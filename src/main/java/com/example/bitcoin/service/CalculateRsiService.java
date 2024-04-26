@@ -11,7 +11,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class CalculateRsi {
+public class CalculateRsiService {
 
     public Double calculateRsi(List<CandleDTO> list){
 

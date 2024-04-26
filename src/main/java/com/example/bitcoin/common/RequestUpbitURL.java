@@ -25,7 +25,7 @@ public class RequestUpbitURL {
             data = response.body().string();
 
         }catch(Exception e){
-            log.info(e.getMessage());
+//            log.info(e.getMessage());
         }
 
         return data;

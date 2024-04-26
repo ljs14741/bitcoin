@@ -29,7 +29,7 @@ public class GetRsiService {
         });
 
         //rsi 계산
-        double rsi = new CalculateRsi().calculateRsi(list);
+        double rsi = new CalculateRsiService().calculateRsi(list);
 
         return rsi;
 

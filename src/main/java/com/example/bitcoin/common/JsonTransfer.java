@@ -18,7 +18,7 @@ public class JsonTransfer {
 
     public static Map<String, Object> getMapFromJSONObject(JSONObject obj) {
         if (ObjectUtils.isEmpty(obj)) {
-            log.error("BAD REQUEST obj : {}", obj);
+//            log.error("BAD REQUEST obj : {}", obj);
             throw new IllegalArgumentException(String.format("BAD REQUEST obj %s", obj));
         }
 
@@ -30,14 +30,14 @@ public class JsonTransfer {
             return new ObjectMapper().readValue(obj.toString(), new TypeReference<Map<String, Object>>() {
             });
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+//            log.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
     }
 
     public static List<Map<String, Object>> getListMapFromJsonArray(JSONArray jsonArray) throws JSONException {
         if (ObjectUtils.isEmpty(jsonArray)) {
-            log.error("jsonArray is null.");
+//            log.error("jsonArray is null.");
             throw new IllegalArgumentException("jsonArray is null");
         }
         List<Map<String, Object>> list = new ArrayList<>();
@@ -50,7 +50,7 @@ public class JsonTransfer {
 
     public static <T> T getObjectFromJSONObject(JSONObject obj,TypeReference<T> type){
         if (ObjectUtils.isEmpty(obj)) {
-            log.error("BAD REQUEST obj : {}", obj);
+//            log.error("BAD REQUEST obj : {}", obj);
             throw new IllegalArgumentException(String.format("BAD REQUEST obj %s", obj));
         }
 
@@ -59,18 +59,18 @@ public class JsonTransfer {
             ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             return objectMapper.readValue(obj.toString(), type);
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+//            log.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
     }
 
     public static <T> List<T> getListObjectFromJSONObject(JSONArray jsonArray, TypeReference<T> type) throws JSONException{
         if (ObjectUtils.isEmpty(jsonArray)) {
-            log.error("jsonArray is null.");
+//            log.error("jsonArray is null.");
             throw new IllegalArgumentException("jsonArray is null");
         }
         List<T> list = new ArrayList<>();
-        log.info(list.getClass().getName());
+//        log.info(list.getClass().getName());
         for (int i=0; i<jsonArray.length(); i++) {
             list.add(getObjectFromJSONObject((JSONObject)jsonArray.get(i),type));
         }
