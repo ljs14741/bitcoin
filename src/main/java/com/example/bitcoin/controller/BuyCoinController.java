@@ -1,14 +1,18 @@
 package com.example.bitcoin.controller;
 
 import com.example.bitcoin.service.GetRsiService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.text.ParseException;
 
-@Controller
+
+@Slf4j
+@RestController
 public class BuyCoinController {
 
     @Autowired
@@ -22,7 +26,8 @@ public class BuyCoinController {
 
     @RequestMapping("/BuyCoinController.getRsi.do")
     public void getRsi() throws IOException, ParseException {
-        getRsiService.getRsi(dttm, unit, market);
+        double rsi = getRsiService.getRsi(dttm, unit, market);
+        log.info("rsi: " + rsi);
     }
 
 

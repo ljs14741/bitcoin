@@ -4,6 +4,7 @@ import com.example.bitcoin.common.JsonTransfer;
 import com.example.bitcoin.common.RequestUpbitURL;
 import com.example.bitcoin.dto.CandleDTO;
 import com.fasterxml.jackson.core.type.TypeReference;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ import org.json.JSONException;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class GetRsiService {
     @Autowired
     private RequestUpbitURL requestUpbitURL;
@@ -27,6 +29,8 @@ public class GetRsiService {
 //        List<Map<String, Object>> list = JsonTransfer.getListMapFromJsonArray(jsonArray);
         List<CandleDTO> list = JsonTransfer.getListObjectFromJSONObject(jsonArray, new TypeReference<CandleDTO>() {
         });
+
+        log.info("가나다라: " + list);
 
         //rsi 계산
         double rsi = new CalculateRsiService().calculateRsi(list);
