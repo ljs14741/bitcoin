@@ -3,6 +3,7 @@ package com.example.bitcoin.service;
 import com.example.bitcoin.common.RequestUpbitURL;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -22,12 +23,11 @@ public class BuySellOrderService {
     @Autowired
     GetRsiService getRsiService;
 
-    public String dttm = "2023-10-04 09:00:00";
-    public String unit = "minutes/240";
+    public String dttm;
+    public String unit = "minutes/60";
     public String market = "KRW-XRP";
 
     // 현재 시간을 LocalDateTime 객체로 가져오기
-
 
     public void buySellOrder() throws IOException, ParseException, NoSuchAlgorithmException {
 
@@ -37,25 +37,23 @@ public class BuySellOrderService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         // LocalDateTime 객체를 지정된 형식의 문자열로 변환
-        String formattedDateTime = now.format(formatter);
-
-        // 결과 출력
-        log.info("현재 시간: " + formattedDateTime);
+        dttm = now.format(formatter);
 
         // 1. 해당 코인을 보유하고 있는지 여부 조회
         boolean existsYn = requestUpbitURL.getAccounts();
 
         // 2. RSI 값 구하기
         double rsi = getRsiService.getRsi(dttm, unit, market);
-        log.info("rsi: " + rsi);
 
         /* 3. 보유하고 있으면 매도, 보유하지 않으면 매수
               rsi 60이상 매도, rsi 25이하 매수 */
-//        if(existsYn && rsi < 25.0) {
-//            buyCoin();
-//        } else if(!existsYn && rsi > 60.0){
-//            sellCoin();
-//        }
+        if(existsYn && rsi < 25.0) {
+            buyCoin();
+        } else if(!existsYn && rsi > 60.0){
+            sellCoin();
+        } else {
+            log.info("rsi: " + rsi + " rsi값이 매수 및 매도기준에 부합하지 않아 매매를 하지 않곘습니다.");
+        }
     }
 
     public void buyCoin() throws NoSuchAlgorithmException, UnsupportedEncodingException {

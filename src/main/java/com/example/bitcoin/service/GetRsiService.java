@@ -30,7 +30,7 @@ public class GetRsiService {
         List<CandleDTO> list = JsonTransfer.getListObjectFromJSONObject(jsonArray, new TypeReference<CandleDTO>() {
         });
 
-        log.info("가나다라: " + list);
+//        log.info("가나다라: " + list);
 
         //rsi 계산
         double rsi = new CalculateRsiService().calculateRsi(list);
