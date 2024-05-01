@@ -2,11 +2,15 @@ package com.example.bitcoin.common;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
@@ -54,6 +58,57 @@ public class RequestUpbitURL {
 
     }
 
+    // 자산 조회 요청
+    public boolean getAccounts() {
+        String accessKey = System.getenv("UPBIT_OPEN_API_ACCESS_KEY");
+        String secretKey = System.getenv("UPBIT_OPEN_API_SECRET_KEY");
+        String serverUrl = System.getenv("UPBIT_OPEN_API_SERVER_URL");
+
+        Algorithm algorithm = Algorithm.HMAC256(secretKey);
+
+        String jwtToken = JWT.create()
+                .withClaim("access_key", accessKey)
+                .withClaim("nonce", UUID.randomUUID().toString())
+                .sign(algorithm);
+
+        String authenticationToken = "Bearer " + jwtToken;
+
+//        String body = "";
+        try {
+            CloseableHttpClient client = HttpClientBuilder.create().build();
+            HttpGet request = new HttpGet(serverUrl + "/v1/accounts");
+            request.setHeader("Content-Type", "application/json");
+            request.addHeader("Authorization", authenticationToken);
+
+            HttpResponse response = client.execute(request);
+            HttpEntity entity = ((CloseableHttpResponse) response).getEntity();
+//            body = EntityUtils.toString(entity, "UTF-8");
+            String json = EntityUtils.toString(entity, "UTF-8");
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(json);
+
+            boolean xrpExists = false;
+            for (JsonNode node : jsonNode) {
+                if (node.get("currency").asText().equals("XRP")) {
+                    xrpExists = true;
+                    break;
+                }
+            }
+
+            if (xrpExists) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        return false;
+    }
+
+    // 매매 요청
     public void executeTrade(String market, String side, String volume, String price, String ord_type) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         String accessKey = System.getenv("UPBIT_OPEN_API_ACCESS_KEY");
         String secretKey = System.getenv("UPBIT_OPEN_API_SECRET_KEY");
