@@ -34,7 +34,7 @@ dependencies {
     implementation 'com.auth0:java-jwt:4.3.0'
 
     // db
-    implementation 'mysql:mysql-connector-java:8.0.33'
+    implementation 'com.mysql:mysql-connector-j'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
     implementation 'org.apache.httpcomponents.client5:httpclient5:5.1.4'
