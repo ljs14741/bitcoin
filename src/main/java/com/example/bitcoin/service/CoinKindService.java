@@ -25,6 +25,11 @@ public class CoinKindService {
     @Autowired
     CoinKindRepository coinKindRepository;
 
+    public List<CoinKind> getAllCoinKinds() {
+        log.info("가나다라: " + coinKindRepository.findAll());
+        return coinKindRepository.findAll();
+    }
+
 
     @Transactional
     public void coinKind() {
