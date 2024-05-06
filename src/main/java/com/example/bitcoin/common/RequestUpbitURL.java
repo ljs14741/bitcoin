@@ -84,6 +84,7 @@ public class RequestUpbitURL {
             HttpEntity entity = ((CloseableHttpResponse) response).getEntity();
 //            body = EntityUtils.toString(entity, "UTF-8");
             String json = EntityUtils.toString(entity, "UTF-8");
+
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(json);
 
