@@ -10,6 +10,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,8 +28,8 @@ public class CoinKindService {
     CoinKindRepository coinKindRepository;
 
     public List<CoinKind> getAllCoinKinds() {
-        log.info("가나다라: " + coinKindRepository.findAll());
-        return coinKindRepository.findAll();
+        Pageable pageable = PageRequest.of(0, 5);
+        return coinKindRepository.findAll(pageable).getContent();
     }
 
 

@@ -61,25 +61,4 @@ public class CandleDTO {
     @JsonProperty("buy_day")
     private String buyDay;
 
-    public interface CandleProjection {
-        String getMarket();
-        String getCandleDateTimeUtc();
-        String getCandleDateTimeKst();
-        Double getOpeningPrice();
-        Double getHighPrice();
-        Double getLowPrice();
-        Double getTradePrice();
-        Long getTimestamp();
-        Double getCandleAccTradePrice();
-        Double getCandleAccTradeVolume();
-        Integer getUnit();
-        Double getRsi();
-        Double getRange();
-        Double getTarget();
-        Double getEarnings();
-
-
-
-    }
-
 }
