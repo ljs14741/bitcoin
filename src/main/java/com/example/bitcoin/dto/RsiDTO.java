@@ -13,6 +13,10 @@ public class RsiDTO {
 
     private String market;
 
+    private String koreanName;
+
+    private double rsi15;
+
     private double rsi60;
 
     private double rsiDaily;

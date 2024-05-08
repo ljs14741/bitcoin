@@ -58,7 +58,7 @@ public class GetRsiService {
     }
 
     // 60분봉, 일봉, 주봉, 월봉 RSI 전부 구하기
-    public List<RsiDTO> getRsiSummary() throws IOException, ParseException, NoSuchAlgorithmException {
+    public void getRsiSummary() throws IOException, ParseException, NoSuchAlgorithmException {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String dttm = now.format(formatter);
@@ -74,19 +74,29 @@ public class GetRsiService {
         List<RsiDTO> rsiSummaryList = new ArrayList<>();
         for (CoinKind coinKind : coinKinds) {
             String market = coinKind.getMarket();
+            String koreanName = coinKind.getKoreanName();
+
+            // 15분봉 RSI 계산
+            double rsi15 = getRsi(dttm, "minutes/15", market);
+            rsi15 = Math.round(rsi15 * 100.0) / 100.0; // 소수점 두 번째 자리에서 반올림
 
             // 60분봉 RSI 계산
             double rsi60 = getRsi(dttm, "minutes/60", market);
+            rsi60 = Math.round(rsi60 * 100.0) / 100.0; // 소수점 두 번째 자리에서 반올림
 
             // 일별 RSI 계산
             double rsiDaily = getRsi(dttm, "days", market);
+            rsiDaily = Math.round(rsiDaily * 100.0) / 100.0; // 소수점 두 번째 자리에서 반올림
 
             // 주별 RSI 계산
             double rsiWeekly = getRsi(dttm, "weeks", market);
+            rsiWeekly = Math.round(rsiWeekly * 100.0) / 100.0; // 소수점 두 번째 자리에서 반올림
 
             // 월별 RSI 계산
             double rsiMonthly = getRsi(dttm, "months", market);
+            rsiMonthly = Math.round(rsiMonthly * 100.0) / 100.0; // 소수점 두 번째 자리에서 반올림
 
+            if(Double.isNaN(rsi15)) {rsi15 = 0.0;}
             if(Double.isNaN(rsi60)) {rsi60 = 0.0;}
             if(Double.isNaN(rsiDaily)) {rsiDaily = 0.0;}
             if(Double.isNaN(rsiWeekly)) {rsiWeekly = 0.0;}
@@ -94,20 +104,22 @@ public class GetRsiService {
 
 
             // RSI 값을 객체에 저장
-            RsiDTO rsiSummary = new RsiDTO(market, rsi60, rsiDaily, rsiWeekly, rsiMonthly);
+            RsiDTO rsiSummary = new RsiDTO(market,koreanName, rsi15, rsi60, rsiDaily, rsiWeekly, rsiMonthly);
             rsiSummaryList.add(rsiSummary);
 
             // RSI 값을 데이터베이스에 저장
-            saveRsi(market, rsi60, rsiDaily, rsiWeekly, rsiMonthly);
+            saveRsi(market, koreanName, rsi15, rsi60, rsiDaily, rsiWeekly, rsiMonthly);
         }
 
-        return rsiSummaryList;
+//        return rsiSummaryList;
     }
 
     // RSI 값을 데이터베이스에 저장하는 메서드
-    private void saveRsi(String market, double rsi60, double rsiDaily, double rsiWeekly, double rsiMonthly) {
+    private void saveRsi(String market, String koreanName, double rsi15, double rsi60, double rsiDaily, double rsiWeekly, double rsiMonthly) {
         Rsi rsi = Rsi.builder()
                 .market(market)
+                .koreanName(koreanName)
+                .rsi15(rsi15)
                 .rsi60(rsi60)
                 .rsiDaily(rsiDaily)
                 .rsiWeekly(rsiWeekly)
@@ -117,7 +129,7 @@ public class GetRsiService {
     }
 
     public List<RsiDTO> getRsi() {
-        List<Rsi> rsiList = rsiRepository.findAllByOrderByRsi60AscRsiDailyAscRsiWeeklyAscRsiMonthlyAsc();
+        List<Rsi> rsiList = rsiRepository.findAllByOrderByRsi15AscRsi60AscRsiDailyAscRsiWeeklyAscRsiMonthlyAsc();
         return rsiList.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());

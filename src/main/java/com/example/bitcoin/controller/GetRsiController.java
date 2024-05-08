@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -23,11 +24,15 @@ public class GetRsiController {
     @Autowired
     GetRsiService getRsiService;
 
+    //RSI 값 insert
     @RequestMapping("/GetRsiController.getrsiSummary.do")
-    public void getRsiSummary(Model model) throws IOException, ParseException, NoSuchAlgorithmException {
+//    @ResponseBody
+    public String getRsiSummary(Model model) throws IOException, ParseException, NoSuchAlgorithmException {
         getRsiService.getRsiSummary();
+        return "redirect:/";
     }
 
+    //메인화면 RSI 조회
     @GetMapping("/")
     public String showRsiSummary(Model model) {
         List<RsiDTO> rsiList = getRsiService.getRsi();

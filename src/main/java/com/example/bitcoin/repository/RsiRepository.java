@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface RsiRepository extends JpaRepository<Rsi, Long> {
-    List<Rsi> findAllByOrderByRsi60AscRsiDailyAscRsiWeeklyAscRsiMonthlyAsc();
+    List<Rsi> findAllByOrderByRsi15AscRsi60AscRsiDailyAscRsiWeeklyAscRsiMonthlyAsc();
 }

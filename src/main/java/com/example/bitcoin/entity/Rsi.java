@@ -20,6 +20,12 @@ public class Rsi {
     @Column(name = "market")
     private String market;
 
+    @Column(name = "korean_name")
+    private String koreanName;
+
+    @Column(name = "rsi15")
+    private double rsi15;
+
     @Column(name = "rsi60")
     private double rsi60;
 

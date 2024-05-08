@@ -13,6 +13,8 @@
     <thead>
     <tr>
         <th>Market</th>
+        <th>한글명</th>
+        <th>rsi 15</th>
         <th>RSI 60</th>
         <th>RSI Daily</th>
         <th>RSI Weekly</th>
@@ -22,6 +24,8 @@
     <tbody>
     <tr th:each="rsi : ${rsiList}">
         <td th:text="${rsi.market}"></td>
+        <td th:text="${rsi.koreanName}"></td>
+        <td th:text="${rsi.rsi15}"></td>
         <td th:text="${rsi.rsi60}"></td>
         <td th:text="${rsi.rsiDaily}"></td>
         <td th:text="${rsi.rsiWeekly}"></td>
