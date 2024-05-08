@@ -6,25 +6,29 @@
 </head>
 <body>
 <h1>Hi zzzzz</h1>
-<table>
+
+<h2>코인 RSI 값</h2>
+
+<table border="1">
     <thead>
     <tr>
         <th>Market</th>
-        <th>60분봉 RSI</th>
-        <th>일별 RSI</th>
-        <th>주별 RSI</th>
-        <th>월별 RSI</th>
+        <th>RSI 60</th>
+        <th>RSI Daily</th>
+        <th>RSI Weekly</th>
+        <th>RSI Monthly</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="rsiSummary : ${rsiSummaryList}">
-        <td th:text="${rsiSummary.market}"></td>
-        <td th:text="${rsiSummary.rsi60}"></td>
-        <td th:text="${rsiSummary.rsiDaily}"></td>
-        <td th:text="${rsiSummary.rsiWeekly}"></td>
-        <td th:text="${rsiSummary.rsiMonthly}"></td>
+    <tr th:each="rsi : ${rsiList}">
+        <td th:text="${rsi.market}"></td>
+        <td th:text="${rsi.rsi60}"></td>
+        <td th:text="${rsi.rsiDaily}"></td>
+        <td th:text="${rsi.rsiWeekly}"></td>
+        <td th:text="${rsi.rsiMonthly}"></td>
     </tr>
     </tbody>
 </table>
+
 </body>
 </html>

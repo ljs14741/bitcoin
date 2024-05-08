@@ -28,8 +28,8 @@ public class CoinKindService {
     CoinKindRepository coinKindRepository;
 
     public List<CoinKind> getAllCoinKinds() {
-        Pageable pageable = PageRequest.of(0, 5);
-        return coinKindRepository.findAll(pageable).getContent();
+//        Pageable pageable = PageRequest.of(0, 5);
+        return coinKindRepository.findByMarketLike("KRW");
     }
 
 
