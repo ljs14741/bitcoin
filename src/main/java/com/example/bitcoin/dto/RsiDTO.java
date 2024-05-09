@@ -3,6 +3,8 @@ package com.example.bitcoin.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter //클래스의 포함된 멤버 변수의 모든 getter 매서드를 생성
 @Setter
 @Builder // sql에 값 넣는것
@@ -24,4 +26,8 @@ public class RsiDTO {
     private double rsiWeekly;
 
     private double rsiMonthly;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 }

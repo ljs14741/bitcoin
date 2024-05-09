@@ -4,6 +4,8 @@ package com.example.bitcoin.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter //클래스의 포함된 멤버 변수의 모든 getter 매서드를 생성
 @Setter
 @Builder // sql에 값 넣는것
@@ -38,4 +40,9 @@ public class Rsi {
     @Column(name = "rsi_monthly")
     private double rsiMonthly;
 
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }

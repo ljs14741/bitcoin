@@ -102,20 +102,15 @@ public class GetRsiService {
             if(Double.isNaN(rsiWeekly)) {rsiWeekly = 0.0;}
             if(Double.isNaN(rsiMonthly)) {rsiMonthly = 0.0;}
 
-
-            // RSI 값을 객체에 저장
-            RsiDTO rsiSummary = new RsiDTO(market,koreanName, rsi15, rsi60, rsiDaily, rsiWeekly, rsiMonthly);
-            rsiSummaryList.add(rsiSummary);
-
             // RSI 값을 데이터베이스에 저장
             saveRsi(market, koreanName, rsi15, rsi60, rsiDaily, rsiWeekly, rsiMonthly);
         }
-
-//        return rsiSummaryList;
     }
 
     // RSI 값을 데이터베이스에 저장하는 메서드
     private void saveRsi(String market, String koreanName, double rsi15, double rsi60, double rsiDaily, double rsiWeekly, double rsiMonthly) {
+        LocalDateTime now = LocalDateTime.now();
+
         Rsi rsi = Rsi.builder()
                 .market(market)
                 .koreanName(koreanName)
@@ -124,6 +119,8 @@ public class GetRsiService {
                 .rsiDaily(rsiDaily)
                 .rsiWeekly(rsiWeekly)
                 .rsiMonthly(rsiMonthly)
+                .createdAt(now)
+                .updatedAt(now)
                 .build();
         rsiRepository.save(rsi);
     }

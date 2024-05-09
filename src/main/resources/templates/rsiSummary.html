@@ -63,7 +63,8 @@
     <tr>
         <th>Market <i class="fas fa-sort"></i></th>
         <th>한글명 <i class="fas fa-sort"></i></th>
-        <th>rsi 15 <i class="fas fa-sort"></i></th>
+        <th>RSI 계산 시간</th>
+        <th>RSI 15 <i class="fas fa-sort"></i></th>
         <th>RSI 60 <i class="fas fa-sort"></i></th>
         <th>RSI Daily <i class="fas fa-sort"></i></th>
         <th>RSI Weekly <i class="fas fa-sort"></i></th>
@@ -74,6 +75,7 @@
     <tr th:each="rsi : ${rsiList}">
         <td th:text="${rsi.market}"></td>
         <td th:text="${rsi.koreanName}"></td>
+        <td th:text="${rsi.updatedAt}"></td>
         <td th:text="${rsi.rsi15}"></td>
         <td th:text="${rsi.rsi60}"></td>
         <td th:text="${rsi.rsiDaily}"></td>
