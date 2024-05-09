@@ -49,9 +49,10 @@ public class RequestUpbitURL {
 
             Response response = client.newCall(request).execute();
             data = response.body().string();
+            log.info("data: " + data);
 
         }catch(Exception e){
-//            log.info(e.getMessage());
+            log.info(e.getMessage());
         }
 
         return data;

@@ -88,6 +88,11 @@ public class GetRsiService {
                 existingRsi.setRsiMonthly(rsiMonthly);
                 existingRsi.setUpdatedAt(now);
                 rsiRepository.save(existingRsi);
+                try {
+                    Thread.sleep(300); // 0.3초 딜레이
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             } else {
                 getRsiSummary();
             }

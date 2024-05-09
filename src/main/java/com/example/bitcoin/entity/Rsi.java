@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @ToString // 객체의 값 확인
 @AllArgsConstructor //생성자 자동 완성
 @NoArgsConstructor //생성자 자동 완성
-@Entity
+@Entity(name="rsi")
 public class Rsi {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
