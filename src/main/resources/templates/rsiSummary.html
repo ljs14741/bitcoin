@@ -2,7 +2,56 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>RSI Summary</title>
+    <title>Binary</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const table = document.querySelector('table');
+            const ths = table.querySelectorAll('th');
+            const tbody = table.querySelector('tbody');
+
+            ths.forEach(th => {
+                th.addEventListener('click', function () {
+                    const index = Array.from(ths).indexOf(th);
+                    const isAscending = th.classList.toggle('ascending');
+                    const rows = Array.from(tbody.querySelectorAll('tr'));
+
+                    rows.sort((a, b) => {
+                        const aValue = a.children[index].textContent.trim();
+                        const bValue = b.children[index].textContent.trim();
+                        if (aValue === bValue) return 0;
+                        if (isAscending) {
+                            return aValue > bValue ? 1 : -1;
+                        } else {
+                            return aValue < bValue ? 1 : -1;
+                        }
+                    });
+
+                    tbody.innerHTML = '';
+                    rows.forEach(row => {
+                        tbody.appendChild(row);
+                    });
+
+                    // 아이콘 회전
+                    ths.forEach(otherTh => {
+                        if (otherTh !== th) {
+                            otherTh.querySelector('i').classList.remove('fa-sort-up', 'fa-sort-down');
+                        }
+                    });
+                    const icon = th.querySelector('i');
+                    if (isAscending) {
+                        icon.classList.remove('fa-sort-down');
+                        icon.classList.add('fa-sort-up');
+                    } else {
+                        icon.classList.remove('fa-sort-up');
+                        icon.classList.add('fa-sort-down');
+                    }
+                });
+            });
+        });
+    </script>
+
 </head>
 <body>
 <h1>Hi zzzzz</h1>
@@ -12,13 +61,13 @@
 <table border="1">
     <thead>
     <tr>
-        <th>Market</th>
-        <th>한글명</th>
-        <th>rsi 15</th>
-        <th>RSI 60</th>
-        <th>RSI Daily</th>
-        <th>RSI Weekly</th>
-        <th>RSI Monthly</th>
+        <th>Market <i class="fas fa-sort"></i></th>
+        <th>한글명 <i class="fas fa-sort"></i></th>
+        <th>rsi 15 <i class="fas fa-sort"></i></th>
+        <th>RSI 60 <i class="fas fa-sort"></i></th>
+        <th>RSI Daily <i class="fas fa-sort"></i></th>
+        <th>RSI Weekly <i class="fas fa-sort"></i></th>
+        <th>RSI Monthly <i class="fas fa-sort"></i></th>
     </tr>
     </thead>
     <tbody>
