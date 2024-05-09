@@ -5,6 +5,7 @@ import com.example.bitcoin.dto.RsiDTO;
 import com.example.bitcoin.service.GetRsiService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,11 +26,20 @@ public class GetRsiController {
     GetRsiService getRsiService;
 
     //RSI 값 insert
-    @RequestMapping("/GetRsiController.getrsiSummary.do")
-//    @ResponseBody
-    public String getRsiSummary(Model model) throws IOException, ParseException, NoSuchAlgorithmException {
-        getRsiService.getRsiSummary();
-        return "redirect:/";
+//    @RequestMapping("/GetRsiController.getrsiSummary.do")
+////    @ResponseBody
+//    public String getRsiSummary(Model model) throws IOException, ParseException, NoSuchAlgorithmException {
+//        getRsiService.getRsiSummary();
+//        return "redirect:/";
+//    }
+
+    @Scheduled(fixedRate = 300000) // 5분마다 실행
+    public void updateRsiValues() {
+        try {
+            getRsiService.updateRsiValues();
+        } catch (IOException | ParseException | NoSuchAlgorithmException e) {
+            e.printStackTrace(); // 에러 처리를 원하는 방식으로 변경 가능
+        }
     }
 
     //메인화면 RSI 조회

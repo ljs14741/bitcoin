@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.json.JSONArray;
@@ -55,6 +56,42 @@ public class GetRsiService {
 
         return rsi;
 
+    }
+
+    public void updateRsiValues() throws IOException, ParseException, NoSuchAlgorithmException {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String dttm = now.format(formatter);
+
+        List<CoinKind> coinKinds = coinKindService.getAllCoinKinds();
+
+        for (CoinKind coinKind : coinKinds) {
+            String market = coinKind.getMarket();
+
+            Optional<Rsi> optionalRsi = rsiRepository.findByMarket(market);
+            if (optionalRsi.isPresent()) {
+                Rsi existingRsi = optionalRsi.get();
+                double rsi15 = getRsi(dttm, "minutes/15", market);
+                rsi15 = Math.round(rsi15 * 100.0) / 100.0;
+                existingRsi.setRsi15(rsi15);
+                double rsi60 = getRsi(dttm, "minutes/60", market);
+                rsi60 = Math.round(rsi60 * 100.0) / 100.0;
+                existingRsi.setRsi60(rsi60);
+                double rsiDaily = getRsi(dttm, "days", market);
+                rsiDaily = Math.round(rsiDaily * 100.0) / 100.0;
+                existingRsi.setRsiDaily(rsiDaily);
+                double rsiWeekly = getRsi(dttm, "weeks", market);
+                rsiWeekly = Math.round(rsiWeekly * 100.0) / 100.0;
+                existingRsi.setRsiWeekly(rsiWeekly);
+                double rsiMonthly = getRsi(dttm, "months", market);
+                rsiMonthly = Math.round(rsiMonthly * 100.0) / 100.0;
+                existingRsi.setRsiMonthly(rsiMonthly);
+                existingRsi.setUpdatedAt(now);
+                rsiRepository.save(existingRsi);
+            } else {
+                getRsiSummary();
+            }
+        }
     }
 
     // 60분봉, 일봉, 주봉, 월봉 RSI 전부 구하기
