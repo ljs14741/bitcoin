@@ -1,17 +1,20 @@
-spring:
-###  local
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/bitcoin?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: root
-    password: 87654321
+server:
+  port: 80
 
-  ###  aws-ec2
+spring:
+##  local
 #  datasource:
 #    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://db-bitcoin.cloma02o4b8c.ap-northeast-2.rds.amazonaws.com:3306/bitcoin?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-#    username: admin
+#    url: jdbc:mysql://localhost:3306/bitcoin?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+#    username: root
 #    password: 87654321
+
+  ###  aws-ec2
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://db-bitcoin.cloma02o4b8c.ap-northeast-2.rds.amazonaws.com:3306/bitcoin?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: admin
+    password: 87654321
 
   jpa:
     open-in-view: true
