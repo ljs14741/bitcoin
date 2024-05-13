@@ -3,7 +3,10 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background-color: #e1e9f0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 /* 제목 스타일 */
@@ -16,6 +19,9 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    background-color: white;
+    opacity: 0.9;
+    border-radius: 10px;
 }
 
 /* 테이블 헤더 스타일 */
@@ -55,4 +61,26 @@ a {
 a:hover {
     color: #0056b3;
     text-decoration: underline;
+}
+
+/* 추가된 버튼 및 버튼 컨테이너 스타일 */
+.btn-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.btn-container button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-container button:hover {
+    background-color: #0056b3;
 }
