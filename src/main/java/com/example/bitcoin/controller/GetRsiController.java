@@ -42,8 +42,8 @@ public class GetRsiController {
         }
     }
 
-    //메인화면 RSI 조회
-    @GetMapping("/")
+    //코인 RSI 정보 조회
+    @RequestMapping("/rsiSummary")
     public String showRsiSummary(Model model) {
         List<RsiDTO> rsiList = getRsiService.getRsi();
         model.addAttribute("rsiList", rsiList);

@@ -9,9 +9,41 @@ body {
     background-repeat: no-repeat;
 }
 
+/* 헤더 스타일 */
+header {
+    background-color: #333;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+
 /* 제목 스타일 */
 h1, h2 {
     color: #333;
+}
+
+/* 메인 컨테이너 스타일 */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* 소개 섹션 스타일 */
+.intro {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+/* 서비스 섹션 스타일 */
+.services {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* 테이블 스타일 */
@@ -63,7 +95,7 @@ a:hover {
     text-decoration: underline;
 }
 
-/* 추가된 버튼 및 버튼 컨테이너 스타일 */
+/* 버튼 및 버튼 컨테이너 스타일 */
 .btn-container {
     text-align: center;
     margin-top: 20px;
@@ -83,4 +115,15 @@ a:hover {
 
 .btn-container button:hover {
     background-color: #0056b3;
+}
+
+/* 푸터 스타일 */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
 }
