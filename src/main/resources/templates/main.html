@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>뭐든지 만들어드립니다</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
 <body>
 <header>
@@ -12,17 +14,14 @@
 </header>
 
 <div class="btn-container">
-    <!-- 로또 추첨기 링크 -->
     <button onclick="window.location.href='https://kimchilotto.netlify.app/'">로또 추첨기</button>
-    <!-- 죽음 예측 테스트 링크 -->
     <button onclick="window.location.href='https://godofdeath.pages.dev/'">죽음 예측 테스트</button>
-    <!-- 코인 RSI 정보 -->
     <button onclick="window.location.href='https://binary96.store/rsiSummary'">코인 RSI 정보</button>
 </div>
 
 <main class="container">
     <section class="intro">
-        <h2>우리의 서비스</h2>
+        <h2>Binary의 서비스</h2>
         <p>저는 사용자의 요구에 맞춰 무엇이든 제작해드리는 서비스를 제공합니다. 현재는 코인 RSI 정보, 죽음 예측 테스트, 로또추첨기 서비스를 운영중입니다.</p>
         <p>웹에서 만들 수 있는 것을 아래에 요청해주시면 최대한 만들어보겠습니다.</p>
     </section>
@@ -31,9 +30,64 @@
         <button onclick="window.location.href='https://blog.naver.com/ljs14741'">네이버블로그</button>
         <button onclick="window.location.href='https://jindduya.tistory.com/'">티스토리블로그</button>
     </div>
+
+    <!-- 채팅 시스템 -->
+    <div id="chat">
+        <div id="chat-box">
+            <div id="messages"></div>
+        </div>
+        <input type="text" id="username-input" placeholder="사용자 이름">
+        <input type="text" id="message-input" placeholder="메시지를 입력하세요" onkeypress="if(event.keyCode==13) sendMessage()">
+        <button onclick="sendMessage()">전송</button>
+    </div>
 </main>
 <footer>
     <p>&copy; 2024 뭐든지 만들어드립니다. </p>
 </footer>
+
+<script>
+    var stompClient = null;
+    var username = "";
+
+    function connect() {
+        var socket = new SockJS('/ws');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function(frame) {
+            stompClient.subscribe('/topic/messages', function(message) {
+                showMessage(JSON.parse(message.body).content);
+            });
+        });
+    }
+
+    function sendMessage() {
+        var usernameInput = document.getElementById('username-input');
+        var messageInput = document.getElementById('message-input');
+        if(usernameInput.value.trim() !== "" && messageInput.value.trim() !== "") {
+            if(username === "") {
+                username = usernameInput.value;
+                usernameInput.disabled = true;
+            }
+            var currentDate = new Date().toLocaleDateString();
+            var currentTime = new Date().toLocaleTimeString();
+            var message = "[" + currentDate + " " + currentTime + "] " + username + ": " + messageInput.value;
+            stompClient.send("/app/message", {}, JSON.stringify({'content': message}));
+            messageInput.value = '';
+        } else {
+            alert("사용자 이름과 메시지를 입력하세요.");
+        }
+    }
+
+
+    function showMessage(message) {
+        var messages = document.getElementById('messages');
+        var messageElement = document.createElement('div');
+        messageElement.appendChild(document.createTextNode(message));
+        messages.appendChild(messageElement);
+    }
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        connect();
+    });
+</script>
 </body>
 </html>

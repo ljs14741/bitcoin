@@ -127,3 +127,48 @@ footer {
     width: 100%;
     bottom: 0;
 }
+
+/* 채팅 시스템 스타일 */
+#chat {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 2rem;
+}
+
+#chat-box {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    height: 300px;
+    overflow-y: scroll;
+    margin-bottom: 1rem;
+}
+
+#messages {
+    list-style-type: none;
+    padding: 0;
+}
+
+#message-input, #username-input {
+    width: calc(100% - 80px);
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 0.5rem 1rem;
+    margin-left: 10px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
