@@ -18,8 +18,14 @@ header {
 }
 
 /* 제목 스타일 */
-h1, h2 {
-    color: #333;
+h1 {
+    font-family: "Times New Roman", Times, serif;
+    color: white;
+}
+
+h2 {
+    font-family: "Times New Roman", Times, serif;
+    color: black;
 }
 
 /* 메인 컨테이너 스타일 */
@@ -99,6 +105,7 @@ a:hover {
 .btn-container {
     text-align: center;
     margin-top: 20px;
+    margin-bottom: 100px;
 }
 
 .btn-container button {
@@ -130,7 +137,7 @@ footer {
 
 /* 채팅 시스템 스타일 */
 #chat {
-    background-color: white;
+    background-color: #f9f9f9;
     padding: 1rem;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -143,11 +150,24 @@ footer {
     height: 300px;
     overflow-y: scroll;
     margin-bottom: 1rem;
+    background-color: white;
 }
 
 #messages {
     list-style-type: none;
     padding: 0;
+}
+
+/* 사용자 이름 스타일 */
+.message-username {
+    font-weight: bold;
+    color: #007bff;
+    margin-right: 5px;
+}
+
+/* 메시지 내용 스타일 */
+.message-text {
+    color: #333;
 }
 
 #message-input, #username-input {
