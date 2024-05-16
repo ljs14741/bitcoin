@@ -26,7 +26,7 @@ public class BuySellController {
 
     // 매수, 매도 요청
 //    @RequestMapping("/BuyCoinController.buySellOrder.do")
-    @Scheduled(fixedDelay = 600000) //일정시간마다 아래 함수 실행하는 스케쥴러 (1000 -> 1초)
+//    @Scheduled(fixedDelay = 600000) //일정시간마다 아래 함수 실행하는 스케쥴러 (1000 -> 1초)
     public void buySellOrder() throws IOException, ParseException, NoSuchAlgorithmException {
         buySellOrderService.buySellOrder();
     }
