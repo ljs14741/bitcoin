@@ -17,7 +17,6 @@ public class Lotto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // PK를 생성 전략 설정 GenerationType.SEQUENCE
     @Column(name = "lotto_id")
-    @JsonProperty("id")
     private Long id;
 
     @Column(name = "round_number")

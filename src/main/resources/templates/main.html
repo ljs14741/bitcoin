@@ -12,6 +12,7 @@
     <meta name="msvalidate.01" content="CDD92023DE164E539D882BD93CF03BCC" />
     <meta name="google-site-verification" content="6n2SJb2lATZ_KUu0EfXjXrOn2yTT-VcNv7aRmHJGoTU" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
@@ -24,7 +25,7 @@
     <button onclick="window.location.href='https://kimchilotto.netlify.app/'">로또 추첨기</button>
     <button onclick="window.location.href='https://godofdeath.pages.dev/'">죽음 예측 테스트</button>
     <button onclick="window.location.href='https://binary96.store/rsiSummary'">코인 RSI 정보</button>
-    <button onclick="window.location.href='https://binary96.store/getLotto'">사용자요청</button>
+    <button onclick="window.location.href='https://binary96.store/getLotto'">로또 당첨 순위</button>
 </div>
 
 <main class="container">
@@ -33,6 +34,16 @@
         <p>저는 사용자의 요구에 맞춰 무엇이든 제작해드리는 서비스를 제공합니다. 현재는 코인 RSI 정보, 죽음 예측 테스트, 로또추첨기 서비스를 운영중입니다.</p>
         <p>아래에 요청해주시면 최대한 만들어보겠습니다.</p>
     </section>
+
+    <div class="service-container">
+        <section class="intro">
+            <h2>사용자 요청 목록</h2>
+            <div class="service">
+                <img th:src="@{/img/img1.jpg}" alt="요청한 서비스1">
+                <button onclick="window.location.href='https://binary96.store/getLotto'">요청한 서비스1</button>
+            </div>
+        </section>
+    </div>
 
     <!-- 채팅 시스템 -->
     <div id="chat">

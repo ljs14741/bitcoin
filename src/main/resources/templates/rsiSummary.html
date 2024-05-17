@@ -2,7 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Binary</title>
+    <title>코인 RSI 정보</title>
+    <meta name="title" content="코인 RSI 정보">
+    <meta name="description" content="코인 RSI 정보를 알려드립니다~ 15분봉, 60분봉, 일봉, 주봉, 월봉별로 보여드립니다.">
+    <meta property="og:title" content="코인 RSI 정보">
+    <meta property="og:description" content="코인 RSI 정보를 알려드립니다~ 15분봉, 60분봉, 일봉, 주봉, 월봉별로 보여드립니다.">
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <meta name="google-site-verification" content="6n2SJb2lATZ_KUu0EfXjXrOn2yTT-VcNv7aRmHJGoTU" />
@@ -59,14 +63,11 @@
     <h1 onclick="window.location.href='https://binary96.store/'">뭐든지 만들어드립니다</h1>
 </header>
 
-<!-- 버튼 컨테이너 추가 -->
 <div class="btn-container">
-    <!-- 로또 추첨기 링크 -->
     <button onclick="window.location.href='https://kimchilotto.netlify.app/'">로또 추첨기</button>
-    <!-- 죽음 예측 테스트 링크 -->
     <button onclick="window.location.href='https://godofdeath.pages.dev/'">죽음 예측 테스트</button>
-    <!-- 코인 RSI 정보 -->
     <button onclick="window.location.href='https://binary96.store/rsiSummary'">코인 RSI 정보</button>
+    <button onclick="window.location.href='https://binary96.store/getLotto'">로또 당첨 순위</button>
 </div>
 
 <h2>코인 RSI 값</h2>
@@ -79,7 +80,7 @@
     <tr>
         <th>Market <i class="fas fa-sort"></i></th>
         <th>한글명 <i class="fas fa-sort"></i></th>
-        <th>RSI 계산 시간</th>
+        <th>RSI 계산 시간 <i class="fas fa-sort"></i></th>
         <th>RSI 15 <i class="fas fa-sort"></i></th>
         <th>RSI 60 <i class="fas fa-sort"></i></th>
         <th>RSI Daily <i class="fas fa-sort"></i></th>

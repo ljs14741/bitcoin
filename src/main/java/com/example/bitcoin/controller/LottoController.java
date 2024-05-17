@@ -37,7 +37,7 @@ public class LottoController {
     @RequestMapping("/getLotto")
     public String getLotto(Model model) {
 //        List<Lotto> lottoList = lottoRepository.findAll();
-        List<Lotto> lottoList = lottoRepository.findByOrderByRoundNumberAsc();
+        List<Lotto> lottoList = lottoRepository.findByOrderByRoundNumberDesc();
         model.addAttribute("lottoList", lottoList);
 
         Map<Integer, Long> numberFrequencies = lottoService.getNumberFrequencies();

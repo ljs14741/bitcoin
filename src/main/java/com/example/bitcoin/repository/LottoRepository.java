@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface LottoRepository extends JpaRepository<Lotto, Long> {
 
-    List<Lotto> findByOrderByRoundNumberAsc();
+    List<Lotto> findByOrderByRoundNumberDesc();
 
     @Query(value = "SELECT number, COUNT(number) AS count FROM (" +
             "SELECT l.number1 AS number FROM Lotto l UNION ALL " +
