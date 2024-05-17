@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>로또번호 당첨 순위</title>
+</head>
+<body>
+<h1>로또번호 당첨 순위</h1>
+
+<h2>아래는 역대 로또 번호 목록</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>회차 번호</th>
+        <th>Number 1</th>
+        <th>Number 2</th>
+        <th>Number 3</th>
+        <th>Number 4</th>
+        <th>Number 5</th>
+        <th>Number 6</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="lotto : ${lottoList}">
+        <td th:text="${lotto.roundNumber}"></td>
+        <td th:text="${lotto.number1}"></td>
+        <td th:text="${lotto.number2}"></td>
+        <td th:text="${lotto.number3}"></td>
+        <td th:text="${lotto.number4}"></td>
+        <td th:text="${lotto.number5}"></td>
+        <td th:text="${lotto.number6}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
