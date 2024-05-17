@@ -6,6 +6,22 @@
 <body>
 <h1>로또번호 당첨 순위</h1>
 
+<h2>가장 많이 나온 번호 순위</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>번호</th>
+        <th>나온 횟수</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="entry : ${numberFrequencies}">
+        <td th:text="${entry.key}"></td>
+        <td th:text="${entry.value}"></td>
+    </tr>
+    </tbody>
+</table>
+
 <h2>아래는 역대 로또 번호 목록</h2>
 <table border="1">
     <thead>
@@ -31,5 +47,6 @@
     </tr>
     </tbody>
 </table>
+
 </body>
 </html>

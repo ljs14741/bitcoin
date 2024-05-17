@@ -15,7 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -101,5 +103,16 @@ public class LottoService {
 
             lottoRepository.save(lotto);
         }
+    }
+
+    public Map<Integer, Long> getNumberFrequencies() {
+        List<Object[]> results = lottoRepository.findNumberFrequencies();
+        Map<Integer, Long> numberFrequencyMap = new HashMap<>();
+        for (Object[] result : results) {
+            Integer number = (Integer) result[0];
+            Long count = (Long) result[1];
+            numberFrequencyMap.put(number, count);
+        }
+        return numberFrequencyMap;
     }
 }

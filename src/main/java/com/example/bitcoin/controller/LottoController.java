@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class LottoController {
@@ -35,8 +36,12 @@ public class LottoController {
 
     @RequestMapping("/getLotto")
     public String getLotto(Model model) {
-        List<Lotto> lottoList = lottoRepository.findAll();
+//        List<Lotto> lottoList = lottoRepository.findAll();
+        List<Lotto> lottoList = lottoRepository.findByOrderByRoundNumberAsc();
         model.addAttribute("lottoList", lottoList);
+
+        Map<Integer, Long> numberFrequencies = lottoService.getNumberFrequencies();
+        model.addAttribute("numberFrequencies", numberFrequencies);
         return "lotto";
     }
 
