@@ -66,13 +66,6 @@
         </section>
     </div>
 
-    <div>
-        <a href="/oauth/kakao">
-            <img id="kakao-login-btn" th:src="@{/img/kakao_login_medium_narrow.png}" alt="카카오톡 로그인">
-            <p>로그인 테스트중</p>
-        </a>
-    </div>
-
     <!-- 채팅 시스템 -->
     <div id="chat">
         <div id="chat-box" style="height: 400px; overflow-y: scroll;">
@@ -84,10 +77,16 @@
                 </div>
             </div>
         </div>
-        <input type="text" id="username-input" placeholder="사용자 이름">
+        <input type="text" id="username-input" placeholder="사용자 이름(카톡 로그인 하세요)" readonly>
+<!--        <input type="text" id="username-input" th:placeholder="${session.nickname}" readonly>-->
         <input type="text" id="message-input" placeholder="메시지를 입력하세요" onkeypress="if(event.keyCode==13) sendMessage()">
         <button onclick="sendMessage()">전송</button>
+        <a href="/oauth/kakao">
+            <img id="kakao-login-btn" th:src="@{/img/kakao_login_medium_narrow.png}" alt="카카오톡 로그인">
+        </a>
     </div>
+<!--    <div>-->
+<!--    </div>-->
     <br>
     <section class="intro">
         <h2>방문해 주셔서 감사합니다!</h2>
@@ -109,7 +108,7 @@
     <p>&copy; 2024 뭐든지 만들어드립니다. </p>
 </footer>
 
-<script>
+<script th:inline="javascript">
     var stompClient = null;
     var username = "";
 
@@ -125,13 +124,13 @@
     }
 
     function sendMessage() {
-        var usernameInput = document.getElementById('username-input');
+        var username = [[${session.nickname}]];
         var messageInput = document.getElementById('message-input');
-        if(usernameInput.value.trim() !== "" && messageInput.value.trim() !== "") {
-            if(username === "") {
-                username = usernameInput.value;
-                usernameInput.disabled = true;
-            }
+        if(username !== null && username !== undefined && messageInput.value.trim() !== "") {
+            // if(username === "") {
+            //     username = usernameInput.value;
+            //     usernameInput.disabled = true;
+            // }
             let offset = 1000 * 60 * 60 * 9; // 9시간 밀리세컨드 값
             let today = new Date(Date.now() + offset);
 
@@ -144,7 +143,7 @@
             stompClient.send("/app/chat", {}, JSON.stringify(message));
             messageInput.value = '';
         } else {
-            alert("사용자 이름과 메시지를 입력하세요.");
+            alert("카카오톡 로그인을 후 메시지를 입력하세요.");
         }
     }
 
@@ -164,22 +163,20 @@
 
     $(document).ready(function() {
         $("#kakao-login-btn").click(function() {
-            if (!isLoggedIn()) {
-                alert("로그인을 먼저 하세요.");
                 window.location.href = "/oauth/kakao";
-            } else {
-                // 채팅 기능 수행
-            }
         });
-
-        function isLoggedIn() {
-            // 로그인 여부를 확인하는 로직 (예: 쿠키나 세션 검사)
-            // 예: return document.cookie.includes("nickname");
-            return false;
-        }
     });
 
     document.addEventListener('DOMContentLoaded', (event) => {
+
+        var usernameInputElement = document.getElementById('username-input');
+        var sessionNickname = [[${session.nickname}]];
+
+        // 세션에 닉네임이 있는 경우 placeholder를 업데이트
+        if (sessionNickname !== null && sessionNickname !== undefined) {
+            usernameInputElement.placeholder = sessionNickname;
+        }
+
         connect();
         scrollToBottom();
     });

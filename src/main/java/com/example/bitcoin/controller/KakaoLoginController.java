@@ -2,6 +2,7 @@ package com.example.bitcoin.controller;
 
 //import org.springframework.security.core.annotation.AuthenticationPrincipal;
 //import org.springframework.security.oauth2.core.user.OAuth2User;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
@@ -20,9 +21,9 @@ import java.util.Map;
 @Slf4j
 public class KakaoLoginController {
 
-    private final String clientId = "";
-    private final String clientSecret = "";
-    private final String redirectUri = "http://localhost:8080/login/oauth2/code/kakao";
+    private final String clientId = System.getenv("KAKAO_CLIENT_ID");
+    private final String clientSecret = System.getenv("KAKAO_CLIENT_SECRET");
+    private final String redirectUri = System.getenv("KAKAO_REDIRECT_URI");
 //    private final String redirectUri = "https://binary96.store/login/oauth2/code/kakao";
 
 
@@ -35,7 +36,7 @@ public class KakaoLoginController {
     }
 
     @RequestMapping("/login/oauth2/code/kakao")
-    public String kakaoCallback(@RequestParam String code) {
+    public String kakaoCallback(@RequestParam String code, HttpSession session) {
         log.info("Received code: " + code);
 
         RestTemplate restTemplate = new RestTemplate();
@@ -85,6 +86,8 @@ public class KakaoLoginController {
                 // 세션 또는 쿠키에 사용자 정보 저장 후 리디렉션
                 // 예: 세션에 저장
                 // session.setAttribute("nickname", nickname);
+                session.setAttribute("nickname", nickname);
+                log.info("하하하: " + session.getAttribute("nickname"));
 
                 return "redirect:/";
             } else {
