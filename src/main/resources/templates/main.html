@@ -80,10 +80,12 @@
         <input type="text" id="username-input" placeholder="사용자 이름(카톡 로그인 하세요)" readonly>
 <!--        <input type="text" id="username-input" th:placeholder="${session.nickname}" readonly>-->
         <input type="text" id="message-input" placeholder="메시지를 입력하세요" onkeypress="if(event.keyCode==13) sendMessage()">
-        <button onclick="sendMessage()">전송</button>
-        <a href="/oauth/kakao">
-            <img id="kakao-login-btn" th:src="@{/img/kakao_login_medium_narrow.png}" alt="카카오톡 로그인">
-        </a>
+        <div class="chat-buttons">
+            <button onclick="sendMessage()">전송</button>
+            <a href="/oauth/kakao" class="kakao-link">
+                <img id="kakao-login-btn" th:src="@{/img/kakao_login_medium_narrow.png}" alt="카카오톡 로그인">
+            </a>
+        </div>
     </div>
 <!--    <div>-->
 <!--    </div>-->

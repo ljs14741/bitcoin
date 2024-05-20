@@ -183,17 +183,43 @@ footer {
     margin-bottom: 10px;
 }
 
+.chat-buttons {
+    position: relative;
+    margin-top: 10px;
+    height: 40px; /* 버튼 높이에 맞게 조정 */
+}
+
+.chat-buttons button {
+    position: absolute;
+    left: 0;
+}
+
+.chat-buttons .kakao-link {
+    position: absolute;
+    left: 5cm; /* 5cm 정도 오른쪽 */
+}
+
+#kakao-login-btn {
+    display: block;
+    height: 100%; /* 버튼 높이에 맞게 조정 */
+}
+
 button {
     padding: 0.5rem 1rem;
-    margin-left: 10px;
     font-size: 16px;
     background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    height: 100%; /* 버튼 높이에 맞게 조정 */
 }
 
 button:hover {
     background-color: #0056b3;
+}
+
+.kakao-link {
+    display: inline-block;
+    height: 100%; /* 버튼 높이에 맞게 조정 */
 }
