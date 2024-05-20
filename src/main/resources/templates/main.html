@@ -33,6 +33,9 @@
     <meta name="theme-color" content="#ffffff">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!--    <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>-->
+<!--    <script>Kakao.init('8b68c737be6b8e9a8007c61ee6f9b8da');</script>-->
 </head>
 <body>
 <header>
@@ -61,6 +64,13 @@
                 <button onclick="window.location.href='https://binary96.store/getLotto'">요청한 서비스1</button>
             </div>
         </section>
+    </div>
+
+    <div>
+        <a href="/oauth/kakao">
+            <img id="kakao-login-btn" th:src="@{/img/kakao_login_medium_narrow.png}" alt="카카오톡 로그인">
+            <p>로그인 테스트중</p>
+        </a>
     </div>
 
     <!-- 채팅 시스템 -->
@@ -151,6 +161,23 @@
         var chatBox = document.getElementById('chat-box');
         chatBox.scrollTop = chatBox.scrollHeight;
     }
+
+    $(document).ready(function() {
+        $("#kakao-login-btn").click(function() {
+            if (!isLoggedIn()) {
+                alert("로그인을 먼저 하세요.");
+                window.location.href = "/oauth/kakao";
+            } else {
+                // 채팅 기능 수행
+            }
+        });
+
+        function isLoggedIn() {
+            // 로그인 여부를 확인하는 로직 (예: 쿠키나 세션 검사)
+            // 예: return document.cookie.includes("nickname");
+            return false;
+        }
+    });
 
     document.addEventListener('DOMContentLoaded', (event) => {
         connect();

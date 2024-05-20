@@ -22,6 +22,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.projectlombok:lombok:1.18.28'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.testng:testng:7.1.0'
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
@@ -47,6 +48,9 @@ dependencies {
     implementation 'org.modelmapper:modelmapper:2.4.4'
 
     implementation 'org.jsoup:jsoup:1.14.3'
+
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
 
 }
