@@ -6,6 +6,9 @@ import com.example.bitcoin.dto.VisitorDTO;
 import com.example.bitcoin.repository.LottoRepository;
 import com.example.bitcoin.service.ChatMessageService;
 import com.example.bitcoin.service.VisitorService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @Controller
+@Slf4j
 public class MainController {
 
     @Autowired
@@ -24,17 +28,19 @@ public class MainController {
     private VisitorService visitorService;
 
     @RequestMapping("/")
-    public String main(Model model) {
+    public String main(Model model, HttpSession session,HttpServletRequest request) {
         // 채팅 조회
         List<ChatMessageDTO> messages = chatMessageService.getAllMessages();
         model.addAttribute("messages", messages);
 
-        // 방문자 조회
-        visitorService.incrementVisitorCount();
+        // 카카오 로그인이 아닐때만 세션 30분 설정
+        if (session.isNew()) {
+            // 방문자 수 증가
+            visitorService.incrementVisitorCount();
+        }
         VisitorDTO visitorDTO = visitorService.getVisitorCount();
         model.addAttribute("dailyCount", visitorDTO.getDailyCount());
         model.addAttribute("totalCount", visitorDTO.getTotalCount());
         return "main";
     }
-
 }
