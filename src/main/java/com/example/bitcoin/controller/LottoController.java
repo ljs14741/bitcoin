@@ -4,10 +4,12 @@ import com.example.bitcoin.entity.Lotto;
 import com.example.bitcoin.repository.LottoRepository;
 import com.example.bitcoin.service.LottoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
@@ -23,17 +25,19 @@ public class LottoController {
     @Autowired
     private LottoRepository lottoRepository;
 
-    @GetMapping("/saveLotto")
-    public String fetchLotteryData() {
+    // 매주 월요일 오전 6시 로또 번호 insert
+    @Scheduled(cron = "0 0 6 * * SUN")
+    @ResponseBody
+    public String saveLotto() {
         try {
-            lottoService.pastnumbers(); // 현재 1119회 까지 한번에 insert
-//            lottoService.fetchAndStoreWinningNumbers(); // 최신 회차 insert
+            lottoService.saveLotto();
             return "Data fetched and stored successfully.";
         } catch (IOException e) {
             return "Failed to fetch data: " + e.getMessage();
         }
     }
 
+    // 로또 번호 조회
     @RequestMapping("/getLotto")
     public String getLotto(Model model) {
 //        List<Lotto> lottoList = lottoRepository.findAll();

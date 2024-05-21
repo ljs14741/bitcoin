@@ -11,6 +11,8 @@ public interface LottoRepository extends JpaRepository<Lotto, Long> {
 
     List<Lotto> findByOrderByRoundNumberDesc();
 
+    Lotto findFirstByOrderByRoundNumberDesc();
+
     @Query(value = "SELECT number, COUNT(number) AS count FROM (" +
             "SELECT l.number1 AS number FROM lotto l UNION ALL " +
             "SELECT l.number2 FROM lotto l UNION ALL " +
