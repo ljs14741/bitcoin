@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -22,6 +23,8 @@ public class VoteService {
 
     @Autowired
     private VoteResultRepository voteResultRepository;
+
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일 a h시 m분");
 
     public Vote createVote(Vote vote, List<String> options) {
         LocalDateTime now = LocalDateTime.now();
@@ -40,7 +43,11 @@ public class VoteService {
     }
 
     public List<Vote> getAllVotes() {
-        return voteRepository.findAll();
+        List<Vote> votes = voteRepository.findAll();
+        for (Vote vote : votes) {
+            vote.setFormattedCreatedAt(vote.getCreatedAt().format(formatter));
+        }
+        return votes;
     }
 
     public Vote getVoteById(Long id) {

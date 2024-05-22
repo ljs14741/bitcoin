@@ -24,9 +24,10 @@ public class Vote {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Transient
+    @Column(name = "formatted_createdAt")
     private String formattedCreatedAt;
 
-    // getter와 setter 추가
     public String getFormattedCreatedAt() {
         return formattedCreatedAt;
     }
