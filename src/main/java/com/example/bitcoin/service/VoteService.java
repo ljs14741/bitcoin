@@ -45,7 +45,7 @@ public class VoteService {
     }
 
     public List<Vote> getAllVotes() {
-        List<Vote> votes = voteRepository.findAll();
+        List<Vote> votes = voteRepository.findAllOrderByCreatedAtDesc();
         for (Vote vote : votes) {
             vote.setFormattedCreatedAt(vote.getCreatedAt().format(formatter));
         }

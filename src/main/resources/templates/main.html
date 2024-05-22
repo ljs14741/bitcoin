@@ -43,6 +43,7 @@
 </header>
 
 <div class="btn-container">
+    <button onclick="window.location.href='https://binary96.store/voteList'">익명 투표!</button>
     <button onclick="window.location.href='https://kimchilotto.netlify.app/'">로또 추첨기</button>
     <button onclick="window.location.href='https://godofdeath.pages.dev/'">죽음 예측 테스트</button>
     <button onclick="window.location.href='https://binary96.store/rsiSummary'">코인 RSI 정보</button>
@@ -64,6 +65,28 @@
                 <button onclick="window.location.href='https://binary96.store/getLotto'">요청한 서비스1</button>
             </div>
         </section>
+    </div>
+
+    <!-- vote_id가 1인 투표 정보 표시 -->
+    <div class="vote-container">
+        <h2>익명 투표</h2>
+        <div class="vote">
+            <div>
+                <span th:text="${vote.title}">투표 제목</span>
+            </div>
+            <div>
+                <span th:text="${voteCount} + '명이 투표에 참여했어요'">참여 인원</span>
+            </div>
+            <div>
+                <form th:action="@{/vote/{id}(id=${vote.id})}" method="get">
+                    <button type="submit" class="vote-button">투표 하러가기</button>
+                </form>
+                <form th:action="@{/vote/results/{id}(id=${vote.id})}" method="get">
+                    <button type="submit" class="result-button">투표 결과보기</button>
+                </form>
+                <button onclick="window.location.href='https://binary96.store/voteList'">투표 목록가기</button>
+            </div>
+        </div>
     </div>
 
     <!-- 채팅 시스템 -->

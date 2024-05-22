@@ -1,60 +1,52 @@
 /* Body 스타일 */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #e1e9f0;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background-color: #f8f9fa;
+    color: #343a40;
 }
 
 /* 헤더 스타일 */
 header {
-    background-color: #333;
+    background-color: #343a40;
     color: white;
-    padding: 1rem;
+    padding: 1rem 0;
     text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* 제목 스타일 */
-h1 {
-    font-family: "Times New Roman", Times, serif;
-    color: white;
-    cursor: pointer;
+header h1 {
+    font-family: 'Georgia', serif;
+    font-size: 2.5rem;
+    margin: 0;
 }
 
-h1:hover {
+header h1:hover {
     color: #007bff; /* 마우스를 올렸을 때 글자색 변경 */
 }
 
-h2 {
-    font-family: "Times New Roman", Times, serif;
-    color: black;
-}
-
-/* 메인 컨테이너 스타일 */
+/* 컨테이너 스타일 */
 .container {
-    max-width: 1200px;
+    max-width: 1140px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 2rem 1rem;
 }
 
-/* 소개 섹션 스타일 */
-.intro {
+/* 섹션 스타일 */
+section {
     background-color: white;
     padding: 2rem;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 2rem;
 }
 
-/* 서비스 섹션 스타일 */
-.services {
-    background-color: white;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+section h2 {
+    font-family: 'Georgia', serif;
+    color: #343a40;
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
 }
 
 /* 테이블 스타일 */
@@ -63,36 +55,44 @@ table {
     border-collapse: collapse;
     margin-top: 20px;
     background-color: white;
-    opacity: 0.9;
     border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* 테이블 헤더 스타일 */
-th {
-    background-color: #f2f2f2;
-    padding: 8px;
+th, td {
+    padding: 12px;
     text-align: left;
-    border-bottom: 1px solid #ddd;
-    position: relative; /* 아이콘을 헤더에 겹쳐서 위치시키기 위해 */
 }
 
-/* 헤더 아이콘 스타일 */
-th i {
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
+th {
+    background-color: #007bff;
+    color: white;
 }
 
-/* 테이블 셀 스타일 */
 td {
-    padding: 8px;
     border-bottom: 1px solid #ddd;
 }
 
-/* 번갈아가며 색상 바꾸기 */
 tbody tr:nth-child(even) {
     background-color: #f2f2f2;
+}
+
+/* 버튼 스타일 */
+button, .vote-button, .result-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    margin-right: 10px; /* 버튼 간격 조정 */
+}
+
+button:hover, .vote-button:hover, .result-button:hover {
+    background-color: #218838;
 }
 
 /* 링크 스타일 */
@@ -106,38 +106,97 @@ a:hover {
     text-decoration: underline;
 }
 
-/* 버튼 및 버튼 컨테이너 스타일 */
-.btn-container {
-    text-align: center;
-    margin-top: 20px;
-    margin-bottom: 100px;
-}
-
-.btn-container button {
-    padding: 10px 20px;
-    margin: 0 10px;
-    font-size: 16px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.btn-container button:hover {
-    background-color: #0056b3;
-}
-
 /* 푸터 스타일 */
 footer {
-    background-color: #333;
+    background-color: #343a40;
     color: white;
     text-align: center;
     padding: 1rem;
     position: fixed;
     width: 100%;
     bottom: 0;
+}
+
+/* 투표 스타일 */
+.vote-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.vote-title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.vote-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.vote-form label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.vote-form input[type="text"],
+.vote-form select {
+    padding: 10px;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.vote-form input[type="submit"] {
+    align-self: flex-start;
+    background-color: #28a745;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.vote-form input[type="submit"]:hover {
+    background-color: #218838;
+}
+
+.vote-results {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.vote-results h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.vote-results .result {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.vote-results .result:last-child {
+    border-bottom: none;
+}
+
+.vote-results .result .label {
+    color: #666;
+}
+
+.vote-results .result .value {
+    font-weight: bold;
+    color: #333;
 }
 
 /* 채팅 시스템 스타일 */
@@ -207,7 +266,7 @@ footer {
 button {
     padding: 0.5rem 1rem;
     font-size: 16px;
-    background-color: #007bff;
+    background-color: #28a745;
     color: white;
     border: none;
     border-radius: 5px;
@@ -216,7 +275,7 @@ button {
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #218838;
 }
 
 .kakao-link {
@@ -224,44 +283,11 @@ button:hover {
     height: 100%; /* 버튼 높이에 맞게 조정 */
 }
 
-.vote-container {
-    max-width: 600px;
-    margin: 0 auto;
+/* 투표 목록 스타일 */
+.vote-options li {
+    background: #fff;
     padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-.vote-title {
-    font-size: 1.5em;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-.vote-participants {
-    color: #28a745;
-    font-weight: bold;
     margin-bottom: 10px;
-}
-.vote-date, .vote-status {
-    margin-bottom: 10px;
-    color: #555;
-}
-.vote-actions {
-    margin-top: 20px;
-}
-.vote-button, .result-button {
-    padding: 10px 20px;
-    font-size: 1em;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-.vote-button {
-    background-color: #28a745;
-    color: white;
-    margin-right: 10px;
-}
-.result-button {
-    background-color: #ccc;
-    color: #333;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
