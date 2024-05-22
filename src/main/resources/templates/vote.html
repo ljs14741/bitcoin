@@ -2,11 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>익명 투표하기</title>
 </head>
 <body>
 <div class="vote-container">
-    <h1 class="vote-title" th:text="${vote.title}">Vote Title</h1>
+    <h1 class="vote-title" th:text="${vote.title}">익명 투표하기</h1>
 
     <form th:action="@{/vote/{id}(id=${vote.id})}" method="post">
         <ul class="vote-options">

@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class VoteService {
@@ -50,6 +52,10 @@ public class VoteService {
         return votes;
     }
 
+    public Long getResultCountByVoteId(Long voteId) {
+        return voteResultRepository.countByVoteId(voteId);
+    }
+
     public Vote getVoteById(Long id) {
         return voteRepository.findById(id).orElseThrow(() -> new RuntimeException("Vote not found"));
     }
@@ -78,5 +84,10 @@ public class VoteService {
 
     public int countVotesByOptionId(Long optionId) {
         return voteResultRepository.countByOptionId(optionId).intValue();
+    }
+
+    public Map<Long, Long> getResultCountByVoteIdGrouped(Long voteId) {
+        return voteResultRepository.findByVoteId(voteId).stream()
+                .collect(Collectors.groupingBy(result -> result.getOption().getId(), Collectors.counting()));
     }
 }

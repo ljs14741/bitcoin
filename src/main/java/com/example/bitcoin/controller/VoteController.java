@@ -11,7 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Controller
@@ -22,7 +24,16 @@ public class VoteController {
     @GetMapping("/voteList")
     public String listVotes(Model model) {
         List<Vote> votes = voteService.getAllVotes();
+        Map<Long, Long> voteResults = new HashMap<>();
+
+        for (Vote vote : votes) {
+            Long voteId = vote.getId();
+            Long resultCount = voteService.getResultCountByVoteId(voteId);
+            voteResults.put(voteId, resultCount);
+        }
+
         model.addAttribute("votes", votes);
+        model.addAttribute("voteResults", voteResults);
         return "voteList";
     }
 
@@ -66,6 +77,16 @@ public class VoteController {
         }
 
         return "redirect:/voteList";
+    }
+
+    @GetMapping("/vote/results/{id}")
+    public String viewVoteResults(@PathVariable Long id, Model model) {
+        List<Options> options = voteService.getOptionsByVoteId(id);
+        Map<Long, Long> results = voteService.getResultCountByVoteIdGrouped(id);
+
+        model.addAttribute("options", options);
+        model.addAttribute("results", results);
+        return "voteResults";
     }
 
     private String getSessionIdFromCookie(HttpServletRequest request) {
