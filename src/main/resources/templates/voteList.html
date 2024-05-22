@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Vote List</h1>
+<a th:href="@{/vote/new}">Create a new vote</a>
+<ul>
+    <li th:each="vote : ${votes}">
+        <a th:href="@{/vote/{id}(id=${vote.id})}" th:text="${vote.title}"></a>
+        <span th:text="'Created at: ' + ${vote.createdAt}"></span>
+    </li>
+</ul>
+</body>
+</html>

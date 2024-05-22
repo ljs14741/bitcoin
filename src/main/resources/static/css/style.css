@@ -223,3 +223,45 @@ button:hover {
     display: inline-block;
     height: 100%; /* 버튼 높이에 맞게 조정 */
 }
+
+.vote-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.vote-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.vote-participants {
+    color: #28a745;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.vote-date, .vote-status {
+    margin-bottom: 10px;
+    color: #555;
+}
+.vote-actions {
+    margin-top: 20px;
+}
+.vote-button, .result-button {
+    padding: 10px 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.vote-button {
+    background-color: #28a745;
+    color: white;
+    margin-right: 10px;
+}
+.result-button {
+    background-color: #ccc;
+    color: #333;
+}
