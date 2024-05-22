@@ -3,22 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>익명 투표</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
 </head>
 <body>
-<h1>익명 투표</h1>
-<a th:href="@{/vote/new}">투표 만들기!</a>
-<ul>
-    <li th:each="vote : ${votes}">
-        <span th:text="${vote.title}"></span>
-        <span th:text="'생성시간: ' + ${vote.formattedCreatedAt}"></span>
-        <span th:text="${voteResults[vote.id]} + '명이 투표에 참여했어요'"></span>
-        <form th:action="@{/vote/{id}(id=${vote.id})}" method="get" style="display:inline;">
-            <button type="submit">투표 하러가기</button>
-        </form>
-        <form th:action="@{/vote/results/{id}(id=${vote.id})}" method="get" style="display:inline;">
-            <button type="submit">투표 결과보기</button>
-        </form>
-    </li>
-</ul>
+<div class="vote-container">
+    <h1>익명 투표</h1>
+    <a class="vote-button" th:href="@{/vote/new}">투표 만들기!</a>
+    <ul class="vote-options">
+        <li th:each="vote : ${votes}">
+            <span th:text="${vote.title}"></span> -
+            <span th:text="'생성시간: ' + ${vote.formattedCreatedAt}"></span> -
+            <span th:text="${voteResults[vote.id]} + '명이 투표에 참여했어요'"></span>
+            <form th:action="@{/vote/{id}(id=${vote.id})}" method="get">
+                <button type="submit" class="vote-button">투표 하러가기</button>
+            </form>
+            <form th:action="@{/vote/results/{id}(id=${vote.id})}" method="get">
+                <button type="submit" class="result-button">투표 결과보기</button>
+            </form>
+        </li>
+    </ul>
+</div>
 </body>
 </html>

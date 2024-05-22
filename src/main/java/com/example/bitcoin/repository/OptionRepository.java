@@ -14,5 +14,6 @@ public interface OptionRepository extends JpaRepository<Options, Long> {
     @Query("SELECT o FROM options o LEFT JOIN FETCH o.voteResults WHERE o.vote.id = :voteId")
     List<Options> findByVoteIdWithResults(@Param("voteId") Long voteId);
 
-    Optional<Options> findByVoteIdAndId(Long voteId, Long id);
+    @Query("SELECT o FROM options o WHERE o.vote.id = :voteId AND o.optionNumber = :optionNumber")
+    Optional<Options> findByVoteIdAndOptionNumber(@Param("voteId") Long voteId, @Param("optionNumber") Long optionNumber);
 }

@@ -62,7 +62,7 @@ public class VoteController {
     }
 
     @PostMapping("/vote/{id}")
-    public String submitVote(@PathVariable Long id, @RequestParam Long optionId, HttpServletRequest request, HttpServletResponse response, Model model) {
+    public String submitVote(@PathVariable Long id, @RequestParam Long optionNumber, HttpServletRequest request, HttpServletResponse response, Model model) {
         String sessionId = getSessionIdFromCookie(request);
 
         if (sessionId == null) {
@@ -71,7 +71,7 @@ public class VoteController {
         }
 
         try {
-            voteService.vote(id, optionId, sessionId);
+            voteService.vote(id, optionNumber, sessionId);
         } catch (IllegalArgumentException e) {
             return "redirect:/vote/" + id + "?error=" + e.getMessage();
         }

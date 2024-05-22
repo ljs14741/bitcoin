@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>투표 만들기</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
     <script>
         function addOption() {
             var optionList = document.getElementById("optionList");
@@ -21,17 +23,19 @@
     </script>
 </head>
 <body>
-<h1>투표 만들기</h1>
-<form th:action="@{/vote}" method="post">
-    <label for="title">Title:</label>
-    <input type="text" id="title" name="title">
-    <ul id="optionList">
-        <li><input type="text" name="options"></li>
-        <li><input type="text" name="options"></li>
-    </ul>
-    <button type="button" onclick="addOption()">선택지 추가</button>
-    <button type="button" onclick="removeOption()">선택지 제거</button>
-    <button type="submit">투표 생성</button>
-</form>
+<div class="vote-container">
+    <h1>투표 만들기</h1>
+    <form th:action="@{/vote}" method="post">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" class="vote-input">
+        <ul id="optionList" class="vote-options">
+            <li><input type="text" name="options" class="vote-input"></li>
+            <li><input type="text" name="options" class="vote-input"></li>
+        </ul>
+        <button type="button" onclick="addOption()" class="vote-button">선택지 추가</button>
+        <button type="button" onclick="removeOption()" class="vote-button">선택지 제거</button>
+        <button type="submit" class="vote-button">투표 생성</button>
+    </form>
+</div>
 </body>
 </html>

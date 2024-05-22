@@ -15,8 +15,12 @@ import java.util.List;
 @Entity(name="options")// class에 지정할 테이블명
 public class Options {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // PK를 생성 전략 설정 GenerationType.SEQUENCE
     @Column(name = "option_id")
     private Long id;
+
+    @Column(name = "option_number")
+    private Long optionNumber;
 
     @ManyToOne
     @JoinColumn(name = "vote_id")
@@ -26,9 +30,7 @@ public class Options {
     @Column(name = "option_text")
     private String optionText;
 
-    @OneToMany(mappedBy = "option")
+    @OneToMany(mappedBy = "optionNumber")
     private List<VoteResult> voteResults;
 
-//    @OneToMany(mappedBy = "options", cascade = CascadeType.ALL)
-//    private List<Vote> votes = new ArrayList<>();
 }

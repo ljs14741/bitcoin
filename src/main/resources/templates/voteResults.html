@@ -3,23 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>투표 결과</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
 </head>
 <body>
-<h1>투표 결과</h1>
-<table>
-    <thead>
-    <tr>
-        <th>선택지</th>
-        <th>투표 수</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="option : ${options}">
-        <td th:text="${option.optionText}"></td>
-        <td th:text="${results[option.id] != null ? results[option.id] : 0}"></td>
-    </tr>
-    </tbody>
-</table>
-<a th:href="@{/voteList}">투표 목록 가기</a>
+<div class="vote-container">
+    <h1>투표 결과</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>선택지</th>
+            <th>투표 수</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="option : ${options}">
+            <td th:text="${option.optionText}"></td>
+            <td th:text="${results[option.optionNumber] != null ? results[option.optionNumber] : 0}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <a class="result-button" th:href="@{/voteList}">투표 목록 가기</a>
+</div>
 </body>
 </html>

@@ -32,14 +32,14 @@ public class VoteService {
         LocalDateTime now = LocalDateTime.now();
         vote.setCreatedAt(now);
         Vote savedVote = voteRepository.save(vote);
-        long optionId = 1;
+        long optionNumber = 1;
         for (String optionText : options) {
             Options option = new Options();
-            option.setId(optionId);
+            option.setOptionNumber(optionNumber); // 수동으로 번호 설정
             option.setVote(savedVote);
             option.setOptionText(optionText);
             optionRepository.save(option);
-            optionId++;
+            optionNumber++;
         }
         return savedVote;
     }
@@ -60,20 +60,19 @@ public class VoteService {
         return voteRepository.findById(id).orElseThrow(() -> new RuntimeException("Vote not found"));
     }
 
-    public void vote(Long voteId, Long optionId, String sessionId) {
+    public void vote(Long voteId, Long optionNumber, String sessionId) {
         // 중복 투표 확인
         if (voteResultRepository.findByVoteIdAndUserId(voteId, sessionId).isPresent()) {
             throw new IllegalArgumentException("You have already voted.");
         }
 
         Vote vote = getVoteById(voteId);
-        Options option = optionRepository.findByVoteIdAndId(voteId, optionId).orElseThrow(() -> new RuntimeException("Option not found"));
+        Options option = optionRepository.findByVoteIdAndOptionNumber(voteId, optionNumber).orElseThrow(() -> new RuntimeException("Option not found"));
 
         VoteResult voteResult = new VoteResult();
-        voteResult.setOption(option);
+        voteResult.setOptionNumber(optionNumber); // 수동으로 번호 설정
         voteResult.setVote(vote);
         voteResult.setUserId(sessionId); // 사용자 세션 ID 설정
-        voteResult.setCount(1);
 
         voteResultRepository.save(voteResult);
     }
@@ -82,12 +81,12 @@ public class VoteService {
         return optionRepository.findByVoteIdWithResults(voteId);
     }
 
-    public int countVotesByOptionId(Long optionId) {
-        return voteResultRepository.countByOptionId(optionId).intValue();
+    public int countVotesByOptionNumber(Long voteId, Long optionNumber) {
+        return voteResultRepository.countByVoteIdAndOptionNumber(voteId, optionNumber).intValue();
     }
 
     public Map<Long, Long> getResultCountByVoteIdGrouped(Long voteId) {
         return voteResultRepository.findByVoteId(voteId).stream()
-                .collect(Collectors.groupingBy(result -> result.getOption().getId(), Collectors.counting()));
+                .collect(Collectors.groupingBy(VoteResult::getOptionNumber, Collectors.counting()));
     }
 }

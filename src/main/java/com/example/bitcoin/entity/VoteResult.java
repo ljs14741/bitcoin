@@ -17,14 +17,17 @@ public class VoteResult {
     @Column(name = "vote_result_id")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "option_id")
+//    @ManyToOne
+//    @JoinColumn(name = "option_id")
 //    @Column(name = "option_id")
-    private Options option;
+//    private Options option;
 
     @ManyToOne
     @JoinColumn(name = "vote_id")
     private Vote vote;
+
+    @Column(name = "option_number")
+    private Long optionNumber;
 
     @Column(name = "count")
     private int count=0;
