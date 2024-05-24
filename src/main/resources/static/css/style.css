@@ -1,36 +1,76 @@
+/* 폰트 */
+@font-face {
+    font-family: 'TTHakgyoansimUndongjangL';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_keris@1.0/TTHakgyoansimUndongjangL.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'IBMPlexSansKR-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/IBMPlexSansKR-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
 /* Body 스타일 */
 body {
-    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-family: 'IBMPlexSansKR-Regular', Arial, sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f8f9fa;
     color: #343a40;
+    text-align: center;
+    vertical-align: center;
 }
 
 /* 헤더 스타일 */
 header {
     background-color: #343a40;
     color: white;
+    height: 340px;
     padding: 1rem 0;
     text-align: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 header h1 {
-    font-family: 'Georgia', serif;
-    font-size: 2.5rem;
+    font-family: 'TTHakgyoansimUndongjangL', serif;
+    font-size: 60px;
+    padding: 100px;
     margin: 0;
 }
 
 header h1:hover {
-    color: #007bff; /* 마우스를 올렸을 때 글자색 변경 */
+    color: black; /* 마우스를 올렸을 때 글자색 변경 */
+}
+
+.btn-container{
+    background-color: #343a40;
+    width: 100%;
+    position: sticky;
+    margin-bottom: 1rem;
+    top: 0;
+    /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);*/
+}
+
+.btn-container button {
+    margin: 20px 5px;
 }
 
 /* 컨테이너 스타일 */
 .container {
     max-width: 1140px;
     margin: 0 auto;
-    padding: 2rem 1rem;
+    padding: 0 1rem 2rem 1rem;
+    position: relative;
+    top: -80px;
+}
+
+.service {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
 }
 
 /* 섹션 스타일 */
@@ -39,14 +79,15 @@ section {
     padding: 2rem;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 2rem;
+    margin: 0 1rem 2rem;
 }
 
-section h2 {
-    font-family: 'Georgia', serif;
+h2 {
+    font-family: 'TTHakgyoansimUndongjangL', serif;
     color: #343a40;
     font-size: 1.75rem;
     margin-bottom: 1rem;
+    text-align: center;
 }
 
 /* 테이블 스타일 */
@@ -66,7 +107,7 @@ th, td {
 }
 
 th {
-    background-color: #007bff;
+    background-color: #5239AA;
     color: white;
 }
 
@@ -79,30 +120,30 @@ tbody tr:nth-child(even) {
 }
 
 /* 버튼 스타일 */
-button, .vote-button, .result-button {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
-    margin-right: 10px; /* 버튼 간격 조정 */
-}
+/*button, .vote-button, .result-button {*/
+/*    background-color: #28a745;*/
+/*    color: white;*/
+/*    border: 3px solid black;*/
+/*    padding: 10px 20px;*/
+/*    border-radius: 5px;*/
+/*    cursor: pointer;*/
+/*    font-size: 1rem;*/
+/*    transition: background-color 0.3s ease;*/
+/*    margin-right: 10px; !* 버튼 간격 조정 *!*/
+/*}*/
 
 button:hover, .vote-button:hover, .result-button:hover {
-    background-color: #218838;
+    background-color: #3F3955;
 }
 
 /* 링크 스타일 */
 a {
-    color: #007bff;
+    color: #5239AA;
     text-decoration: none;
 }
 
 a:hover {
-    color: #0056b3;
+    color: #3F3955;
     text-decoration: underline;
 }
 
@@ -119,8 +160,8 @@ footer {
 
 /* 투표 스타일 */
 .vote-container {
-    max-width: 800px;
-    margin: 0 auto;
+    max-width: 1140px;
+    margin: 0 1rem 2rem;
     padding: 20px;
     background: white;
     border-radius: 10px;
@@ -152,7 +193,7 @@ footer {
 
 .vote-form input[type="submit"] {
     align-self: flex-start;
-    background-color: #28a745;
+    background-color: #5239AA;
     border: none;
     color: white;
     padding: 10px 20px;
@@ -162,7 +203,7 @@ footer {
 }
 
 .vote-form input[type="submit"]:hover {
-    background-color: #218838;
+    background-color: #3F3955;
 }
 
 .vote-results {
@@ -205,16 +246,21 @@ footer {
     padding: 1rem;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-top: 2rem;
+    margin: 2rem 1rem;
+    display: flex;
+    align-items: center;
+    flex-flow: column;
 }
 
 #chat-box {
     border: 1px solid #ddd;
     padding: 1rem;
+    width: calc(100% - 98px);
     height: 300px;
     overflow-y: scroll;
     margin-bottom: 1rem;
     background-color: white;
+    border-radius: 5px;
 }
 
 #messages {
@@ -225,7 +271,7 @@ footer {
 /* 사용자 이름 스타일 */
 .message-username {
     font-weight: bold;
-    color: #007bff;
+    color: #5239AA;
     margin-right: 5px;
 }
 
@@ -240,9 +286,15 @@ footer {
     border-radius: 5px;
     border: 1px solid #ddd;
     margin-bottom: 10px;
+    font-family: 'IBMPlexSansKR-Regular', Arial, sans-serif;
+}
+
+#message-input{
+    height: 70px;
 }
 
 .chat-buttons {
+    width: calc(100% - 61px);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -250,23 +302,25 @@ footer {
 }
 
 button {
-    padding: 0.5rem 1rem;
-    font-size: 16px;
-    background-color: #28a745;
+    padding: 0 1rem;
+    font-size: 14px;
+    font-family: 'TTHakgyoansimUndongjangL', Arial, sans-serif;
+    background-color: #5239AA;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    height: 100%; /* 버튼 높이에 맞게 조정 */
+    height: 40px; /* 버튼 높이에 맞게 조정 */
 }
 
 button:hover {
-    background-color: #218838;
+    background-color: #3F3955;
 }
 
 .kakao-link {
     display: inline-block;
-    height: 100%; /* 버튼 높이에 맞게 조정 */
+    height: 40px; /* 버튼 높이에 맞게 조정 */
+    vertical-align: bottom;
 }
 
 .nickname-form {
@@ -285,4 +339,44 @@ button:hover {
     margin-bottom: 10px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.vote div{
+    display: flex;
+    flex-flow: row;
+    justify-content: space-evenly;
+}
+
+
+#chat div{
+    text-align: left;
+}
+
+input::placeholder {
+    font-family: 'IBMPlexSansKR-Regular', Arial, sans-serif;
+}
+
+
+.btn-submit{
+    width: 200px;
+}
+
+.btn-changeName{
+    font-family: 'IBMPlexSansKR-Regular', Arial, sans-serif;
+    font-size: 14px;
+    background-color: #606060;
+}
+
+
+@media screen and (max-width: 768px) {
+    .chat-buttons{
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .btn-submit{
+        width: calc(100% - 2px);
+    }
 }
