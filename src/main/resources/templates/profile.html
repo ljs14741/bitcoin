@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>닉네임 수정</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+</head>
+<body>
+<h1>닉네임 수정</h1>
+<p th:text="'현재 닉네임: ' + ${user.changeNickname}"></p>
+
+<form th:action="@{/updateNickname}" method="post">
+    <label for="newNickname">변경할 닉네임:</label>
+    <input type="text" id="newNickname" name="newNickname" required>
+    <button type="submit">변경하기</button>
+</form>
+
+<p th:if="${error}" th:text="${error}"></p>
+
+<a href="/">메인 화면</a>
+
+
+</body>
+</html>

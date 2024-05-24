@@ -243,24 +243,10 @@ footer {
 }
 
 .chat-buttons {
-    position: relative;
-    margin-top: 10px;
-    height: 40px; /* 버튼 높이에 맞게 조정 */
-}
-
-.chat-buttons button {
-    position: absolute;
-    left: 0;
-}
-
-.chat-buttons .kakao-link {
-    position: absolute;
-    left: 5cm; /* 5cm 정도 오른쪽 */
-}
-
-#kakao-login-btn {
-    display: block;
-    height: 100%; /* 버튼 높이에 맞게 조정 */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px; /* 버튼 높이에 맞게 조정 */
 }
 
 button {
@@ -281,6 +267,15 @@ button:hover {
 .kakao-link {
     display: inline-block;
     height: 100%; /* 버튼 높이에 맞게 조정 */
+}
+
+.nickname-form {
+    display: inline-block;
+    height: 100%;
+}
+
+#kakao-login-btn {
+    height: 40px;
 }
 
 /* 투표 목록 스타일 */

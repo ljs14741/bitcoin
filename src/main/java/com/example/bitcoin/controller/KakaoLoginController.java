@@ -2,8 +2,11 @@ package com.example.bitcoin.controller;
 
 //import org.springframework.security.core.annotation.AuthenticationPrincipal;
 //import org.springframework.security.oauth2.core.user.OAuth2User;
+import com.example.bitcoin.entity.User;
+import com.example.bitcoin.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
@@ -26,6 +29,8 @@ public class KakaoLoginController {
     private final String redirectUri = System.getenv("KAKAO_REDIRECT_URI");
 //    private final String redirectUri = "https://binary96.store/login/oauth2/code/kakao";
 
+    @Autowired
+    UserService userService;
 
     @GetMapping("/oauth/kakao")
     public RedirectView kakaoLogin() {
@@ -79,13 +84,19 @@ public class KakaoLoginController {
 
             if (userInfoResponse.getStatusCode().is2xxSuccessful()) {
                 Map<String, Object> userInfo = userInfoResponse.getBody();
+                Long kakaoId = ((Number) userInfo.get("id")).longValue();
                 Map<String, Object> kakaoAccount = (Map<String, Object>) userInfo.get("kakao_account");
                 Map<String, String> profile = (Map<String, String>) kakaoAccount.get("profile");
                 String nickname = profile.get("nickname");
 
+                // 사용자를 찾거나 새로 생성 후 저장
+                User user = userService.findOrCreateUser(kakaoId, nickname);
+
                 // 세션 또는 쿠키에 사용자 정보 저장 후 리디렉션
                 // 예: 세션에 저장
                 // session.setAttribute("nickname", nickname);
+                log.info("히히히 사용자 ID: " + kakaoId);
+                session.setAttribute("id", user.getId());
                 session.setAttribute("nickname", nickname);
                 log.info("하하하: " + session.getAttribute("nickname"));
 
