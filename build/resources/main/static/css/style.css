@@ -304,7 +304,7 @@ button:hover {
 
 .kakao-link {
     display: inline-block;
-    height: 40px; /* 버튼 높이에 맞게 조정 */
+    height: 100%; /* 버튼 높이에 맞게 조정 */
     vertical-align: bottom;
 }
 
@@ -358,7 +358,6 @@ input::placeholder {
         display: flex;
         flex-flow: column;
         align-items: center;
-        gap: 5px;
     }
 
     .btn-submit{
