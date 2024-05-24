@@ -5,6 +5,9 @@ import com.example.bitcoin.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class UserService {
 
@@ -26,7 +29,13 @@ public class UserService {
     }
 
     public boolean nicknameExists(String nickname) {
-        return userRepository.findByChangeNickname(nickname) != null;
+        String cleanedNickname = nickname.replaceAll("\\s", "");
+        List<String> cleanedExistingNicknames = userRepository.findAllNicknames()
+                .stream()
+                .map(existingNickname -> existingNickname.replaceAll("\\s", ""))
+                .collect(Collectors.toList());
+
+        return cleanedExistingNicknames.contains(cleanedNickname);
     }
 
     public void updateNickname(Long userId, String newNickname) {
