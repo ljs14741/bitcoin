@@ -97,7 +97,7 @@ public class KakaoLoginController {
                 // session.setAttribute("nickname", nickname);
                 log.info("히히히 사용자 ID: " + kakaoId);
                 session.setAttribute("id", user.getId());
-                session.setAttribute("nickname", nickname);
+                session.setAttribute("nickname", user.getChangeNickname());
                 log.info("하하하: " + session.getAttribute("nickname"));
 
                 return "redirect:/";
