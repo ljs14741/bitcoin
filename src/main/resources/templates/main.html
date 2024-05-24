@@ -11,6 +11,7 @@
     <meta name="naver-site-verification" content="7bf5ed460d4c7ce510734301ed66231be04df7ba" />
     <meta name="msvalidate.01" content="CDD92023DE164E539D882BD93CF03BCC" />
     <meta name="google-site-verification" content="6n2SJb2lATZ_KUu0EfXjXrOn2yTT-VcNv7aRmHJGoTU" />
+    <!--    <link rel="stylesheet" type="text/css" href="../static/css/style.css">-->
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="icon" href="/img/favicon/favicon.ico" type="image/x-icon">
@@ -34,23 +35,25 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!--    <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>-->
-<!--    <script>Kakao.init('8b68c737be6b8e9a8007c61ee6f9b8da');</script>-->
+    <!--    <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>-->
+    <!--    <script>Kakao.init('8b68c737be6b8e9a8007c61ee6f9b8da');</script>-->
 </head>
 <body>
 <header>
     <h1 onclick="window.location.href='https://binary96.store/'">뭐든지 만들어드립니다</h1>
+
+
 </header>
 
-<div class="btn-container">
-    <button onclick="window.location.href='https://binary96.store/voteList'">익명 투표!</button>
-    <button onclick="window.location.href='https://kimchilotto.netlify.app/'">로또 추첨기</button>
-    <button onclick="window.location.href='https://godofdeath.pages.dev/'">죽음 예측 테스트</button>
-    <button onclick="window.location.href='https://binary96.store/rsiSummary'">코인 RSI 정보</button>
-    <button onclick="window.location.href='https://binary96.store/getLotto'">로또 당첨 순위</button>
-</div>
 
 <main class="container">
+    <div class="btn-container">
+        <button onclick="window.location.href='https://binary96.store/voteList'">익명 투표!</button>
+        <button onclick="window.location.href='https://kimchilotto.netlify.app/'">로또 추첨기</button>
+        <button onclick="window.location.href='https://godofdeath.pages.dev/'">죽음 예측 테스트</button>
+        <button onclick="window.location.href='https://binary96.store/rsiSummary'">코인 RSI 정보</button>
+        <button onclick="window.location.href='https://binary96.store/getLotto'">로또 당첨 순위</button>
+    </div>
     <section class="intro">
         <h2>Binary의 서비스</h2>
         <p>저는 사용자의 요구에 맞춰 무엇이든 제작해드리는 서비스를 제공합니다. 현재는 코인 RSI 정보, 죽음 예측 테스트, 로또추첨기 서비스를 운영중입니다.</p>
@@ -101,18 +104,18 @@
             </div>
         </div>
         <input type="text" id="username-input" placeholder="사용자 이름(카톡 로그인 하세요.) 닉네임 변경 가능" readonly>
-<!--        <input type="text" id="username-input" th:placeholder="${session.nickname}" readonly>-->
+        <!--        <input type="text" id="username-input" th:placeholder="${session.nickname}" readonly>-->
         <input type="text" id="message-input" placeholder="메시지를 입력하세요" onkeypress="if(event.keyCode==13) sendMessage()">
         <div class="chat-buttons">
-            <button onclick="sendMessage()">전송</button>
-            <button onclick="changeNickname()">닉네임 변경하기</button>
+            <button class="btn-changeName" onclick="changeNickname()">닉네임 변경하기</button>
+            <button class="btn-submit" onclick="sendMessage()">전송</button>
             <a href="/oauth/kakao" class="kakao-link">
                 <img id="kakao-login-btn" th:src="@{/img/kakao_login_medium_narrow.png}" alt="카카오톡 로그인">
             </a>
         </div>
     </div>
-<!--    <div>-->
-<!--    </div>-->
+    <!--    <div>-->
+    <!--    </div>-->
     <br>
     <section class="intro">
         <h2>방문해 주셔서 감사합니다!</h2>
@@ -198,7 +201,7 @@
 
     $(document).ready(function() {
         $("#kakao-login-btn").click(function() {
-                window.location.href = "/oauth/kakao";
+            window.location.href = "/oauth/kakao";
         });
     });
 
@@ -214,6 +217,26 @@
 
         connect();
         scrollToBottom();
+    });
+
+
+    //모바일 반응
+    const mql = window.matchMedia("screen and (max-width: 768px)");
+    const btnChangeName = document.querySelector('.btn-changeName')
+    const btnSubmit = document.querySelector('.btn-submit')
+    const btnKakao = document.querySelector('.kakao-link')
+    const divChatBtn = document.querySelector('.chat-buttons')
+
+
+    mql.addListener(function(e) {
+        if(e.matches) {
+            console.log('모바일 화면 입니다.');
+            divChatBtn.append(btnChangeName);
+        } else {
+            console.log('데스크탑 화면 입니다.');
+            divChatBtn.append(btnSubmit);
+            divChatBtn.append(btnKakao);
+        }
     });
 </script>
 </body>
