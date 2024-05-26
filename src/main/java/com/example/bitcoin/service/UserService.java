@@ -2,17 +2,25 @@ package com.example.bitcoin.service;
 
 import com.example.bitcoin.entity.User;
 import com.example.bitcoin.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    // 유니코드 공백 문자 패턴 정의
+    private static final Pattern UNICODE_WHITESPACE_PATTERN = Pattern.compile(
+            "[\\p{Zs}\\u0009\\u000A\\u000B\\u000C\\u000D\\u0085\\u00A0\\u1680\\u2000-\\u200A\\u2028\\u2029\\u202F\\u205F\\u3000\\u3164]"
+    );
 
     public User findOrCreateUser(Long kakaoId, String nickname) {
         User user = userRepository.findByKakaoId(kakaoId);
@@ -28,11 +36,18 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
+
+    // 공백 문자 제거
+    private String removeUnicodeWhitespaces(String input) {
+        return UNICODE_WHITESPACE_PATTERN.matcher(input).replaceAll("");
+    }
+
     public boolean nicknameExists(String nickname) {
-        String cleanedNickname = nickname.replaceAll("\\s", "");
+        String cleanedNickname = removeUnicodeWhitespaces(nickname);
+        log.info("안되자나: " + cleanedNickname);
         List<String> cleanedExistingNicknames = userRepository.findAllNicknames()
                 .stream()
-                .map(existingNickname -> existingNickname.replaceAll("\\s", ""))
+                .map(this::removeUnicodeWhitespaces)
                 .collect(Collectors.toList());
 
         return cleanedExistingNicknames.contains(cleanedNickname);
@@ -40,7 +55,8 @@ public class UserService {
 
     public void updateNickname(Long userId, String newNickname) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        user.setChangeNickname(newNickname);
+        String cleanedNickname = removeUnicodeWhitespaces(newNickname);
+        user.setChangeNickname(cleanedNickname);
         userRepository.save(user);
     }
 }

@@ -29,7 +29,7 @@ public class User {
     @Column(name = "first_nickname")
     private String firstNickname;
 
-    @Column(name = "change_nickname")
+    @Column(name = "change_nickname", unique = true)
     private String changeNickname;
 
     @CreatedDate
