@@ -86,7 +86,6 @@ public class GetRsiService {
                 double rsiMonthly = getRsi(dttm, "months", market);
                 rsiMonthly = Math.round(rsiMonthly * 100.0) / 100.0;
                 existingRsi.setRsiMonthly(rsiMonthly);
-                existingRsi.setUpdatedAt(now);
                 rsiRepository.save(existingRsi);
                 try {
                     Thread.sleep(300); // 0.3초 딜레이
@@ -151,7 +150,6 @@ public class GetRsiService {
 
     // RSI 값을 데이터베이스에 저장하는 메서드
     private void saveRsi(String market, String koreanName, double rsi15, double rsi60, double rsiDaily, double rsiWeekly, double rsiMonthly) {
-        LocalDateTime now = LocalDateTime.now();
 
         Rsi rsi = Rsi.builder()
                 .market(market)
@@ -161,8 +159,6 @@ public class GetRsiService {
                 .rsiDaily(rsiDaily)
                 .rsiWeekly(rsiWeekly)
                 .rsiMonthly(rsiMonthly)
-                .createdAt(now)
-                .updatedAt(now)
                 .build();
         rsiRepository.save(rsi);
     }

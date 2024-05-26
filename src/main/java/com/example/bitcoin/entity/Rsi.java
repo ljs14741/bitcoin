@@ -3,6 +3,9 @@ package com.example.bitcoin.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -12,6 +15,7 @@ import java.time.LocalDateTime;
 @ToString // 객체의 값 확인
 @AllArgsConstructor //생성자 자동 완성
 @NoArgsConstructor //생성자 자동 완성
+@EntityListeners(AuditingEntityListener.class)
 @Entity(name="rsi")
 public class Rsi {
     @Id
@@ -40,9 +44,11 @@ public class Rsi {
     @Column(name = "rsi_monthly")
     private double rsiMonthly;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @CreatedDate
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
 
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    @LastModifiedDate
+    @Column(name = "updated_date")
+    private LocalDateTime updatedDate;
 }

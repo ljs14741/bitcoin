@@ -27,7 +27,7 @@ public class RsiDTO {
 
     private double rsiMonthly;
 
-    private LocalDateTime createdAt;
+    private LocalDateTime createdDate;
 
-    private LocalDateTime updatedAt;
+    private LocalDateTime updatedDate;
 }

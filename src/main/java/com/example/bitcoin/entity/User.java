@@ -33,13 +33,12 @@ public class User {
     private String changeNickname;
 
     @CreatedDate
-    @Column(updatable = false, name = "created_at")
-
-    private LocalDateTime createdAt;
+    @Column(updatable = false, name = "created_date")
+    private LocalDateTime createdDate;
 
     @LastModifiedDate
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    @Column(name = "updated_date")
+    private LocalDateTime updatedDate;
 
     public User(Long kakaoId, String firstNickname) {
         this.kakaoId = kakaoId;

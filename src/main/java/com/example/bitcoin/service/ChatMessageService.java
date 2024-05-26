@@ -19,19 +19,16 @@ public class ChatMessageService {
         ChatMessage chatMessage = ChatMessage.builder()
                 .username(chatMessageDTO.getUsername())
                 .message(chatMessageDTO.getMessage())
-                .createdAt(LocalDateTime.now())
                 .build();
         chatMessageRepository.save(chatMessage);
     }
 
     public List<ChatMessageDTO> getAllMessages() {
-        List<ChatMessage> messages = chatMessageRepository.findAllByOrderByCreatedAtAsc();
+        List<ChatMessage> messages = chatMessageRepository.findAllByOrderByCreatedDateAsc();
         return messages.stream().map(message -> ChatMessageDTO.builder()
                 .username(message.getUsername())
                 .message(message.getMessage())
-                .createdAt(message.getCreatedAt())
+                .createdDate(message.getCreatedDate())
                 .build()).collect(Collectors.toList());
     }
-
-
 }

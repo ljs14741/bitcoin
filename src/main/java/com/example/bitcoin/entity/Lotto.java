@@ -4,6 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 @Getter //클래스의 포함된 멤버 변수의 모든 getter 매서드를 생성
 @Setter
@@ -11,8 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 @ToString // 객체의 값 확인
 @AllArgsConstructor //생성자 자동 완성
 @NoArgsConstructor //생성자 자동 완성
+@EntityListeners(AuditingEntityListener.class)
 @Entity(name="lotto")// class에 지정할 테이블명
-@Slf4j
 public class Lotto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // PK를 생성 전략 설정 GenerationType.SEQUENCE
@@ -39,4 +44,12 @@ public class Lotto {
 
     @Column(name = "number6")
     private int number6;
+
+    @CreatedDate
+    @Column(updatable = false, name = "created_date")
+    private LocalDateTime createdDate;
+
+    @LastModifiedDate
+    @Column(name = "updated_date")
+    private LocalDateTime updatedDate;
 }
