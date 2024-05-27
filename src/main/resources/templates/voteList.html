@@ -24,14 +24,18 @@
 </div>
 <div class="vote-container">
     <h1>익명 투표</h1>
-    <a class="vote-button" th:href="@{/vote/new}">투표 만들기!</a>
+<!--    <a class="vote-button" th:href="@{/vote/new}" onclick="createVote()">투표 만들기!</a>-->
+    <button onclick="createVote()">투표 만들기!</button>
+    <a href="#" onclick="redirectToKakaoLogin(event)" class="kakao-link">
+        <img id="kakao-login-btn" th:src="@{/img/kakao_login_medium_narrow.png}" alt="카카오톡 로그인">
+    </a>
     <ul class="vote-options">
         <li th:each="vote : ${votes}">
             <div>
                 <span th:text="${vote.title}">투표</span>
             </div>
             <div>
-                <span th:text="'생성시간: ' + ${vote.formattedCreatedAt}">생성시간</span>
+                <span th:text="'생성시간: ' + ${vote.formattedCreatedDate}">생성시간</span>
             </div>
             <div>
                 <span th:text="${voteResults[vote.id]} + '명이 투표에 참여했어요'">몇명참여</span>
@@ -47,5 +51,24 @@
         </li>
     </ul>
 </div>
+
+<script th:inline="javascript">
+    function createVote() {
+        var sessionNickname = [[${session.nickname}]];
+        alert("세션: " + sessionNickname);
+        if (sessionNickname !== null && sessionNickname !== undefined) {
+            window.location.href = "/vote/new";
+        } else {
+            alert("카카오톡 로그인을 후 투표를 만들어주세요.");
+        }
+    }
+
+    function redirectToKakaoLogin(event) {
+        event.preventDefault(); // 기본 동작을 막습니다.
+        const currentUrl = encodeURIComponent(window.location.href);
+        window.location.href = `/oauth/kakao?state=${currentUrl}`;
+    }
+
+</script>
 </body>
 </html>

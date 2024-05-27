@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface VoteRepository extends JpaRepository<Vote, Long> {
-    @Query("SELECT v FROM vote v ORDER BY v.createdAt DESC")
-    List<Vote> findAllOrderByCreatedAtDesc();
+    @Query("SELECT v FROM vote v ORDER BY v.createdDate DESC")
+    List<Vote> findAllOrderByCreatedDateDesc();
 }

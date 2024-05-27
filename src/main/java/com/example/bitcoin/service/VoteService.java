@@ -29,8 +29,8 @@ public class VoteService {
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일 a h시 m분");
 
     public Vote createVote(Vote vote, List<String> options) {
-        LocalDateTime now = LocalDateTime.now();
-        vote.setCreatedAt(now);
+//        LocalDateTime now = LocalDateTime.now();
+//        vote.setCreatedAt(now);
         Vote savedVote = voteRepository.save(vote);
         long optionNumber = 1;
         for (String optionText : options) {
@@ -45,9 +45,9 @@ public class VoteService {
     }
 
     public List<Vote> getAllVotes() {
-        List<Vote> votes = voteRepository.findAllOrderByCreatedAtDesc();
+        List<Vote> votes = voteRepository.findAllOrderByCreatedDateDesc();
         for (Vote vote : votes) {
-            vote.setFormattedCreatedAt(vote.getCreatedAt().format(formatter));
+            vote.setFormattedCreatedDate(vote.getCreatedDate().format(formatter));
         }
         return votes;
     }

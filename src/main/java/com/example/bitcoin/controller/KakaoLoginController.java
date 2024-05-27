@@ -33,15 +33,17 @@ public class KakaoLoginController {
     UserService userService;
 
     @GetMapping("/oauth/kakao")
-    public RedirectView kakaoLogin() {
+    public RedirectView kakaoLogin(@RequestParam(value = "state", required = false) String state) {
         String kakaoUrl = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=" + clientId + "&redirect_uri=" + redirectUri;
+        if (state != null) {
+            kakaoUrl += "&state=" + state;
+        }
         log.info("카카오url: " + kakaoUrl);
-//        kakaoCallback();
         return new RedirectView(kakaoUrl);
     }
 
     @RequestMapping("/login/oauth2/code/kakao")
-    public String kakaoCallback(@RequestParam String code, HttpSession session) {
+    public String kakaoCallback(@RequestParam String code, @RequestParam(value = "state", required = false) String state, HttpSession session) {
         log.info("Received code: " + code);
 
         RestTemplate restTemplate = new RestTemplate();
@@ -99,8 +101,13 @@ public class KakaoLoginController {
                 session.setAttribute("id", user.getId());
                 session.setAttribute("nickname", user.getChangeNickname());
                 log.info("하하하: " + session.getAttribute("nickname"));
+                log.info("state: " + state);
 
-                return "redirect:/";
+                if (state != null) {
+                    return "redirect:" + state;
+                } else {
+                    return "redirect:/";
+                }
             } else {
                 log.error("Failed to fetch user info from Kakao API: " + userInfoResponse.getStatusCode());
             }

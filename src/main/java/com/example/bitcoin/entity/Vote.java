@@ -2,6 +2,9 @@ package com.example.bitcoin.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -11,6 +14,7 @@ import java.time.LocalDateTime;
 @ToString // 객체의 값 확인
 @AllArgsConstructor //생성자 자동 완성
 @NoArgsConstructor //생성자 자동 완성
+@EntityListeners(AuditingEntityListener.class)
 @Entity(name="vote")// class에 지정할 테이블명
 public class Vote {
     @Id
@@ -21,19 +25,24 @@ public class Vote {
     @JoinColumn(name = "title")
     private String title;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
     @Transient
-    @Column(name = "formatted_createdAt")
-    private String formattedCreatedAt;
+    @Column(name = "formatted_created_date")
+    private String formattedCreatedDate;
 
-    public String getFormattedCreatedAt() {
-        return formattedCreatedAt;
+    @CreatedDate
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
+
+    @LastModifiedDate
+    @Column(name = "updated_date")
+    private LocalDateTime updatedDate;
+
+    public String getFormattedCreatedDate() {
+        return formattedCreatedDate;
     }
 
-    public void setFormattedCreatedAt(String formattedCreatedAt) {
-        this.formattedCreatedAt = formattedCreatedAt;
+    public void setFormattedCreatedDate(String formattedCreatedDate) {
+        this.formattedCreatedDate = formattedCreatedDate;
     }
 
 }
