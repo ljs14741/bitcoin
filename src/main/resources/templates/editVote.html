@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>투표 수정하기</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <script>
+        function addOption() {
+            var optionList = document.getElementById("optionList");
+            var optionItem = document.createElement("li");
+            var span = document.createElement("span");
+            span.classList.add("option-label");
+            var input = document.createElement("input");
+            input.type = "text";
+            input.name = "options";
+            input.classList.add("vote-input");
+            optionItem.appendChild(span);
+            optionItem.appendChild(input);
+            optionList.appendChild(optionItem);
+            updateOptionNumbers();
+        }
+
+        function removeOption() {
+            var optionList = document.getElementById("optionList");
+            if (optionList.childElementCount > 2) {
+                optionList.removeChild(optionList.lastChild);
+            }
+            updateOptionNumbers();
+        }
+
+        function updateOptionNumbers() {
+            var optionList = document.getElementById("optionList");
+            var options = optionList.getElementsByTagName("li");
+            for (var i = 0; i < options.length; i++) {
+                var span = options[i].getElementsByClassName("option-label")[0];
+                var input = options[i].getElementsByTagName("input")[0];
+                span.textContent = "항목 " + (i + 1) + ": ";
+            }
+        }
+
+        window.onload = function() {
+            updateOptionNumbers();
+        };
+    </script>
+</head>
+<body>
+<div class="vote-container">
+    <h1>투표 수정하기</h1>
+    <form th:action="@{/vote/update/{id}(id=${vote.id})}" method="post">
+        <label for="title">투표 제목:</label>
+        <input type="text" id="title" name="title" class="vote-input" th:value="${vote.title}">
+        <ul id="optionList" class="vote-options">
+            <li th:each="option, iter : ${options}">
+                <span class="option-label" th:text="'항목 ' + ${iter.index + 1} + ': '"></span>
+                <input type="text" name="options" class="vote-input" th:value="${option.optionText}">
+            </li>
+        </ul>
+        <button type="button" onclick="addOption()" class="vote-button">선택지 추가</button>
+        <button type="button" onclick="removeOption()" class="vote-button">선택지 제거</button>
+        <button type="submit" class="vote-button">투표 수정</button>
+    </form>
+</div>
+</body>
+</html>

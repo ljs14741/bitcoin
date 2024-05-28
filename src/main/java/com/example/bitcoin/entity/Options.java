@@ -39,7 +39,7 @@ public class Options {
     private List<VoteResult> voteResults;
 
     @CreatedDate
-    @Column(name = "created_date")
+    @Column(name = "created_date", updatable = false)
     private LocalDateTime createdDate;
 
     @LastModifiedDate

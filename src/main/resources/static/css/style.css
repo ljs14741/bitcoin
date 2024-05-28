@@ -316,6 +316,11 @@ button {
 button:hover {
     background-color: #3F3955;
 }
+.kakao-login-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
 
 .kakao-link {
     display: inline-block;

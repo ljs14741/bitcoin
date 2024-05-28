@@ -6,6 +6,8 @@ import com.example.bitcoin.service.VoteService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,10 +19,12 @@ import java.util.Map;
 import java.util.UUID;
 
 @Controller
+@Slf4j
 public class VoteController {
     @Autowired
     private VoteService voteService;
 
+    //투표 목록 조회
     @GetMapping("/voteList")
     public String listVotes(Model model) {
         List<Vote> votes = voteService.getAllVotes();
@@ -37,18 +41,48 @@ public class VoteController {
         return "voteList";
     }
 
+    // 투표 생성 화면 조회
     @GetMapping("/vote/new")
     public String newVoteForm(Model model) {
         model.addAttribute("vote", new Vote());
         return "newVote";
     }
 
+    // 투표 수정 화면 조회
+    @GetMapping("/vote/edit/{id}")
+    public String editVoteForm(@PathVariable Long id, Model model, HttpSession session) {
+        Long kakaoId = (Long) session.getAttribute("kakaoId");
+        Vote vote = voteService.getVoteById(id);
+        if (!vote.getKakaoId().equals(kakaoId)) {
+            return "redirect:/voteList";
+        }
+        List<Options> options = voteService.getOptionsByVoteId(id);
+
+        model.addAttribute("vote", vote);
+        model.addAttribute("options", options);
+        return "editVote";
+    }
+
+    // 투표 생성하기
     @PostMapping("/vote")
-    public String createVote(@ModelAttribute Vote vote, @RequestParam List<String> options) {
+    public String createVote(@ModelAttribute Vote vote, @RequestParam List<String> options, HttpSession session) {
+        Long kakaoId = (Long) session.getAttribute("kakaoId");
+        vote.setKakaoId(kakaoId);
         voteService.createVote(vote, options);
         return "redirect:/voteList";
     }
 
+    // 투표 수정하기
+    @PostMapping("/vote/update/{id}")
+    public String updateVote(@PathVariable Long id, @ModelAttribute Vote vote, @RequestParam List<String> options, HttpSession session) {
+        Long kakaoId = (Long) session.getAttribute("kakaoId");
+        vote.setId(id);
+        vote.setKakaoId(kakaoId);
+        voteService.updateVote(vote, options);
+        return "redirect:/voteList";
+    }
+
+    // 투표 화면 조회
     @GetMapping("/vote/{id}")
     public String vote(@PathVariable Long id, Model model, @RequestParam(required = false) String error) {
         Vote vote = voteService.getVoteById(id);
@@ -61,6 +95,7 @@ public class VoteController {
         return "vote";
     }
 
+    // 투표하기
     @PostMapping("/vote/{id}")
     public String submitVote(@PathVariable Long id, @RequestParam Long optionNumber, HttpServletRequest request, HttpServletResponse response, Model model) {
         String sessionId = getSessionIdFromCookie(request);
@@ -79,6 +114,7 @@ public class VoteController {
         return "redirect:/voteList";
     }
 
+    // 투표 결과 화면 조회
     @GetMapping("/vote/results/{id}")
     public String viewVoteResults(@PathVariable Long id, Model model) {
         List<Options> options = voteService.getOptionsByVoteId(id);
@@ -103,6 +139,7 @@ public class VoteController {
 
     private void setSessionIdCookie(HttpServletResponse response, String sessionId) {
         Cookie cookie = new Cookie("VOTE_SESSION_ID", sessionId);
+
         cookie.setPath("/");
         cookie.setMaxAge(60 * 60 * 24 * 365); // 1년 동안 유효
         response.addCookie(cookie);
