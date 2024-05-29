@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>오늘의 운세</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+</head>
+<body>
+<h1>여기는 오늘의 운세!ㅋ</h1>
+<div class="container mt-5">
+  <h2>오늘의 운세</h2>
+  <form id="userForm" action="#" th:action="@{/saveUser}" th:object="${user}" method="post" class="form-group" onsubmit="return checkLoginAndSubmit()">
+    <div class="mb-3">
+      <label for="gender" class="form-label">성별</label>
+      <select id="gender" th:field="*{gender}" class="form-select">
+        <option value="남성">남성</option>
+        <option value="여성">여성</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="solarLunar" class="form-label">양력/음력</label>
+      <select id="solarLunar" th:field="*{solarLunar}" class="form-select">
+        <option value="양력">양력</option>
+        <option value="음력 평달">음력 평달</option>
+        <option value="음력 윤달">음력 윤달</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="birthTime" class="form-label">태어난 시간</label>
+      <select id="birthTime" th:field="*{birthTime}" class="form-select">
+        <option value="모름">모름</option>
+        <option value="子(자) 23:30 ~ 01:29">子(자) 23:30 ~ 01:29</option>
+        <option value="丑(축) 01:30 ~ 03:29">丑(축) 01:30 ~ 03:29</option>
+        <option value="寅(인) 03:30 ~ 05:29">寅(인) 03:30 ~ 05:29</option>
+        <option value="卯(묘) 05:30 ~ 07:29">卯(묘) 05:30 ~ 07:29</option>
+        <option value="辰(진) 07:30 ~ 09:29">辰(진) 07:30 ~ 09:29</option>
+        <option value="巳(사) 09:30 ~ 11:29">巳(사) 09:30 ~ 11:29</option>
+        <option value="午(오) 11:30 ~ 13:29">午(오) 11:30 ~ 13:29</option>
+        <option value="未(미) 13:30 ~ 15:29">未(미) 13:30 ~ 15:29</option>
+        <option value="申(신) 15:30 ~ 17:29">申(신) 15:30 ~ 17:29</option>
+        <option value="酉(유) 17:30 ~ 19:29">酉(유) 17:30 ~ 19:29</option>
+        <option value="戌(술) 19:30 ~ 21:29">戌(술) 19:30 ~ 21:29</option>
+        <option value="亥(해) 21:30 ~ 23:29">亥(해) 21:30 ~ 23:29</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="birthDate" class="form-label">생년월일</label>
+      <input type="date" id="birthDate" th:field="*{birthDate}" class="form-control" required/>
+
+    </div>
+    <button type="submit" class="btn btn-primary">저장</button>
+    <a href="#" onclick="redirectToKakaoLogin(event)" class="kakao-link">
+      <img id="kakao-login-btn" th:src="@{/img/kakao_login_medium_narrow.png}" alt="카카오톡 로그인">
+    </a>
+  </form>
+
+  <form action="/getLucky" method="get" onsubmit="return checkLoginAndSubmit()">
+    <button type="submit" class="btn btn-success">운세 확인하기</button>
+  </form>
+
+  <div id="fortune-result" th:text="${fortuneResult}"></div>
+</div>
+<script th:inline="javascript">
+
+  function checkLoginAndSubmit() {
+    var sessionNickname = [[${session.nickname}]];
+    if (sessionNickname !== null && sessionNickname !== undefined) {
+      return true;
+    } else {
+      alert("카카오톡 로그인을 후 이용해주세요.");
+      return false;
+    }
+
+  }
+  function redirectToKakaoLogin(event) {
+    event.preventDefault();
+    const currentUrl = encodeURIComponent(window.location.href);
+    window.location.href = `/oauth/kakao?state=${currentUrl}`;
+  }
+
+</script>
+</body>
+</html>

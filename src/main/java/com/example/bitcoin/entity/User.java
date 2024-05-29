@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter //클래스의 포함된 멤버 변수의 모든 getter 매서드를 생성
@@ -31,6 +32,18 @@ public class User {
 
     @Column(name = "change_nickname", unique = true)
     private String changeNickname;
+
+    @Column(name = "gender")
+    private String gender;
+
+    @Column(name = "solar_lunar")
+    private String solarLunar;
+
+    @Column(name = "birth_time")
+    private String birthTime;
+
+    @Column(name = "birth_date")
+    private LocalDate birthDate;
 
     @CreatedDate
     @Column(updatable = false, name = "created_date")
