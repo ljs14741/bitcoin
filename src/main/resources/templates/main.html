@@ -222,24 +222,24 @@
     });
 
 
-    //모바일 반응
-    // const mql = window.matchMedia("screen and (max-width: 768px)");
-    // const btnChangeName = document.querySelector('.btn-changeName')
-    // const btnSubmit = document.querySelector('.btn-submit')
-    // const btnKakao = document.querySelector('.kakao-link')
-    // const divChatBtn = document.querySelector('.chat-buttons')
-    //
-    //
-    // mql.addListener(function(e) {
-    //     if(e.matches) {
-    //         console.log('모바일 화면 입니다.');
-    //         divChatBtn.append(btnChangeName);
-    //     } else {
-    //         console.log('데스크탑 화면 입니다.');
-    //         divChatBtn.append(btnSubmit);
-    //         divChatBtn.append(btnKakao);
-    //     }
-    // });
+    // 모바일 반응
+    const mql = window.matchMedia("screen and (max-width: 768px)");
+    const btnChangeName = document.querySelector('.btn-changeName')
+    const btnSubmit = document.querySelector('.btn-submit')
+    const btnKakao = document.querySelector('.kakao-link')
+    const divChatBtn = document.querySelector('.chat-buttons')
+
+
+    mql.addListener(function(e) {
+        if(e.matches) {
+            console.log('모바일 화면 입니다.');
+            divChatBtn.append(btnChangeName);
+        } else {
+            console.log('데스크탑 화면 입니다.');
+            divChatBtn.append(btnSubmit);
+            divChatBtn.append(btnKakao);
+        }
+    });
 </script>
 </body>
 </html>
