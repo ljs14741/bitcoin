@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Controller
@@ -70,6 +72,13 @@ import java.util.Optional;
                 if (latestLuckyOptional.isPresent()) {
                     Lucky luckyResult = latestLuckyOptional.get();
                     model.addAttribute("luckyResult",luckyResult);
+
+                    LocalDate today = LocalDate.now();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+                    String formattedDate = today.format(formatter);
+
+                    model.addAttribute("luckytime", formattedDate);
+
                 } else {
                     model.addAttribute("luckyResult", "운세 정보를 찾을 수 없습니다.");
                 }

@@ -33,7 +33,13 @@ public class LuckyService {
 
     @PostConstruct
     public void setup() {
-        System.setProperty("webdriver.chrome.driver", "C:/chromedriver-win64/chromedriver.exe");
+        String os = System.getProperty("os.name").toLowerCase();
+        log.info("os: " + os);
+        if (os.contains("win")) {
+            System.setProperty("webdriver.chrome.driver", "C:/chromedriver-win64/chromedriver.exe");
+        } else {
+            System.setProperty("webdriver.chrome.driver", "/home/ubuntu/chromedriver-linux64/chromedriver");
+        }
     }
 
     public String getLucky(User user) {
@@ -96,11 +102,13 @@ public class LuckyService {
 
             // 운세 결과 가져오기
             Thread.sleep(2000); // 2초 대기
-            WebElement resultElement = driver.findElement(By.cssSelector("dd"));
+//            WebElement resultElement = driver.findElement(By.cssSelector("dd"));
+//            WebElement resultElement = driver.findElement(By.cssSelector("#fortune_birthResult > div:nth-child(3) > dl:nth-child(3) > dd > strong"));
+            WebElement resultElement = driver.findElement(By.cssSelector("#fortune_birthResult > div:nth-child(3) > dl:nth-child(3) > dd > strong"));
             String luckyTitle = resultElement.getText();
-            log.info("운세 결과 전체 가져오기 완료");
+            log.info("운세 결과 제목 가져오기 완료");
 
-            WebElement detailedResultElement = resultElement.findElement(By.tagName("p"));
+            WebElement detailedResultElement = driver.findElement(By.cssSelector("#fortune_birthResult > div:nth-child(3) > dl:nth-child(3) > dd > p"));
             String luckyDetail = detailedResultElement.getText();
             log.info("운세 결과 상세 내용 가져오기 완료");
 
