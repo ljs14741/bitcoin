@@ -11,4 +11,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u.changeNickname FROM user u")
     List<String> findAllNicknames();
+
+    List<User> findAllByBirthDateIsNotNull();
 }

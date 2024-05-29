@@ -1,6 +1,9 @@
 package com.example.bitcoin.service;
 
+import com.example.bitcoin.entity.Lucky;
 import com.example.bitcoin.entity.User;
+import com.example.bitcoin.repository.LuckyRepository;
+import com.example.bitcoin.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
@@ -11,26 +14,29 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
 public class LuckyService {
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    LuckyRepository luckyRepository;
+
     @PostConstruct
     public void setup() {
         System.setProperty("webdriver.chrome.driver", "C:/chromedriver-win64/chromedriver.exe");
     }
 
     public String getLucky(User user) {
-        log.info("1: " + user.getGender());
-        log.info("2: " + user.getSolarLunar());
-        log.info("3: " + user.getBirthTime());
-        log.info("4: " + user.getBirthDate());
-        log.info("5: " + user.getBirthDate().getYear());
-        log.info("6: " + user.getBirthDate().getMonthValue());
-        log.info("5: " + user.getBirthDate().getDayOfMonth());
 
         WebDriver driver = new ChromeDriver();
         try {
@@ -91,19 +97,41 @@ public class LuckyService {
             // 운세 결과 가져오기
             Thread.sleep(2000); // 2초 대기
             WebElement resultElement = driver.findElement(By.cssSelector("dd"));
-            String resultText = resultElement.getText();
+            String luckyTitle = resultElement.getText();
             log.info("운세 결과 전체 가져오기 완료");
 
             WebElement detailedResultElement = resultElement.findElement(By.tagName("p"));
-            String detailedResultText = detailedResultElement.getText();
+            String luckyDetail = detailedResultElement.getText();
             log.info("운세 결과 상세 내용 가져오기 완료");
 
-            return resultText + "\n상세 내용: " + detailedResultText;
+            // 운세 정보를 Lucky 엔터티에 저장
+            Lucky lucky = Lucky.builder()
+                    .kakaoId(user.getKakaoId())
+                    .luckyTitle(luckyTitle)
+                    .luckyDetail(luckyDetail)
+                    .build();
+
+            luckyRepository.save(lucky);
+
+            return luckyTitle + "\n상세 내용: " + luckyDetail;
         } catch (Exception e) {
             log.error("운세를 가져오는 데 실패했습니다.", e);
             return "운세를 가져오는 데 실패했습니다.";
         } finally {
             driver.quit();
         }
+    }
+
+    // 운세 스케줄
+    public void scheduledLucky() {
+        List<User> users = userRepository.findAllByBirthDateIsNotNull();
+        for (User user : users) {
+            getLucky(user);
+        }
+    }
+
+    // 운세 조회
+    public Optional<Lucky> getLatestLucky(Long kakaoId) {
+        return luckyRepository.findTopByKakaoIdOrderByCreatedDateDesc(kakaoId);
     }
 }

@@ -25,7 +25,7 @@ public class LottoController {
     @Autowired
     private LottoRepository lottoRepository;
 
-    // 매주 월요일 오전 6시 로또 번호 insert
+    // 매주 일요일 오전 6시 로또 번호 insert
     @Scheduled(cron = "0 0 6 * * SUN")
     @ResponseBody
     public String saveLotto() {
@@ -48,5 +48,4 @@ public class LottoController {
         model.addAttribute("numberFrequencies", numberFrequencies);
         return "lotto";
     }
-
 }
