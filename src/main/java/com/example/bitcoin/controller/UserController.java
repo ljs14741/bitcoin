@@ -20,20 +20,25 @@ public class UserController {
 
     @GetMapping("/profile")
     public String showProfile(HttpSession session, Model model) {
-        Long userId = (Long) session.getAttribute("id");
-        if (userId == null) {
+        log.info("아나: " + session.getAttribute("kakaoId"));
+        Long kakaoId = (Long) session.getAttribute("kakaoId");
+        if (kakaoId == null) {
             return "redirect:/";
         }
 
-        User user = userService.findById(userId);
+        User user = userService.findById(kakaoId);
+            log.info("user: " + user.getId());
+            log.info("getFirstNickname: " + user.getFirstNickname());
+            log.info("getChangeNickname: " + user.getChangeNickname());
+            log.info("getKakaoId: " + user.getKakaoId());
         model.addAttribute("user", user);
         return "profile";
     }
 
     @PostMapping("/updateNickname")
     public String updateNickname(@RequestParam String newNickname, HttpSession session, Model model) {
-        Long userId = (Long) session.getAttribute("id");
-        if (userId == null) {
+        Long kakaoId = (Long) session.getAttribute("kakaoId");
+        if (kakaoId == null) {
             return "redirect:/";
         }
 
@@ -42,7 +47,7 @@ public class UserController {
             return showProfile(session, model);
         }
 
-        userService.updateNickname(userId, newNickname);
+        userService.updateNickname(kakaoId, newNickname);
         session.setAttribute("nickname", newNickname);
         return "redirect:/";
     }

@@ -7,8 +7,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter //클래스의 포함된 멤버 변수의 모든 getter 매서드를 생성
 @Setter
@@ -17,33 +15,27 @@ import java.util.List;
 @AllArgsConstructor //생성자 자동 완성
 @NoArgsConstructor //생성자 자동 완성
 @EntityListeners(AuditingEntityListener.class)
-@Entity(name="options")// class에 지정할 테이블명
-public class Options {
+@Entity(name="lucky")
+public class Lucky {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // PK를 생성 전략 설정 GenerationType.SEQUENCE
-    @Column(name = "option_id")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "lucky_id")
+    private Long luckyId;
 
-    @Column(name = "option_number")
-    private Long optionNumber;
+    @Column(name = "kakao_id")
+    private Long kakaoId;
 
-    @ManyToOne
-    @JoinColumn(name = "vote_id")
-//    @Column(name = "vote_id")
-    private Vote vote;
+    @Column(name = "lucky_title", columnDefinition = "TEXT")
+    private String luckyTitle;
 
-    @Column(name = "option_text")
-    private String optionText;
-
-    @OneToMany(mappedBy = "optionNumber")
-    private List<VoteResult> voteResults;
+    @Column(name = "lucky_detail", columnDefinition = "TEXT")
+    private String luckyDetail;
 
     @CreatedDate
-    @Column(name = "created_date", updatable = false)
+    @Column(updatable = false, name = "created_date")
     private LocalDateTime createdDate;
 
     @LastModifiedDate
     @Column(name = "updated_date")
     private LocalDateTime updatedDate;
-
 }

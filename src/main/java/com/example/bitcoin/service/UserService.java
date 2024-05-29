@@ -32,8 +32,8 @@ public class UserService {
         return user;
     }
 
-    public User findById(Long id) {
-        return userRepository.findById(id).orElse(null);
+    public User findById(Long kakaoId) {
+        return userRepository.findByKakaoId(kakaoId);
     }
 
 
@@ -53,8 +53,8 @@ public class UserService {
         return cleanedExistingNicknames.contains(cleanedNickname);
     }
 
-    public void updateNickname(Long userId, String newNickname) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+    public void updateNickname(Long kakaoId, String newNickname) {
+        User user = userRepository.findByKakaoId(kakaoId);
         String cleanedNickname = removeUnicodeWhitespaces(newNickname);
         user.setChangeNickname(cleanedNickname);
         userRepository.save(user);

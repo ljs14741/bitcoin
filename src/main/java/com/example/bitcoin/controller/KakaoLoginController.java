@@ -38,7 +38,6 @@ public class KakaoLoginController {
         if (state != null) {
             kakaoUrl += "&state=" + state;
         }
-        log.info("카카오url: " + kakaoUrl);
         return new RedirectView(kakaoUrl);
     }
 
@@ -95,13 +94,8 @@ public class KakaoLoginController {
                 User user = userService.findOrCreateUser(kakaoId, nickname);
 
                 // 세션 또는 쿠키에 사용자 정보 저장 후 리디렉션
-                // 예: 세션에 저장
-                // session.setAttribute("nickname", nickname);
-                log.info("히히히 사용자 ID: " + kakaoId);
-                session.setAttribute("id", user.getId());
+                session.setAttribute("kakaoId", user.getKakaoId());
                 session.setAttribute("nickname", user.getChangeNickname());
-                log.info("하하하: " + session.getAttribute("nickname"));
-                log.info("state: " + state);
 
                 if (state != null) {
                     return "redirect:" + state;

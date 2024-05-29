@@ -16,4 +16,6 @@ public interface OptionRepository extends JpaRepository<Options, Long> {
 
     @Query("SELECT o FROM options o WHERE o.vote.id = :voteId AND o.optionNumber = :optionNumber")
     Optional<Options> findByVoteIdAndOptionNumber(@Param("voteId") Long voteId, @Param("optionNumber") Long optionNumber);
+
+    void deleteByVoteId(Long voteId);
 }

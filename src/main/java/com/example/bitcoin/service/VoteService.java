@@ -8,8 +8,8 @@ import com.example.bitcoin.repository.VoteRepository;
 import com.example.bitcoin.repository.OptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +29,7 @@ public class VoteService {
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일 a h시 m분");
 
     public Vote createVote(Vote vote, List<String> options) {
-//        LocalDateTime now = LocalDateTime.now();
-//        vote.setCreatedAt(now);
+
         Vote savedVote = voteRepository.save(vote);
         long optionNumber = 1;
         for (String optionText : options) {
@@ -42,6 +41,21 @@ public class VoteService {
             optionNumber++;
         }
         return savedVote;
+    }
+
+    @Transactional
+    public void updateVote(Vote vote, List<String> options) {
+        Vote savedVote = voteRepository.save(vote);
+        optionRepository.deleteByVoteId(savedVote.getId());
+        long optionNumber = 1;
+        for (String optionText : options) {
+            Options option = new Options();
+            option.setOptionNumber(optionNumber); // 수동으로 번호 설정
+            option.setVote(savedVote);
+            option.setOptionText(optionText);
+            optionRepository.save(option);
+            optionNumber++;
+        }
     }
 
     public List<Vote> getAllVotes() {

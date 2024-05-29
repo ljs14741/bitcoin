@@ -22,6 +22,9 @@ public class Vote {
     @Column(name = "vote_id")
     private Long id;
 
+    @Column(name = "kakao_id")
+    private Long kakaoId;
+
     @JoinColumn(name = "title")
     private String title;
 
@@ -30,7 +33,7 @@ public class Vote {
     private String formattedCreatedDate;
 
     @CreatedDate
-    @Column(name = "created_date")
+    @Column(name = "created_date", updatable = false)
     private LocalDateTime createdDate;
 
     @LastModifiedDate

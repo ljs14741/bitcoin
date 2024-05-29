@@ -316,6 +316,11 @@ button {
 button:hover {
     background-color: #3F3955;
 }
+.kakao-login-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
 
 .kakao-link {
     display: inline-block;
@@ -365,6 +370,29 @@ input::placeholder {
     font-family: 'IBMPlexSansKR-Regular', Arial, sans-serif;
     font-size: 14px;
     background-color: #606060;
+}
+
+.spinner {
+    display: none;
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 5px solid #3498db;
+    animation: spin 1s linear infinite;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading {
+    display: block;
 }
 
 

@@ -9,6 +9,24 @@
     <meta property="og:title" content="익명 투표">
     <meta property="og:description" content="익명으로 투표 만들고 투표할 수 있습니다.">
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <link rel="icon" href="/img/favicon/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="57x57" href="/img/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/img/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/img/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/img/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/img/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/img/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/img/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/img/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/img/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/img/favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
 </head>
 <body>
 <header>
@@ -21,14 +39,17 @@
     <button onclick="window.location.href='https://godofdeath.pages.dev/'">죽음 예측 테스트</button>
     <button onclick="window.location.href='https://binary96.store/rsiSummary'">코인 RSI 정보</button>
     <button onclick="window.location.href='https://binary96.store/getLotto'">로또 당첨 순위</button>
+    <button onclick="window.location.href='https://binary96.store/lucky'">오늘의 운세</button>
 </div>
+
 <div class="vote-container">
-    <h1>익명 투표</h1>
-<!--    <a class="vote-button" th:href="@{/vote/new}" onclick="createVote()">투표 만들기!</a>-->
+    <h2>익명 투표</h2>
+    <div class="kakao-login-container">
+        <a href="#" onclick="redirectToKakaoLogin(event)" class="kakao-link">
+            <img id="kakao-login-btn" th:src="@{/img/kakao_login_medium_narrow.png}" alt="카카오톡 로그인">
+        </a>
+    </div>
     <button onclick="createVote()">투표 만들기!</button>
-    <a href="#" onclick="redirectToKakaoLogin(event)" class="kakao-link">
-        <img id="kakao-login-btn" th:src="@{/img/kakao_login_medium_narrow.png}" alt="카카오톡 로그인">
-    </a>
     <ul class="vote-options">
         <li th:each="vote : ${votes}">
             <div>
@@ -47,27 +68,43 @@
                 <form th:action="@{/vote/results/{id}(id=${vote.id})}" method="get">
                     <button type="submit" class="result-button">투표 결과보기</button>
                 </form>
+<!--                <button type="button" class="edit-button" th:voteId="${vote.id}" th:onclick="editVote(this.getAttribute('voteId'))">투표 수정하기</button>-->
+                <button type="button" class="edit-button" th:voteId="${vote.id}" th:kakaoId="${vote.kakaoId}" th:onclick="editVote(this.getAttribute('voteId'), this.getAttribute('kakaoId'))">투표 수정하기</button>
             </div>
         </li>
     </ul>
 </div>
 
 <script th:inline="javascript">
+
+    function editVote(voteId, voteKakaoId) {
+        var sessionKakaoId = [[${session.kakaoId}]];
+
+        console.log('voteKakaoId: ' + voteKakaoId);
+        console.log('sessionKakaoId: ' + sessionKakaoId);
+
+        if (Number(sessionKakaoId) === Number(voteKakaoId)) {
+            window.location.href = "/vote/edit/" + voteId;
+        } else {
+            alert("카카오톡 로그인이 필요하며, 수정은 투표 생성자만 가능합니다");
+        }
+    }
     function createVote() {
         var sessionNickname = [[${session.nickname}]];
-        alert("세션: " + sessionNickname);
         if (sessionNickname !== null && sessionNickname !== undefined) {
             window.location.href = "/vote/new";
         } else {
-            alert("카카오톡 로그인을 후 투표를 만들어주세요.");
+            alert("카카오톡 로그인을 후 투표를 생성하시오.");
         }
     }
 
     function redirectToKakaoLogin(event) {
-        event.preventDefault(); // 기본 동작을 막습니다.
+        event.preventDefault();
         const currentUrl = encodeURIComponent(window.location.href);
         window.location.href = `/oauth/kakao?state=${currentUrl}`;
     }
+
+
 
 </script>
 </body>
