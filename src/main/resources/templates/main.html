@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <title>뭐든지 만들어드립니다</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>뭐든지 만들어드립니다</title>
     <meta name="title" content="뭐든지 만들어드립니다.">
     <meta name="description" content="뭐든지 만들어드립니다. 웹으로 만들 수 있는 걸 요청해주시면 최대한 만들어보겠습니다. ">
     <meta property="og:title" content="뭐든지 만들어드립니다.">
@@ -11,7 +11,9 @@
     <meta name="naver-site-verification" content="7bf5ed460d4c7ce510734301ed66231be04df7ba" />
     <meta name="msvalidate.01" content="CDD92023DE164E539D882BD93CF03BCC" />
     <meta name="google-site-verification" content="6n2SJb2lATZ_KUu0EfXjXrOn2yTT-VcNv7aRmHJGoTU" />
-    <!--    <link rel="stylesheet" type="text/css" href="../static/css/style.css">-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="icon" href="/img/favicon/favicon.ico" type="image/x-icon">
@@ -32,29 +34,30 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!--    <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>-->
-    <!--    <script>Kakao.init('8b68c737be6b8e9a8007c61ee6f9b8da');</script>-->
 </head>
 <body>
 <header>
-    <h1 onclick="window.location.href='https://binary96.store/'">뭐든지 만들어드립니다</h1>
-
-
+    <div class="container">
+        <div class="logo" onclick="window.location.href='https://binary96.store/'">
+            <h1>뭐든지 만들어드립니다</h1>
+        </div>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="https://binary96.store/lucky"><i class="fas fa-star"></i>오늘의 운세</a></li>
+                <li><a href="https://binary96.store/voteList"><i class="fas fa-vote-yea"></i>익명 투표!</a></li>
+                <li><a href="https://kimchilotto.netlify.app/"><i class="fas fa-ticket-alt"></i>로또 추첨기</a></li>
+                <li><a href="https://godofdeath.pages.dev/"><i class="fas fa-skull-crossbones"></i>죽음 예측 테스트</a></li>
+                <li><a href="https://binary96.store/rsiSummary"><i class="fas fa-chart-line"></i>코인 RSI 정보</a></li>
+                <li><a href="https://binary96.store/getLotto"><i class="fas fa-medal"></i>로또 당첨 순위</a></li>
+            </ul>
+        </nav>
+        <div class="hamburger" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+    </div>
 </header>
 
-
 <main class="container">
-    <div class="btn-container">
-        <button onclick="window.location.href='https://binary96.store/voteList'">익명 투표!</button>
-        <button onclick="window.location.href='https://kimchilotto.netlify.app/'">로또 추첨기</button>
-        <button onclick="window.location.href='https://godofdeath.pages.dev/'">죽음 예측 테스트</button>
-        <button onclick="window.location.href='https://binary96.store/rsiSummary'">코인 RSI 정보</button>
-        <button onclick="window.location.href='https://binary96.store/getLotto'">로또 당첨 순위</button>
-        <button onclick="window.location.href='https://binary96.store/lucky'">오늘의 운세</button>
-    </div>
     <section class="intro">
         <h2>Binary의 서비스</h2>
         <p>필요하신 것을 요청해 주시면 무엇이든 제작해 드리겠습니다.</p>
@@ -222,25 +225,10 @@
         scrollToBottom();
     });
 
-
-    // 모바일 반응
-    const mql = window.matchMedia("screen and (max-width: 768px)");
-    const btnChangeName = document.querySelector('.btn-changeName')
-    const btnSubmit = document.querySelector('.btn-submit')
-    const btnKakao = document.querySelector('.kakao-link')
-    const divChatBtn = document.querySelector('.chat-buttons')
-
-
-    mql.addListener(function(e) {
-        if(e.matches) {
-            console.log('모바일 화면 입니다.');
-            divChatBtn.append(btnChangeName);
-        } else {
-            console.log('데스크탑 화면 입니다.');
-            divChatBtn.append(btnSubmit);
-            divChatBtn.append(btnKakao);
-        }
-    });
+    function toggleMenu() {
+        const nav = document.querySelector('header .main-nav ul');
+        nav.classList.toggle('active');
+    }
 </script>
 </body>
 </html>
