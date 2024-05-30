@@ -58,48 +58,10 @@
 </header>
 
 <main class="container">
-    <section class="intro">
-        <h2>Binary의 서비스</h2>
-        <p>필요하신 것을 요청해 주시면 무엇이든 제작해 드리겠습니다.</p>
-        <p>채팅창에 요청해 주시면 최대한 만들어 보겠습니다.</p>
-        <p>욕은 자제해 주시고 매너 채팅 부탁드립니다~</p>
-        <p>웹페이지 예쁘게 꾸며 주신 상윤님 감사합니다. ^^</p>
-    </section>
-
-    <div class="service-container">
-        <section class="intro">
-            <h2>사용자 요청 목록</h2>
-            <div class="service">
-                <img th:src="@{/img/img1.jpg}" alt="요청한 서비스1">
-                <button onclick="window.location.href='https://binary96.store/getLotto'">요청한 서비스1</button>
-            </div>
-        </section>
-    </div>
-
-    <!-- vote_id가 1인 투표 정보 표시 -->
-    <div class="vote-container">
-        <h2>익명 투표</h2>
-        <div class="vote">
-            <div>
-                <span th:text="${vote.title}" style="font-size: 24px;">투표 제목</span>
-            </div>
-            <div>
-                <span th:text="${voteCount} + '명이 투표에 참여했어요'">참여 인원</span>
-            </div>
-            <div>
-                <form th:action="@{/vote/{id}(id=${vote.id})}" method="get">
-                    <button type="submit" class="vote-button">투표 하러가기</button>
-                </form>
-                <form th:action="@{/vote/results/{id}(id=${vote.id})}" method="get">
-                    <button type="submit" class="result-button">투표 결과보기</button>
-                </form>
-                <button onclick="window.location.href='https://binary96.store/voteList'">투표 목록가기</button>
-            </div>
-        </div>
-    </div>
 
     <!-- 채팅 시스템 -->
     <div id="chat">
+        <h2 class="chat-title">채팅창</h2>
         <div id="chat-box" style="height: 400px; overflow-y: scroll;">
             <div id="messages">
                 <div th:each="message : ${messages}">
@@ -120,8 +82,49 @@
             </a>
         </div>
     </div>
-    <!--    <div>-->
-    <!--    </div>-->
+
+    <div class="section-row">
+        <section class="intro">
+            <h2>Binary의 서비스</h2>
+            <p>필요하신 것을 요청해 주시면 무엇이든 제작해 드리겠습니다.</p>
+            <p>채팅창에 요청해 주시면 최대한 만들어 보겠습니다.</p>
+            <p>욕은 자제해 주시고 매너 채팅 부탁드립니다~</p>
+            <p>웹페이지 예쁘게 꾸며 주신 상윤님 감사합니다. ^^</p>
+        </section>
+
+        <section class="intro">
+            <h2>사용자 요청 목록</h2>
+            <div class="service">
+                <button onclick="window.location.href='https://binary96.store/getLotto'">로또 당첨 순위</button>
+            </div>
+            <div class="service">
+                <button onclick="window.location.href='https://binary96.store/lucky'">오늘의 운세</button>
+            </div>
+        </section>
+
+        <!-- vote_id가 1인 투표 정보 표시 -->
+        <section class="vote-container">
+            <h2>익명 투표</h2>
+            <div class="vote">
+                <div>
+                    <span th:text="${vote.title}" style="font-size: 24px;">투표 제목</span>
+                </div>
+                <div>
+                    <span th:text="${voteCount} + '명이 투표에 참여했어요'">참여 인원</span>
+                </div>
+                <div>
+                    <form th:action="@{/vote/{id}(id=${vote.id})}" method="get">
+                        <button type="submit">투표 하러가기</button>
+                    </form>
+                    <form th:action="@{/vote/results/{id}(id=${vote.id})}" method="get">
+                        <button type="submit">투표 결과보기</button>
+                    </form>
+                    <button onclick="window.location.href='https://binary96.store/voteList'">투표 목록가기</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
     <br>
     <section class="intro">
         <h2>방문해 주셔서 감사합니다!</h2>
@@ -131,8 +134,6 @@
             후원해 주시면 감사합니다! &#127877; → <a href="https://toss.me/godofdeath">복채 보내기</a>
         </div>
     </section>
-
-
 
     <div class="btn-container">
         <button onclick="window.location.href='https://blog.naver.com/ljs14741'">네이버블로그</button>
@@ -162,10 +163,6 @@
         var username = [[${session.nickname}]];
         var messageInput = document.getElementById('message-input');
         if(username !== null && username !== undefined && messageInput.value.trim() !== "") {
-            // if(username === "") {
-            //     username = usernameInput.value;
-            //     usernameInput.disabled = true;
-            // }
             let offset = 1000 * 60 * 60 * 9; // 9시간 밀리세컨드 값
             let today = new Date(Date.now() + offset);
 
@@ -177,6 +174,7 @@
 
             stompClient.send("/app/chat", {}, JSON.stringify(message));
             messageInput.value = '';
+            scrollToBottom();
         } else {
             alert("카카오톡 로그인을 후 메시지를 입력하세요.");
         }

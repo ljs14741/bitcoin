@@ -29,6 +29,11 @@ header {
     background-color: #000000;
     color: white;
     padding: 10px 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    margin-bottom: 20px;
 }
 
 header .container {
@@ -54,7 +59,7 @@ header .logo h1 {
 }
 
 header .logo h1:hover {
-    color: #311d1d; /* 마우스를 올렸을 때 글자색 변경 */
+    color: #afa04d; /* 마우스를 올렸을 때 글자색 변경 */
 }
 
 header .main-nav {
@@ -135,6 +140,18 @@ section {
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin: 0 1rem 2rem;
+}
+
+.section-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.section-row > section {
+    flex: 1;
+    min-width: 250px;
+    box-sizing: border-box;
 }
 
 h2 {
@@ -295,12 +312,21 @@ footer {
 }
 
 /* 채팅 시스템 스타일 */
+.chat-title {
+    font-family: 'IBMPlexSansKR-Regular', Arial, sans-serif;
+    font-size: 24px;
+    color: #343a40;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+
 #chat {
     background-color: #f9f9f9;
     padding: 1rem;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 2rem 1rem;
+    margin: 100px 1rem 2rem;
     display: flex;
     align-items: center;
     flex-flow: column;
@@ -315,11 +341,13 @@ footer {
     margin-bottom: 1rem;
     background-color: white;
     border-radius: 5px;
+    box-sizing: border-box;
 }
 
 #messages {
     list-style-type: none;
     padding: 0;
+    margin: 0;
 }
 
 /* 사용자 이름 스타일 */
@@ -478,5 +506,17 @@ input::placeholder {
     }
     header .hamburger {
         display: block;
+    }
+
+    .section-row {
+        flex-direction: column;
+    }
+
+    .section-row > section {
+        min-width: 100%;
+    }
+
+    #chat {
+        margin: 120px 1rem 2rem;
     }
 }
