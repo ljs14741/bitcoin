@@ -27,19 +27,27 @@
 </head>
 <body>
 <header>
-    <h1 onclick="window.location.href='https://binary96.store/'">뭐든지 만들어드립니다</h1>
+    <div class="container">
+        <div class="logo" onclick="window.location.href='https://binary96.store/'">
+            <h1>뭐든지 만들어드립니다</h1>
+        </div>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="https://binary96.store/lucky"><i class="fas fa-star"></i>오늘의 운세</a></li>
+                <li><a href="https://binary96.store/voteList"><i class="fas fa-vote-yea"></i>익명 투표!</a></li>
+                <li><a href="https://kimchilotto.netlify.app/"><i class="fas fa-ticket-alt"></i>로또 추첨기</a></li>
+                <li><a href="https://godofdeath.pages.dev/"><i class="fas fa-skull-crossbones"></i>죽음 예측 테스트</a></li>
+                <li><a href="https://binary96.store/rsiSummary"><i class="fas fa-chart-line"></i>코인 RSI 정보</a></li>
+                <li><a href="https://binary96.store/getLotto"><i class="fas fa-medal"></i>로또 당첨 순위</a></li>
+            </ul>
+        </nav>
+        <div class="hamburger" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+    </div>
 </header>
 
-<div class="btn-container">
-    <button onclick="window.location.href='https://binary96.store/voteList'">익명 투표!</button>
-    <button onclick="window.location.href='https://kimchilotto.netlify.app/'">로또 추첨기</button>
-    <button onclick="window.location.href='https://godofdeath.pages.dev/'">죽음 예측 테스트</button>
-    <button onclick="window.location.href='https://binary96.store/rsiSummary'">코인 RSI 정보</button>
-    <button onclick="window.location.href='https://binary96.store/getLotto'">로또 당첨 순위</button>
-    <button onclick="window.location.href='https://binary96.store/lucky'">오늘의 운세</button>
-</div>
-
-<section class="intro">
+<section class="intro" style="margin: 100px">
     <h2>오늘의 운세</h2>
 </section>
 
@@ -123,6 +131,11 @@
         event.preventDefault();
         const currentUrl = encodeURIComponent(window.location.href);
         window.location.href = `/oauth/kakao?state=${currentUrl}`;
+    }
+
+    function toggleMenu() {
+        const nav = document.querySelector('header .main-nav ul');
+        nav.classList.toggle('active');
     }
 
 </script>

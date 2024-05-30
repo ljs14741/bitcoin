@@ -27,68 +27,30 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const table = document.querySelector('table');
-            const ths = table.querySelectorAll('th');
-            const tbody = table.querySelector('tbody');
-
-            ths.forEach(th => {
-                th.addEventListener('click', function () {
-                    const index = Array.from(ths).indexOf(th);
-                    const isAscending = th.classList.toggle('ascending');
-                    const rows = Array.from(tbody.querySelectorAll('tr'));
-
-                    rows.sort((a, b) => {
-                        const aValue = a.children[index].textContent.trim();
-                        const bValue = b.children[index].textContent.trim();
-                        if (aValue === bValue) return 0;
-                        if (isAscending) {
-                            return aValue > bValue ? 1 : -1;
-                        } else {
-                            return aValue < bValue ? 1 : -1;
-                        }
-                    });
-
-                    tbody.innerHTML = '';
-                    rows.forEach(row => {
-                        tbody.appendChild(row);
-                    });
-
-                    // 아이콘 회전
-                    ths.forEach(otherTh => {
-                        if (otherTh !== th) {
-                            otherTh.querySelector('i').classList.remove('fa-sort-up', 'fa-sort-down');
-                        }
-                    });
-                    const icon = th.querySelector('i');
-                    if (isAscending) {
-                        icon.classList.remove('fa-sort-down');
-                        icon.classList.add('fa-sort-up');
-                    } else {
-                        icon.classList.remove('fa-sort-up');
-                        icon.classList.add('fa-sort-down');
-                    }
-                });
-            });
-        });
-    </script>
 </head>
 <body>
 <header>
-    <h1 onclick="window.location.href='https://binary96.store/'">뭐든지 만들어드립니다</h1>
+    <div class="container">
+        <div class="logo" onclick="window.location.href='https://binary96.store/'">
+            <h1>뭐든지 만들어드립니다</h1>
+        </div>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="https://binary96.store/lucky"><i class="fas fa-star"></i>오늘의 운세</a></li>
+                <li><a href="https://binary96.store/voteList"><i class="fas fa-vote-yea"></i>익명 투표!</a></li>
+                <li><a href="https://kimchilotto.netlify.app/"><i class="fas fa-ticket-alt"></i>로또 추첨기</a></li>
+                <li><a href="https://godofdeath.pages.dev/"><i class="fas fa-skull-crossbones"></i>죽음 예측 테스트</a></li>
+                <li><a href="https://binary96.store/rsiSummary"><i class="fas fa-chart-line"></i>코인 RSI 정보</a></li>
+                <li><a href="https://binary96.store/getLotto"><i class="fas fa-medal"></i>로또 당첨 순위</a></li>
+            </ul>
+        </nav>
+        <div class="hamburger" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+    </div>
 </header>
 
-<div class="btn-container">
-    <button onclick="window.location.href='https://binary96.store/voteList'">익명 투표!</button>
-    <button onclick="window.location.href='https://kimchilotto.netlify.app/'">로또 추첨기</button>
-    <button onclick="window.location.href='https://godofdeath.pages.dev/'">죽음 예측 테스트</button>
-    <button onclick="window.location.href='https://binary96.store/rsiSummary'">코인 RSI 정보</button>
-    <button onclick="window.location.href='https://binary96.store/getLotto'">로또 당첨 순위</button>
-    <button onclick="window.location.href='https://binary96.store/lucky'">오늘의 운세</button>
-</div>
-
-<section class="intro">
+<section class="intro" style="margin: 100px">
     <h2>가장 많이 나온 번호 순위</h2>
 </section>
 <table border="1">
@@ -142,5 +104,56 @@
         </div>
     </section>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const table = document.querySelector('table');
+        const ths = table.querySelectorAll('th');
+        const tbody = table.querySelector('tbody');
+
+        ths.forEach(th => {
+            th.addEventListener('click', function () {
+                const index = Array.from(ths).indexOf(th);
+                const isAscending = th.classList.toggle('ascending');
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+
+                rows.sort((a, b) => {
+                    const aValue = a.children[index].textContent.trim();
+                    const bValue = b.children[index].textContent.trim();
+                    if (aValue === bValue) return 0;
+                    if (isAscending) {
+                        return aValue > bValue ? 1 : -1;
+                    } else {
+                        return aValue < bValue ? 1 : -1;
+                    }
+                });
+
+                tbody.innerHTML = '';
+                rows.forEach(row => {
+                    tbody.appendChild(row);
+                });
+
+                // 아이콘 회전
+                ths.forEach(otherTh => {
+                    if (otherTh !== th) {
+                        otherTh.querySelector('i').classList.remove('fa-sort-up', 'fa-sort-down');
+                    }
+                });
+                const icon = th.querySelector('i');
+                if (isAscending) {
+                    icon.classList.remove('fa-sort-down');
+                    icon.classList.add('fa-sort-up');
+                } else {
+                    icon.classList.remove('fa-sort-up');
+                    icon.classList.add('fa-sort-down');
+                }
+            });
+        });
+    });
+
+    function toggleMenu() {
+        const nav = document.querySelector('header .main-nav ul');
+        nav.classList.toggle('active');
+    }
+</script>
 </body>
 </html>

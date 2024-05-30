@@ -30,19 +30,27 @@
 </head>
 <body>
 <header>
-    <h1 onclick="window.location.href='https://binary96.store/'">뭐든지 만들어드립니다</h1>
+    <div class="container">
+        <div class="logo" onclick="window.location.href='https://binary96.store/'">
+            <h1>뭐든지 만들어드립니다</h1>
+        </div>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="https://binary96.store/lucky"><i class="fas fa-star"></i>오늘의 운세</a></li>
+                <li><a href="https://binary96.store/voteList"><i class="fas fa-vote-yea"></i>익명 투표!</a></li>
+                <li><a href="https://kimchilotto.netlify.app/"><i class="fas fa-ticket-alt"></i>로또 추첨기</a></li>
+                <li><a href="https://godofdeath.pages.dev/"><i class="fas fa-skull-crossbones"></i>죽음 예측 테스트</a></li>
+                <li><a href="https://binary96.store/rsiSummary"><i class="fas fa-chart-line"></i>코인 RSI 정보</a></li>
+                <li><a href="https://binary96.store/getLotto"><i class="fas fa-medal"></i>로또 당첨 순위</a></li>
+            </ul>
+        </nav>
+        <div class="hamburger" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+    </div>
 </header>
 
-<div class="btn-container">
-    <button onclick="window.location.href='https://binary96.store/voteList'">익명 투표!</button>
-    <button onclick="window.location.href='https://kimchilotto.netlify.app/'">로또 추첨기</button>
-    <button onclick="window.location.href='https://godofdeath.pages.dev/'">죽음 예측 테스트</button>
-    <button onclick="window.location.href='https://binary96.store/rsiSummary'">코인 RSI 정보</button>
-    <button onclick="window.location.href='https://binary96.store/getLotto'">로또 당첨 순위</button>
-    <button onclick="window.location.href='https://binary96.store/lucky'">오늘의 운세</button>
-</div>
-
-<div class="vote-container">
+<div class="vote-container" style="margin: 100px">
     <h2>익명 투표</h2>
     <div class="kakao-login-container">
         <a href="#" onclick="redirectToKakaoLogin(event)" class="kakao-link">
@@ -68,14 +76,17 @@
                 <form th:action="@{/vote/results/{id}(id=${vote.id})}" method="get">
                     <button type="submit" class="result-button">투표 결과보기</button>
                 </form>
-<!--                <button type="button" class="edit-button" th:voteId="${vote.id}" th:onclick="editVote(this.getAttribute('voteId'))">투표 수정하기</button>-->
-                <button type="button" class="edit-button" th:voteId="${vote.id}" th:kakaoId="${vote.kakaoId}" th:onclick="editVote(this.getAttribute('voteId'), this.getAttribute('kakaoId'))">투표 수정하기</button>
+                <button type="button" class="vote-button" th:voteId="${vote.id}" th:kakaoId="${vote.kakaoId}" th:onclick="editVote(this.getAttribute('voteId'), this.getAttribute('kakaoId'))">투표 수정하기</button>
             </div>
         </li>
     </ul>
 </div>
 
 <script th:inline="javascript">
+    function toggleMenu() {
+        const nav = document.querySelector('header .main-nav ul');
+        nav.classList.toggle('active');
+    }
 
     function editVote(voteId, voteKakaoId) {
         var sessionKakaoId = [[${session.kakaoId}]];
@@ -103,7 +114,6 @@
         const currentUrl = encodeURIComponent(window.location.href);
         window.location.href = `/oauth/kakao?state=${currentUrl}`;
     }
-
 
 
 </script>
