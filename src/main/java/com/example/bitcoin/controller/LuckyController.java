@@ -17,8 +17,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Controller
-    @Slf4j
-    public class LuckyController {
+@Slf4j
+public class LuckyController {
+
     @Autowired
     private LuckyService luckyService;
 
@@ -27,8 +28,9 @@ import java.util.Optional;
 
     @GetMapping("/lucky")
     public String lucky(Model model) {
+        log.info("뭐가문제냐?");
         model.addAttribute("user", new User());
-        return "/lucky";
+        return "lucky";
     }
 
     // 사용자 정보 저장 및 운세 저장
@@ -89,7 +91,7 @@ import java.util.Optional;
             model.addAttribute("luckyResult", "로그인 정보가 없습니다.");
         }
 
-        return "/lucky";
+        return "lucky";
     }
 
     // 매일 오전 0시 1분 사용자 운세 저장
