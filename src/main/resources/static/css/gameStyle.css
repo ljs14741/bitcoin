@@ -1,0 +1,16 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+#game-container {
+    width: 800px; /* 고정된 너비 */
+    height: 600px; /* 고정된 높이 */
+    border: 1px solid #000;
+}
