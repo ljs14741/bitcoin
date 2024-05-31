@@ -1,16 +1,133 @@
+@font-face {
+    font-family: 'TTHakgyoansimUndongjangL';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_keris@1.0/TTHakgyoansimUndongjangL.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'IBMPlexSansKR-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/IBMPlexSansKR-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
 body {
+    font-family: 'IBMPlexSansKR-Regular', Arial, sans-serif;
     margin: 0;
     padding: 0;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f0f0f0;
+    background-color: #f8f9fa;
+    color: #343a40;
+    text-align: center;
+    vertical-align: center;
 }
 
 #game-container {
-    width: 800px; /* 고정된 너비 */
-    height: 600px; /* 고정된 높이 */
-    border: 1px solid #000;
+    width: 50px; /* 원하는 가로 크기 */
+    height: 50px; /* 원하는 세로 크기 */
+    margin: 0 auto; /* 중앙 정렬 */
+}
+
+/* 헤더 스타일 */
+header {
+    background-color: #000000;
+    color: white;
+    padding: 10px 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    margin-bottom: 20px;
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+}
+
+header .logo {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+header .logo h1 {
+    font-family: 'TTHakgyoansimUndongjangL', serif;
+    font-size: 24px;
+    margin: 0;
+}
+
+header .logo h1:hover {
+    color: #afa04d; /* 마우스를 올렸을 때 글자색 변경 */
+}
+
+header .main-nav {
+    display: flex;
+    gap: 15px;
+}
+
+header .main-nav ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+    margin: 0;
+    padding: 0;
+}
+
+header .main-nav ul li {
+    display: flex;
+    align-items: center;
+}
+
+header .main-nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+header .main-nav ul li a:hover {
+    background-color: #311d1d;
+    color: #ffffff;
+}
+
+header .main-nav ul li a i {
+    margin-right: 5px;
+}
+
+header .hamburger {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+
+
+@media screen and (max-width: 768px) {
+
+    header .main-nav ul {
+        display: none;
+        flex-direction: column;
+        background-color: #000;
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        width: 200px;
+        border-radius: 10px;
+        z-index: 1000;
+    }
+    header .main-nav ul.active {
+        display: flex;
+    }
+    header .hamburger {
+        display: block;
+    }
 }

@@ -3,8 +3,8 @@ window.onload = function() {
 
     const config = {
         type: Phaser.AUTO,
-        width: isMobile ? window.innerWidth : 800,
-        height: isMobile ? window.innerHeight : 600,
+        width: isMobile ? window.innerWidth : 600,
+        height: isMobile ? window.innerHeight : 400,
         backgroundColor: '#000000',
         physics: {
             default: 'arcade',

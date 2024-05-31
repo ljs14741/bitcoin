@@ -33,7 +33,7 @@ public class GetRsiController {
 //        return "redirect:/";
 //    }
 
-    @Scheduled(fixedRate = 600000) // 10분마다 실행
+//    @Scheduled(fixedRate = 600000) // 10분마다 실행
     public void updateRsiValues() {
         try {
             getRsiService.updateRsiValues();
