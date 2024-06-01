@@ -3,8 +3,8 @@ window.onload = function() {
 
     const config = {
         type: Phaser.AUTO,
-        width: 800,
-        height: 600,
+        width: isMobile ? window.innerWidth : 800,
+        height: isMobile ? window.innerHeight : 600,
         backgroundColor: '#000000',
         physics: {
             default: 'arcade',
@@ -23,6 +23,7 @@ window.onload = function() {
     let tower;
     let enemies;
     let powerUps;
+    let bombs;
     let cursors;
     let gameOver = false;
     let gameOverText;
@@ -33,9 +34,11 @@ window.onload = function() {
     let totalPausedTime = 0;
     let enemySpawnTimer;
     let powerUpSpawnTimer;
+    let bombSpawnTimer;
     let enemySpeed = 100;
     let spawnInterval = 1000;
     let touchControls;
+    let backgroundMusic;
 
     function preload () {
         // 음악
@@ -70,6 +73,13 @@ window.onload = function() {
         powerUpGraphics.generateTexture('powerUp', 10, 10); // 지름이 10인 텍스처 생성
         powerUps = this.physics.add.group();
 
+        // 폭탄 아이템 그래픽
+        const bombGraphics = this.make.graphics({ x: 0, y: 0, add: false });
+        bombGraphics.fillStyle(0x0000FF, 1);
+        bombGraphics.fillCircle(5, 5, 5); // 반지름 5로 줄임
+        bombGraphics.generateTexture('bomb', 10, 10); // 지름이 10인 텍스처 생성
+        bombs = this.physics.add.group();
+
         enemySpawnTimer = this.time.addEvent({
             delay: spawnInterval,
             callback: addEnemy,
@@ -84,6 +94,13 @@ window.onload = function() {
             loop: true
         });
 
+        bombSpawnTimer = this.time.addEvent({
+            delay: 20000,
+            callback: addBomb,
+            callbackScope: this,
+            loop: true
+        });
+
         cursors = this.input.keyboard.createCursorKeys();
 
         // 터치 입력 지원
@@ -92,6 +109,7 @@ window.onload = function() {
         // 충돌 감지
         this.physics.add.overlap(tower, enemies, hitEnemy, null, this);
         this.physics.add.overlap(tower, powerUps, collectPowerUp, null, this);
+        this.physics.add.overlap(tower, bombs, collectBomb, null, this);
 
         // 타이머 텍스트
         timerText = this.add.text(16, 16, 'Time: 0', { fontSize: '32px', fill: '#FFF' });
@@ -255,9 +273,24 @@ window.onload = function() {
         powerUp.setVelocity(Phaser.Math.Between(-100, 100), Phaser.Math.Between(-100, 100));
     }
 
+    function addBomb () {
+        const x = Phaser.Math.Between(0, this.cameras.main.width);
+        const y = Phaser.Math.Between(0, this.cameras.main.height);
+        const bomb = bombs.create(x, y, 'bomb');
+
+        bomb.setCollideWorldBounds(true);
+        bomb.setBounce(1);
+        bomb.setVelocity(Phaser.Math.Between(-100, 100), Phaser.Math.Between(-100, 100));
+    }
+
     function collectPowerUp(tower, powerUp) {
         powerUp.destroy();
         activatePowerUp.call(this); // 여기서 this 바인딩
+    }
+
+    function collectBomb(tower, bomb) {
+        bomb.destroy();
+        clearEnemies.call(this); // 여기서 this 바인딩
     }
 
     function activatePowerUp() {
@@ -268,6 +301,10 @@ window.onload = function() {
                 tower.clearTint(); // 무적 상태 해제
             }
         });
+    }
+
+    function clearEnemies() {
+        enemies.clear(true, true); // 모든 적 제거
     }
 
     function hitEnemy (tower, enemy) {
@@ -317,9 +354,15 @@ window.onload = function() {
     function handleVisibilityChange() {
         if (document.hidden) {
             pauseStartTime = performance.now();
+            if (backgroundMusic) {
+                backgroundMusic.pause();
+            }
         } else {
             const now = performance.now();
             totalPausedTime += now - pauseStartTime;
+            if (backgroundMusic) {
+                backgroundMusic.resume();
+            }
         }
     }
 
