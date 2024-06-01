@@ -2,7 +2,9 @@ package com.example.bitcoin.service;
 
 import com.example.bitcoin.dto.GameDTO;
 import com.example.bitcoin.entity.Game;
+import com.example.bitcoin.entity.User;
 import com.example.bitcoin.repository.GameRepository;
+import com.example.bitcoin.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ public class GameService {
     @Autowired
     private GameRepository gameRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일");
 
     public Game saveGame(GameDTO gameDTO, HttpSession session) {
@@ -30,9 +35,11 @@ public class GameService {
             game.setScore(gameDTO.getScore());
             return gameRepository.save(game);
         } else {
+            User user = userRepository.findByChangeNickname(nickname);
+
             Game game = new Game();
             game.setGameName(gameDTO.getGameName());
-            game.setKakaoId(gameDTO.getKakaoId());
+            game.setKakaoId(user.getKakaoId());
             game.setChangeNickname(nickname);
             game.setScore(gameDTO.getScore());
             return gameRepository.save(game);

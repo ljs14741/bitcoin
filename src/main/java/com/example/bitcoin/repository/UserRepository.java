@@ -9,6 +9,8 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByKakaoId(Long kakaoId);
 
+    User findByChangeNickname(String changeNickname);
+
     @Query("SELECT u.changeNickname FROM user u")
     List<String> findAllNicknames();
 
