@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="title" content="웹 게임">
-    <meta name="description" content="공피하기 웹 게임. 요청해주시면 다른 게임도 만들어보겠습니다.">
+    <meta name="description" content="총알 피하기 웹 게임. 요청해주시면 다른 게임도 만들어보겠습니다.">
     <meta property="og:title" content="웹 게임">
-    <meta property="og:description" content="공피하기 웹 게임. 요청해주시면 다른 게임도 만들어보겠습니다.">
+    <meta property="og:description" content="총알 피하기 웹 게임. 요청해주시면 다른 게임도 만들어보겠습니다.">
     <link rel="stylesheet" th:href="@{/css/gameStyle.css}">
     <script th:src="@{/js/phaser.min.js}"></script>
     <script th:src="@{/js/game.js}"></script>
@@ -53,14 +53,55 @@
         </div>
     </div>
 </header>
-<h1 style="margin-top: 50px;">공피하기 게임</h1>
 
-<div id="game-container"></div>
+<main class="content">
+    <h1>총알 피하기 게임</h1>
 
-<script>
+    <a href="#" onclick="redirectToKakaoLogin(event)" class="kakao-link">
+        <img id="kakao-login-btn" th:src="@{/img/kakao_login_medium_narrow.png}" alt="카카오톡 로그인">
+    </a>
+
+    <table class="styled-table">
+        <thead>
+        <tr>
+            <th>Rank</th>
+            <th>게임명</th>
+            <th>닉네임</th>
+            <th>점수</th>
+            <th>게임 일자</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="game, iterStat : ${games}">
+            <td th:text="${iterStat.index + 1}">1</td>
+            <td th:text="${game.gameName}">게임명</td>
+            <td th:text="${game.changeNickname}">닉네임</td>
+            <td th:text="${game.score}">점수</td>
+            <td th:text="${#temporals.format(game.createdDate, 'yyyy년 M월 d일')}">게임 일자</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+
+<script th:inline="javascript">
     function toggleMenu() {
         const nav = document.querySelector('header .main-nav ul');
         nav.classList.toggle('active');
+    }
+
+    var csrfToken = [[${_csrf.token}]];
+    console.log('csrfToken: ' +csrfToken);
+
+    $(document).ready(function() {
+        $("#kakao-login-btn").click(function() {
+            window.location.href = "/oauth/kakao";
+        });
+    });
+
+    function redirectToKakaoLogin(event) {
+        event.preventDefault();
+        const currentUrl = encodeURIComponent(window.location.href);
+        window.location.href = `/oauth/kakao?state=${currentUrl}`;
     }
 </script>
 </body>
