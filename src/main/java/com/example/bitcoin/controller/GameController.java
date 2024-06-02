@@ -29,6 +29,11 @@ public class GameController {
         return "game";
     }
 
+    @GetMapping("/defenseGame")
+    public String defenseGame() {
+        return "defenseGame";
+    }
+
     @PostMapping("/save")
     @ResponseBody
     public List<Game> saveGame(@RequestBody GameDTO gameDTO, HttpSession session) {
