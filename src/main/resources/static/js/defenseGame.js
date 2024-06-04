@@ -1,10 +1,14 @@
 window.onload = function() {
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
     const config = {
         type: Phaser.AUTO,
-        width: isMobile ? window.innerWidth : 800,
-        height: isMobile ? window.innerHeight : 600,
+        width: 800,
+        height: 600,
+        scale: {
+            mode: Phaser.Scale.FIT,
+            autoCenter: Phaser.Scale.CENTER_BOTH,
+            width: 800,
+            height: 600,
+        },
         physics: {
             default: 'arcade',
             arcade: {
@@ -15,6 +19,9 @@ window.onload = function() {
             preload: preload,
             create: create,
             update: update
+        },
+        audio: {
+            disableWebAudio: false // Web Audio API를 사용하도록 설정
         }
     };
 
@@ -75,9 +82,12 @@ window.onload = function() {
     function create() {
         const self = this;
 
+        // 오디오 시스템 초기화
+        self.sound.context.resume();
+
         // 배경 음악 재생
         backgroundMusic = self.sound.add('backgroundMusic');
-        backgroundMusic.play({ loop: true });
+        // backgroundMusic.play({ loop: true });
 
         // 공격 소리와 적 죽음 소리 로드
         towerAttackSound = self.sound.add('towerAttackSound');
@@ -88,7 +98,9 @@ window.onload = function() {
             if (backgroundMusic.isPlaying) {
                 backgroundMusic.pause();
             } else {
-                backgroundMusic.resume();
+                self.sound.context.resume();
+                backgroundMusic.play({ loop: true });
+
             }
         });
 
