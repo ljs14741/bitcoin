@@ -26,7 +26,7 @@ window.onload = function() {
     };
 
     const game = new Phaser.Game(config);
-    let selectedTowerType = null;
+    let selectedTowerGrade = null;
     let towers = [];
     let cursorTower = null;
     let cancelMarker = null;
@@ -41,7 +41,7 @@ window.onload = function() {
     };
 
     let round = 1;
-    let maxRounds = 3;
+    let maxRounds = 9;
     let roundTime = 120000; // 2분 (120,000 밀리초)
     let enemySpawnInterval = 1000; // 1초 (1,000 밀리초)
     let roundTimerEvent;
@@ -52,11 +52,23 @@ window.onload = function() {
     let enemyCountText;
     let remainingTime = roundTime / 1000; // 초기 시간(초)
     let currentEnemyCount = 0;
-    let currency = 100; // 초기 화폐 양
+    let currency = 20; // 초기 화폐 양
     let currencyText;
     let backgroundMusic; // 전역 변수로 선언
     let towerAttackSound; // 전역 변수로 선언
     let enemy1DieSound; // 전역 변수로 선언
+    let enemyCount = 0;
+    const MAX_ENEMIES = 150;
+    let towerUpgradeLevel = 0;
+    let baseAttackPower = {
+        '일반': 10,
+        '레어': 15,
+        '영웅': 20,
+        '유물': 30,
+        '전설': 40
+    };
+    let isDoubleSpeed = false;
+
 
     function preload() {
         this.load.audio('backgroundMusic', 'assets/audio/Main.mp3');
@@ -64,13 +76,10 @@ window.onload = function() {
         this.load.audio('enemy1DieSound', 'assets/audio/Enemy1Die.mp3'); // 적 죽음 소리 추가
 
         this.load.image('background', 'assets/defense/tiles/land_1.png');
-        this.load.image('flameTower', 'assets/defense/towers/flameTowers_1.png');
+        this.load.image('flameTower', 'assets/defense/towers/ccc.png');
         this.load.image('path', 'assets/defense/tiles/decor_6.png');
         this.load.image('flame_1', 'assets/defense/towers/flame_1.png');
         this.load.image('flame_2', 'assets/defense/towers/flame_2.png');
-        this.load.image('flame_3', 'assets/defense/towers/flame_3.png');
-        this.load.image('flame_4', 'assets/defense/towers/flame_4.png');
-        this.load.image('flame_5', 'assets/defense/towers/flame_5.png');
         this.load.image('cancel', 'assets/defense/cancel.png'); // cancel 이미지 로드
         this.load.image('menu', 'assets/defense/menu.png'); // 햄버거 메뉴 이미지 로드
         this.load.image('meso', 'assets/defense/meso.png');
@@ -136,10 +145,7 @@ window.onload = function() {
             key: 'flame_anim',
             frames: [
                 {key: 'flame_1'},
-                {key: 'flame_2'},
-                {key: 'flame_3'},
-                {key: 'flame_4'},
-                {key: 'flame_5'}
+                {key: 'flame_2'}
             ],
             frameRate: 10,
             repeat: 0
@@ -162,7 +168,7 @@ window.onload = function() {
 
         // 타워 설치 이벤트
         self.input.on('pointerdown', function (pointer) {
-            if (selectedTowerType) {
+            if (selectedTowerGrade) {
                 const x = pointer.worldX;
                 const y = pointer.worldY;
 
@@ -171,11 +177,12 @@ window.onload = function() {
                 const isOccupied = towers.some(tower => Phaser.Math.Distance.Between(tower.x, tower.y, x, y) <= TOWER_RADIUS);
 
                 if (isInsideRectangle && !isOccupied) {
-                    const tower = self.add.sprite(x, y, selectedTowerType).setScale(0.2);
-                    tower.attackPower = 50; // 타워의 공격력 설정
+                    const tower = self.add.sprite(x, y, 'flameTower').setScale(0.05);
+                    tower.grade = selectedTowerGrade; // 타워의 등급 설정
+                    tower.attackPower = getTowerAttackPower(tower.grade); // 타워의 공격력 설정
                     tower.setInteractive();
                     towers.push(tower);
-                    selectedTowerType = null;
+                    selectedTowerGrade = null;
                     cursorTower.destroy();
                     cursorTower = null;
                     if (cancelMarker) {
@@ -185,11 +192,15 @@ window.onload = function() {
 
                     // 타워 클릭 이벤트 추가
                     tower.on('pointerdown', () => {
-                        showTowerAttackPower(self, tower);
+                        showTowerDetailsAndUpgradeButton(self, tower);
                     });
                 }
             }
         });
+
+
+
+
 
         self.input.on('pointermove', function (pointer) {
             if (cursorTower) {
@@ -220,35 +231,36 @@ window.onload = function() {
         const menuButton = self.add.sprite(750, 50, 'menu').setInteractive().setScale(0.5);
 
         menuButton.on('pointerdown', () => {
-            console.log('햄버거 메뉴 클릭됨'); // 클릭 이벤트가 감지되었는지 확인
-
             const towerMenu = self.add.container(550, 100).setSize(200, 200).setInteractive();
-            console.log('타워 메뉴 컨테이너 생성됨'); // 메뉴 컨테이너 생성 로그
-
             const background = self.add.rectangle(0, 0, 200, 200, 0x000000, 0.8).setOrigin(0);
-            console.log('배경 생성됨'); // 배경 생성 로그
-
             const towerPurchaseText = self.add.text(10, 10, '타워 구매', { fontSize: '24px', fill: '#FFF' }).setInteractive();
-            console.log('타워 구매 텍스트 생성됨'); // 텍스트 생성 로그
-
-            const flameTowerText = self.add.text(10, 50, 'FlameTower', { fontSize: '24px', fill: '#FFF' }).setInteractive();
-            flameTowerText.setVisible(false);
-            console.log('FlameTower 텍스트 생성됨'); // 텍스트 생성 로그
-
+            const toggleSpeedText = self.add.text(10, 50, '게임2배속On/Off', { fontSize: '24px', fill: '#FFF' }).setInteractive(); // 추가된 부분
             const startGameText = self.add.text(10, 90, '게임시작', { fontSize: '24px', fill: '#FFF' }).setInteractive();
-            console.log('게임시작 텍스트 생성됨'); // 텍스트 생성 로그
 
             towerPurchaseText.on('pointerdown', () => {
-                flameTowerText.setVisible(true);
-                startGameText.setVisible(false); // "타워 구매"를 클릭했을 때 "게임 시작" 숨기기
+                // 기존 타워 구매 로직
+                if (currency >= 10) {
+                    selectedTowerGrade = getRandomTowerGrade();
+                    if (cursorTower) cursorTower.destroy();
+                    cursorTower = self.add.sprite(self.input.activePointer.worldX, self.input.activePointer.worldY, 'flameTower').setScale(0.05);
+                    cursorTower.setAlpha(0.5);
+                    towerMenu.destroy();
+                    currency -= 10;
+                    currencyText.setText(`: ${currency}`);
+                } else {
+                    const warningText = self.add.text(400, 300, '화폐가 부족합니다!', { fontSize: '32px', fill: '#FFF', backgroundColor: '#000' }).setOrigin(0.5);
+                    self.time.addEvent({
+                        delay: 2000,
+                        callback: () => {
+                            warningText.destroy();
+                        }
+                    });
+                }
             });
 
-            flameTowerText.on('pointerdown', () => {
-                selectedTowerType = 'flameTower';
-                if (cursorTower) cursorTower.destroy();
-                cursorTower = self.add.sprite(self.input.activePointer.worldX, self.input.activePointer.worldY, 'flameTower').setScale(0.2);
-                cursorTower.setAlpha(0.5);
-                towerMenu.destroy();
+            toggleSpeedText.on('pointerdown', () => {
+                isDoubleSpeed = !isDoubleSpeed;
+                self.time.timeScale = isDoubleSpeed ? 2 : 1;
             });
 
             startGameText.on('pointerdown', () => {
@@ -256,25 +268,21 @@ window.onload = function() {
                 startRound(self);
             });
 
-            towerMenu.add([background, towerPurchaseText, flameTowerText, startGameText]);
+            towerMenu.add([background, towerPurchaseText, toggleSpeedText, startGameText]);
             self.add.existing(towerMenu);
-            console.log('타워 메뉴 추가됨'); // 메뉴 추가 로그
 
-            // 메뉴를 닫는 이벤트 등록
             const closeMenu = function(pointer) {
                 if (!towerMenu.getBounds().contains(pointer.worldX, pointer.worldY)) {
                     towerMenu.destroy();
-                    startGameText.setVisible(true); // 메뉴가 닫힐 때 "게임 시작" 다시 보이기
-                    self.input.off('pointerdown', closeMenu); // 이벤트 핸들러 제거
-                    console.log('타워 메뉴 닫힘'); // 메뉴 닫힘 로그
+                    self.input.off('pointerdown', closeMenu);
                 }
             };
 
-            // 메뉴가 생성된 후 약간의 지연 시간을 두고 메뉴 닫힘 이벤트를 등록
             setTimeout(() => {
                 self.input.on('pointerdown', closeMenu);
-            }, 100); // 100 밀리초 지연
+            }, 100);
         });
+
 
         // 타워 공격 로직
         self.time.addEvent({
@@ -293,7 +301,8 @@ window.onload = function() {
                     });
 
                     if (closestEnemy) {
-                        const flame = self.physics.add.sprite(tower.x, tower.y, 'flame_1').setScale(0.5);
+                        const flame = self.physics.add.sprite(tower.x, tower.y, 'flame_1').setScale(0.02); // 불꽃 이미지 크기 조정
+                        flame.attackPower = tower.attackPower; // 타워의 공격력을 불꽃에 추가
                         self.physics.moveToObject(flame, closestEnemy, FLAME_SPEED);
 
                         flame.play('flame_anim');
@@ -301,7 +310,6 @@ window.onload = function() {
 
                         self.physics.add.overlap(flame, closestEnemy, function(flame, enemy) {
                             if (enemy.active) {
-                                console.log('Hit detected');
                                 hitEnemy(self, flame, enemy);
                             }
                         }, null, self);
@@ -346,17 +354,16 @@ window.onload = function() {
     }
 
     function hitEnemy(scene, flame, enemy) {
-        console.log('HitEnemy called');
         flame.destroy(); // 불꽃 제거
         // 적 위치에 불꽃 폭발 효과 (애니메이션이 있는 경우)
-        const explosion = scene.add.sprite(enemy.x, enemy.y, 'flame_1').setScale(0.5);
+        const explosion = scene.add.sprite(enemy.x, enemy.y, 'flame_1').setScale(0.01); // 폭발 이미지 크기 조정
         explosion.play('flame_anim');
         explosion.on('animationcomplete', () => {
             explosion.destroy();
         });
 
         if (enemy.active) {
-            enemy.health -= 20; // 적 체력 감소
+            enemy.health -= flame.attackPower; // 타워의 공격력만큼 적 체력 감소
             console.log('Enemy health:', enemy.health);
             if (enemy.health <= 0) {
                 enemy.healthBar.destroy(); // 체력바 제거
@@ -392,8 +399,39 @@ window.onload = function() {
     }
 
     function spawnEnemy(scene, path) {
+        if (enemyCount >= MAX_ENEMIES) {
+            endGame(scene);
+            return;
+        }
+
+        // 라운드에 따른 체력 설정
+        let enemyHealth;
+        if (round === 1) {
+            enemyHealth = 50;
+        } else if (round === 2) {
+            enemyHealth = 75;
+        } else if (round === 3) {
+            enemyHealth = 120;
+        } else if (round === 4) {
+            enemyHealth = 170;
+        } else if (round === 5) {
+            enemyHealth = 200;
+        } else if (round === 6) {
+            enemyHealth = 300;
+        } else if (round === 7) {
+            enemyHealth = 400;
+        } else if (round === 8) {
+            enemyHealth = 500;
+        } else if (round === 9) {
+            enemyHealth = 800;
+        } else {
+            // 그 이후 라운드의 경우 필요시 추가
+            enemyHealth = 100; // 임시값
+        }
+
         const enemy = scene.add.follower(path, 50, 150, 'enemy_walk_1').setScale(0.05);
-        enemy.health = 100;
+        enemy.health = enemyHealth; // 계산된 체력으로 설정
+        enemy.maxHealth = enemyHealth; // 최대 체력도 동일하게 설정
         scene.physics.add.existing(enemy);  // 적에 물리 속성 추가
         enemy.body.setCircle(enemy.displayWidth / 2);  // 원형 충돌 박스 설정
         scene.enemies.add(enemy);
@@ -409,6 +447,36 @@ window.onload = function() {
         const healthBar = scene.add.graphics();
         enemy.healthBar = healthBar;
         updateHealthBar(enemy);
+
+        // 적 클릭 이벤트 추가
+        enemy.setInteractive();
+        enemy.on('pointerdown', () => {
+            showEnemyHealth(scene, enemy);
+        });
+
+        // 적 유닛 수 증가
+        enemyCount++;
+
+        // 적 유닛 수가 최대치를 넘으면 게임 종료
+        if (enemyCount > MAX_ENEMIES) {
+            endGame(scene);
+        }
+    }
+
+    function showEnemyHealth(scene, enemy) {
+        const healthText = scene.add.text(enemy.x, enemy.y - 50, `체력: ${enemy.health}/${enemy.maxHealth}`, {
+            fontSize: '16px',
+            fill: '#FFF',
+            backgroundColor: '#000'
+        }).setOrigin(0.5);
+
+        // 일정 시간 후 텍스트 제거
+        scene.time.addEvent({
+            delay: 2000,
+            callback: () => {
+                healthText.destroy();
+            }
+        });
     }
 
     function endRound(scene) {
@@ -424,8 +492,8 @@ window.onload = function() {
         }
     }
 
-    function showTowerAttackPower(scene, tower) {
-        const attackPowerText = scene.add.text(tower.x, tower.y - 50, `공격력: ${tower.attackPower}`, {
+    function showTowerDetails(scene, tower) {
+        const detailsText = scene.add.text(tower.x, tower.y - 50, `등급: ${tower.grade}\n공격력: ${tower.attackPower}`, {
             fontSize: '16px',
             fill: '#FFF',
             backgroundColor: '#000'
@@ -435,8 +503,175 @@ window.onload = function() {
         scene.time.addEvent({
             delay: 2000,
             callback: () => {
-                attackPowerText.destroy();
+                detailsText.destroy();
             }
         });
     }
+
+    function getRandomTowerGrade() {
+        const randomValue = Math.random() * 100;
+        if (randomValue < 1) {
+            return '전설';
+        } else if (randomValue < 6) {
+            return '유물';
+        } else if (randomValue < 16) {
+            return '영웅';
+        } else if (randomValue < 49) {
+            return '레어';
+        } else {
+            return '일반';
+        }
+    }
+
+    function getTowerAttackPower(grade) {
+        return baseAttackPower[grade] + (towerUpgradeLevel * baseAttackPower[grade]);
+    }
+
+    function endGame(scene) {
+        // 게임 종료 텍스트 추가
+        const gameOverText = scene.add.text(400, 300, '게임 종료!', {
+            fontSize: '64px',
+            fill: '#FFF',
+            backgroundColor: '#000'
+        }).setOrigin(0.5).setName('gameOverText');
+
+        // 게임 다시하기 버튼 추가
+        const restartButton = scene.add.text(400, 400, '게임 다시하기', {
+            fontSize: '32px',
+            fill: '#FFF',
+            backgroundColor: '#000'
+        }).setOrigin(0.5).setInteractive();
+
+        restartButton.on('pointerdown', () => {
+            // 페이지를 다시 로드하여 게임을 초기화
+            location.reload();
+        });
+
+        // 모든 타이머 이벤트 제거
+        scene.time.removeAllEvents();
+
+        // 적 유닛의 추가 생성 중단
+        if (enemySpawnEvent) {
+            enemySpawnEvent.remove(false);
+        }
+
+        // 라운드 타이머 이벤트 중단
+        if (roundTimerEvent) {
+            roundTimerEvent.remove(false);
+        }
+    }
+
+    function showTowerDetailsAndUpgradeButton(scene, tower) {
+        const basePower = baseAttackPower[tower.grade];
+        const detailsText = scene.add.text(tower.x, tower.y - 70, `등급: ${tower.grade}\n공격력: (${basePower} + ${towerUpgradeLevel * basePower})`, {
+            fontSize: '16px',
+            fill: '#FFF',
+            backgroundColor: '#000'
+        });
+
+        const upgradeCost = 10 + (towerUpgradeLevel * 2);
+        const upgradeText = scene.add.text(tower.x, tower.y - 40, `${towerUpgradeLevel + 1}단계업그레이드(${upgradeCost}원)`, {
+            fontSize: '16px',
+            fill: '#FFF',
+            backgroundColor: '#000'
+        }).setInteractive();
+
+        const sellText = scene.add.text(tower.x, tower.y - 10, `판매하기(${getSellPrice(tower.grade)}원)`, {
+            fontSize: '16px',
+            fill: '#FFF',
+            backgroundColor: '#000'
+        }).setInteractive();
+
+        // 업그레이드 버튼 클릭 이벤트 추가
+        upgradeText.on('pointerdown', () => {
+            upgradeTower(scene, tower, detailsText, upgradeText, sellText);
+        });
+
+        // 판매 버튼 클릭 이벤트 추가
+        sellText.on('pointerdown', () => {
+            sellTower(scene, tower, detailsText, upgradeText, sellText);
+        });
+
+        // 텍스트 객체를 타워에 저장
+        tower.upgradeDetailsText = detailsText;
+        tower.upgradeText = upgradeText;
+
+        // 일정 시간 후 텍스트 제거
+        scene.time.addEvent({
+            delay: 2000,
+            callback: () => {
+                detailsText.destroy();
+                upgradeText.destroy();
+                sellText.destroy();
+            }
+        });
+    }
+
+    function upgradeTower(scene, tower, detailsText, upgradeText, sellText) {
+        const upgradeCost = 10 + (towerUpgradeLevel * 2);
+
+        if (currency >= upgradeCost) {
+            currency -= upgradeCost; // 화폐 감소
+            currencyText.setText(`: ${currency}`); // 화폐 텍스트 업데이트
+
+            towerUpgradeLevel += 1; // 업그레이드 레벨 증가
+
+            // 모든 타워의 공격력을 갱신
+            towers.forEach(t => {
+                t.attackPower = getTowerAttackPower(t.grade);
+            });
+
+            // 모든 타워의 텍스트를 갱신
+            towers.forEach(t => {
+                if (t.upgradeDetailsText && t.upgradeText) {
+                    const basePower = baseAttackPower[t.grade];
+                    t.upgradeDetailsText.setText(`등급: ${t.grade}\n공격력: (${basePower} + ${towerUpgradeLevel * basePower})`);
+                    t.upgradeText.setText(`${towerUpgradeLevel + 1}단계업그레이드(${10 + (towerUpgradeLevel * 2)}원)`);
+                }
+            });
+
+            // 현재 클릭된 타워의 텍스트도 갱신
+            const basePower = baseAttackPower[tower.grade];
+            detailsText.setText(`등급: ${tower.grade}\n공격력: (${basePower} + ${towerUpgradeLevel * basePower})`);
+            upgradeText.setText(`${towerUpgradeLevel + 1}단계업그레이드(${10 + (towerUpgradeLevel * 2)}원)`);
+        } else {
+            // 화폐가 부족할 때 경고 메시지 표시
+            const warningText = scene.add.text(400, 300, '화폐가 부족합니다!', { fontSize: '32px', fill: '#FFF', backgroundColor: '#000' }).setOrigin(0.5);
+            scene.time.addEvent({
+                delay: 2000,
+                callback: () => {
+                    warningText.destroy();
+                }
+            });
+        }
+    }
+
+
+    function sellTower(scene, tower, detailsText, upgradeText, sellText) {
+        const sellPrice = getSellPrice(tower.grade);
+        currency += sellPrice; // 화폐 증가
+        currencyText.setText(`: ${currency}`); // 화폐 텍스트 업데이트
+        towers = towers.filter(t => t !== tower); // 타워 목록에서 제거
+        tower.destroy(); // 타워 제거
+        detailsText.destroy(); // 상세 텍스트 제거
+        upgradeText.destroy(); // 업그레이드 텍스트 제거
+        sellText.destroy(); // 판매 텍스트 제거
+    }
+
+    function getSellPrice(grade) {
+        switch (grade) {
+            case '전설':
+                return 50;
+            case '유물':
+                return 20;
+            case '영웅':
+                return 10;
+            case '레어':
+                return 5;
+            case '일반':
+            default:
+                return 3;
+        }
+    }
+
 }
