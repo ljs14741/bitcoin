@@ -69,7 +69,6 @@ window.onload = function() {
     };
     let isDoubleSpeed = false;
 
-
     function preload() {
         this.load.audio('backgroundMusic', 'assets/audio/Main.mp3');
         this.load.audio('towerAttackSound', 'assets/audio/TowerAttack.mp3'); // 공격 소리 추가
@@ -109,8 +108,20 @@ window.onload = function() {
             } else {
                 self.sound.context.resume();
                 backgroundMusic.play({ loop: true });
-
             }
+        });
+
+        // 볼륨 조절 슬라이더 이벤트 설정
+        document.getElementById('volumeControl').addEventListener('input', function() {
+            const volume = this.value / 100;
+            backgroundMusic.setVolume(volume);
+        });
+
+        //효과음 조절
+        document.getElementById('sfxVolumeControl').addEventListener('input', function() {
+            const volume = this.value / 100;
+            towerAttackSound.setVolume(volume);
+            enemy1DieSound.setVolume(volume);
         });
 
         // 배경 설정
@@ -198,10 +209,6 @@ window.onload = function() {
             }
         });
 
-
-
-
-
         self.input.on('pointermove', function (pointer) {
             if (cursorTower) {
                 const x = pointer.worldX;
@@ -282,7 +289,6 @@ window.onload = function() {
                 self.input.on('pointerdown', closeMenu);
             }, 100);
         });
-
 
         // 타워 공격 로직
         self.time.addEvent({
@@ -371,6 +377,12 @@ window.onload = function() {
                 enemy1DieSound.play(); // 적 죽음 소리 재생
                 currency += 1; // 화폐 1원 증가
                 currencyText.setText(`: ${currency}`); // 텍스트 업데이트
+
+                // 적 유닛 수 감소
+                currentEnemyCount--;
+
+                // 적 수 텍스트 업데이트
+                enemyCountText.setText(`Enemies: ${currentEnemyCount}`);
             } else {
                 // 체력바 업데이트
                 updateHealthBar(enemy);
@@ -399,7 +411,8 @@ window.onload = function() {
     }
 
     function spawnEnemy(scene, path) {
-        if (enemyCount >= MAX_ENEMIES) {
+        // 적 유닛 수가 최대치를 넘으면 게임 종료
+        if (currentEnemyCount >= MAX_ENEMIES) {
             endGame(scene);
             return;
         }
@@ -455,12 +468,10 @@ window.onload = function() {
         });
 
         // 적 유닛 수 증가
-        enemyCount++;
+        currentEnemyCount++;
 
-        // 적 유닛 수가 최대치를 넘으면 게임 종료
-        if (enemyCount > MAX_ENEMIES) {
-            endGame(scene);
-        }
+        // 적 수 텍스트 업데이트
+        enemyCountText.setText(`Enemies: ${currentEnemyCount}`);
     }
 
     function showEnemyHealth(scene, enemy) {
@@ -646,7 +657,6 @@ window.onload = function() {
         }
     }
 
-
     function sellTower(scene, tower, detailsText, upgradeText, sellText) {
         const sellPrice = getSellPrice(tower.grade);
         currency += sellPrice; // 화폐 증가
@@ -673,5 +683,4 @@ window.onload = function() {
                 return 3;
         }
     }
-
 }
