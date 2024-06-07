@@ -245,12 +245,12 @@ window.onload = function() {
         });
 
         // 햄버거 메뉴 설정
-        const menuButton = this.add.sprite(750, 50, 'menu').setInteractive().setScale(0.5);
+        const menuButton = this.add.sprite(750, 50, 'menu').setInteractive().setScale(1);
 
         menuButton.on('pointerdown', () => {
             const towerMenu = this.add.container(550, 100).setSize(200, 200).setInteractive();
             const background = this.add.rectangle(0, 0, 200, 200, 0x000000, 0.8).setOrigin(0);
-            const towerPurchaseText = this.add.text(10, 10, '타워 구매', { fontSize: '24px', fill: '#FFF' }).setInteractive();
+            const towerPurchaseText = this.add.text(10, 10, '랜덤 타워 구매(15원)', { fontSize: '24px', fill: '#FFF' }).setInteractive();
             const toggleSpeedText = this.add.text(10, 50, '게임2배속On/Off', { fontSize: '24px', fill: '#FFF' }).setInteractive(); // 추가된 부분
             const startGameText = this.add.text(10, 90, '게임시작', { fontSize: '24px', fill: '#FFF' }).setInteractive();
 
@@ -444,15 +444,15 @@ window.onload = function() {
             if (round === 1) {
                 enemyHealth = 70;
             } else if (round === 2) {
-                enemyHealth = 350;
+                enemyHealth = 600;
             } else if (round === 3) {
-                enemyHealth = 1000;
+                enemyHealth = 1500;
             } else if (round === 4) {
-                enemyHealth = 2400;
+                enemyHealth = 3300;
             } else if (round === 5) {
-                enemyHealth = 4400;
+                enemyHealth = 5500;
             } else if (round === 6) {
-                enemyHealth = 7000;
+                enemyHealth = 7500;
             } else if (round === 7) {
                 enemyHealth = 9000;
             } else if (round === 8) {
@@ -466,7 +466,7 @@ window.onload = function() {
             enemy = scene.add.follower(path, 50, 150, 'enemy_walk_1').setScale(0.05);
         } else if (!bossSpawned) {
             // 10라운드 보스 생성
-            enemyHealth = 30000;
+            enemyHealth = 300000;
             enemy = scene.add.follower(path, 50, 150, 'boss').setScale(0.1);
             bossSpawned = true; // 보스가 생성되었음을 기록
         } else {
@@ -599,19 +599,19 @@ window.onload = function() {
 
         const upgradeCost = 20 + (towerUpgradeLevel * 2);
         const upgradeText = scene.add.text(tower.x, tower.y - 60, `${towerUpgradeLevel + 1}단계업그레이드(${upgradeCost}원)`, {
-            fontSize: '16px',
+            fontSize: '24px',
             fill: '#FFF',
             backgroundColor: '#000'
         }).setInteractive();
 
         const sellText = scene.add.text(tower.x, tower.y - 30, `판매하기(${getSellPrice(tower.grade)}원)`, {
-            fontSize: '16px',
+            fontSize: '24px',
             fill: '#FFF',
             backgroundColor: '#000'
         }).setInteractive();
 
         const moveText = scene.add.text(tower.x, tower.y, `이동`, {
-            fontSize: '16px',
+            fontSize: '24px',
             fill: '#FFF',
             backgroundColor: '#000'
         }).setInteractive();
