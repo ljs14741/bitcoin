@@ -58,6 +58,16 @@
     </div>
 </header>
 
+<div class="toparea_state_wrapper">
+    <div class="toparea_state">
+        <a href="/oauth/kakao">카카오로그인</a>
+        <span class="divider">|</span>
+        <a href="javascript:void(0);" onclick="changeNickname()">닉네임변경</a>
+        <span class="divider">|</span>
+        <p class="nickname-text" th:text="'닉네임: ' + ${user.changeNickname}"></p>
+    </div>
+</div>
+
 <main class="container">
 
     <!-- 채팅 시스템 -->

@@ -4,6 +4,7 @@ import com.example.bitcoin.entity.Lucky;
 import com.example.bitcoin.entity.User;
 import com.example.bitcoin.repository.UserRepository;
 import com.example.bitcoin.service.LuckyService;
+import com.example.bitcoin.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Optional;
 
 @Controller
@@ -26,10 +30,22 @@ public class LuckyController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/lucky")
-    public String lucky(Model model) {
-        log.info("뭐가문제냐?");
-        model.addAttribute("user", new User());
+    public String lucky(Model model, HttpSession session) {
+        //유저id
+        Long kakaoId = (Long) session.getAttribute("kakaoId");
+        User user = null;
+        if(kakaoId != null) {
+            user = userService.findById(kakaoId);
+        }
+        if (user == null) {
+            user = new User();
+        }
+
+        model.addAttribute("user", user);
         return "lucky";
     }
 

@@ -52,11 +52,16 @@
     </div>
 </header>
 
+<div class="toparea_state_wrapper">
+    <div class="toparea_state">
+        <a href="javascript:void(0);" onclick="redirectToKakaoLogin(event)">카카오로그인</a>
+    </div>
+</div>
+
 <section class="intro" style="margin: 100px">
     <h2>오늘의 운세</h2>
 </section>
 
-<br>
 <div class="container mt-5">
     <form id="userForm" action="#" th:action="@{/saveUser}" th:object="${user}" method="post" class="form-group" onsubmit="return checkLoginAndSubmit()">
         <div class="mb-3">
@@ -95,6 +100,10 @@
         <div class="mb-3">
             <label for="birthDate" class="form-label">생년월일</label>
             <input type="date" id="birthDate" th:field="*{birthDate}" class="form-control" required/>
+
+        </div>
+        <div>
+            <p>저장된 생년월일: <span th:text="${user.birthDate}">저장된 생년월일</span></p>
         </div>
         <br>
 
@@ -103,9 +112,6 @@
         <p> 한번만 저장하시고 매일 들어오셔서 1초만에 운세를 확인하세요!</p>
         <p> 한번만 저장하면 로그인 이후 운세 확인 버튼만 누르시면 됩니다.</p>
         <p> 네이버 운세 크롤링 해왔습니다.</p>
-        <a href="#" onclick="redirectToKakaoLogin(event)" class="kakao-link">
-            <img id="kakao-login-btn" th:src="@{/img/kakao_login_medium_narrow.png}" alt="카카오톡 로그인">
-        </a>
     </form>
 
     <br>
@@ -133,6 +139,7 @@
         }
 
     }
+
     function redirectToKakaoLogin(event) {
         event.preventDefault();
         const currentUrl = encodeURIComponent(window.location.href);

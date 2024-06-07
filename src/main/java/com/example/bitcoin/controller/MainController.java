@@ -3,9 +3,11 @@ package com.example.bitcoin.controller;
 import com.example.bitcoin.dto.ChatMessageDTO;
 import com.example.bitcoin.dto.LottoDTO;
 import com.example.bitcoin.dto.VisitorDTO;
+import com.example.bitcoin.entity.User;
 import com.example.bitcoin.entity.Vote;
 import com.example.bitcoin.repository.LottoRepository;
 import com.example.bitcoin.service.ChatMessageService;
+import com.example.bitcoin.service.UserService;
 import com.example.bitcoin.service.VisitorService;
 import com.example.bitcoin.service.VoteService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,6 +33,9 @@ public class MainController {
 
     @Autowired
     private VoteService voteService;
+
+    @Autowired
+    private UserService userService;
     @RequestMapping("/")
     public String main(Model model, HttpSession session,HttpServletRequest request) {
         // 채팅 조회
@@ -48,6 +53,20 @@ public class MainController {
         Long voteId = 1L;
         Vote vote = voteService.getVoteById(voteId);
         Long voteCount = voteService.getResultCountByVoteId(voteId);
+
+        //유저id
+        Long kakaoId = (Long) session.getAttribute("kakaoId");
+        User user = null;
+        if(kakaoId != null) {
+            user = userService.findById(kakaoId);
+        }
+        if (user == null) {  // user가 여전히 null이면 새로운 User 객체를 생성
+            user = new User();
+            user.setChangeNickname("비로그인유저");
+        }
+
+
+        model.addAttribute("user", user);
         model.addAttribute("vote", vote);
         model.addAttribute("voteCount", voteCount);
         model.addAttribute("dailyCount", visitorDTO.getDailyCount());

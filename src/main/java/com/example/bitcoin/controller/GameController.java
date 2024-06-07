@@ -2,7 +2,9 @@ package com.example.bitcoin.controller;
 
 import com.example.bitcoin.dto.GameDTO;
 import com.example.bitcoin.entity.Game;
+import com.example.bitcoin.entity.User;
 import com.example.bitcoin.service.GameService;
+import com.example.bitcoin.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +24,43 @@ public class GameController {
     @Autowired
     private GameService gameService;
 
+    @Autowired
+    UserService userService;
+
     @GetMapping("/game")
-    public String game(Model model) {
+    public String game(Model model, HttpSession session) {
         List<Game> games = gameService.getTopScores();
+
+        //유저id
+        Long kakaoId = (Long) session.getAttribute("kakaoId");
+        User user = null;
+        if(kakaoId != null) {
+            user = userService.findById(kakaoId);
+        }
+        if (user == null) {  // user가 여전히 null이면 새로운 User 객체를 생성
+            user = new User();
+            user.setChangeNickname("비로그인유저");
+        }
+
+        model.addAttribute("user", user);
         model.addAttribute("games", games);
         return "game";
     }
 
     @GetMapping("/defenseGame")
-    public String defenseGame() {
+    public String defenseGame(Model model, HttpSession session) {
+        //유저id
+        Long kakaoId = (Long) session.getAttribute("kakaoId");
+        User user = null;
+        if(kakaoId != null) {
+            user = userService.findById(kakaoId);
+        }
+        if (user == null) {  // user가 여전히 null이면 새로운 User 객체를 생성
+            user = new User();
+            user.setChangeNickname("비로그인유저");
+        }
+
+        model.addAttribute("user", user);
         return "defenseGame";
     }
 

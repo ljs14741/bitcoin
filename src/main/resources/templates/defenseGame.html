@@ -4,10 +4,10 @@
     <title>게임</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="title" content="디펜스 웹 게임">
-    <meta name="description" content="디펜스 웹 게임 만드는중">
-    <meta property="og:title" content="디펜스 웹 게임">
-    <meta property="og:description" content="디펜스 웹 게임 만드는중">
+    <meta name="title" content="메이플 랜덤 타워 디펜스">
+    <meta name="description" content="메이플 랜덤 타워 디펜스">
+    <meta property="og:title" content="메이플 랜덤 타워 디펜스">
+    <meta property="og:description" content="메이플 랜덤 타워 디펜스">
     <link rel="stylesheet" th:href="@{/css/gameStyle.css}">
     <script th:src="@{/js/phaser.min.js}"></script>
     <script th:src="@{/js/defenseGame.js}"></script>
@@ -56,14 +56,21 @@
     </div>
 </header>
 
+<div class="toparea_state_wrapper">
+    <div class="toparea_state">
+        <a href="javascript:void(0);" onclick="redirectToKakaoLogin(event)">카카오로그인</a>
+        <span class="divider">|</span>
+        <a href="javascript:void(0);" onclick="changeNickname()">닉네임변경</a>
+        <span class="divider">|</span>
+        <p class="nickname-text" th:text="'닉네임: ' + ${user.changeNickname}"></p>
+    </div>
+</div>
+
 <main class="content">
-    <h1>디펜스 게임</h1>
+    <h1>메이플 랜덤 타워 디펜스</h1>
     <a href="https://binary96.store/game"><i class="fas fa-gamepad"></i>총알피하기게임</a></li>
     <a href="https://binary96.store/defenseGame"><i class="fas fa-gamepad"></i>디펜스게임</a></li>
 
-    <a href="#" onclick="redirectToKakaoLogin(event)" class="kakao-link">
-        <img id="kakao-login-btn" th:src="@{/img/kakao_login_medium_narrow.png}" alt="카카오톡 로그인">
-    </a>
     <p>현재는 게임개발중</p>
     <p>모바일에서는 화면 전환해서 하면 될듯</p>
     <button id="bgmToggle">BGM 끄기/켜기</button>
@@ -89,6 +96,16 @@
         event.preventDefault();
         const currentUrl = encodeURIComponent(window.location.href);
         window.location.href = `/oauth/kakao?state=${currentUrl}`;
+    }
+
+    function changeNickname() {
+        var sessionNickname = [[${session.nickname}]];
+
+        if (sessionNickname !== null && sessionNickname !== undefined) {
+            window.location.href = '/profile';
+        } else {
+            alert("카카오톡 로그인을 후 메시지를 입력하세요.");
+        }
     }
 </script>
 

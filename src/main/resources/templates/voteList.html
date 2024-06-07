@@ -52,13 +52,14 @@
     </div>
 </header>
 
+<div class="toparea_state_wrapper">
+    <div class="toparea_state">
+        <a href="javascript:void(0);" onclick="redirectToKakaoLogin(event)">카카오로그인</a>
+    </div>
+</div>
+
 <div class="vote-container" style="margin: 100px">
     <h2>익명 투표</h2>
-    <div class="kakao-login-container">
-        <a href="#" onclick="redirectToKakaoLogin(event)" class="kakao-link">
-            <img id="kakao-login-btn" th:src="@{/img/kakao_login_medium_narrow.png}" alt="카카오톡 로그인">
-        </a>
-    </div>
     <button onclick="createVote()">투표 만들기!</button>
     <ul class="vote-options">
         <li th:each="vote : ${votes}">
