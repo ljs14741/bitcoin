@@ -29,7 +29,7 @@ public class GameController {
 
     @GetMapping("/game")
     public String game(Model model, HttpSession session) {
-        List<Game> games = gameService.getTopScores();
+        List<Game> games = gameService.getTopScoresForAvoidingGame();
 
         //유저id
         Long kakaoId = (Long) session.getAttribute("kakaoId");
@@ -49,6 +49,8 @@ public class GameController {
 
     @GetMapping("/defenseGame")
     public String defenseGame(Model model, HttpSession session) {
+        List<Game> games = gameService.getTopScoresForDefenseGame();
+
         //유저id
         Long kakaoId = (Long) session.getAttribute("kakaoId");
         User user = null;
@@ -61,6 +63,7 @@ public class GameController {
         }
 
         model.addAttribute("user", user);
+        model.addAttribute("games", games);
         return "defenseGame";
     }
 
@@ -68,7 +71,7 @@ public class GameController {
     @ResponseBody
     public List<Game> saveGame(@RequestBody GameDTO gameDTO, HttpSession session) {
         gameService.saveGame(gameDTO, session);
-        return gameService.getTopScores(); // 최신 순위를 반환
+        return gameService.getTopScoresByGameName(gameDTO.getGameName()); // 저장한 게임의 최신 순위를 반환
     }
 
 }

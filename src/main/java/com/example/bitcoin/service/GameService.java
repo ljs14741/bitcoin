@@ -27,27 +27,36 @@ public class GameService {
 
     public Game saveGame(GameDTO gameDTO, HttpSession session) {
         String nickname = (String) session.getAttribute("nickname");
-        if(nickname == null) {
-            Game game = new Game();
-            game.setGameName(gameDTO.getGameName());
-            game.setKakaoId(gameDTO.getKakaoId());
-            game.setChangeNickname("비로그인 유저");
-            game.setScore(gameDTO.getScore());
-            return gameRepository.save(game);
-        } else {
-            User user = userRepository.findByChangeNickname(nickname);
+        User user = null;
 
-            Game game = new Game();
-            game.setGameName(gameDTO.getGameName());
-            game.setKakaoId(user.getKakaoId());
-            game.setChangeNickname(nickname);
-            game.setScore(gameDTO.getScore());
-            return gameRepository.save(game);
+        if(nickname != null) {
+            user = userRepository.findByChangeNickname(nickname);
         }
+
+        if (user == null) {
+            user = new User();
+            user.setChangeNickname("비로그인 유저");
+        }
+
+        Game game = new Game();
+        game.setGameName(gameDTO.getGameName());
+        game.setKakaoId(user.getKakaoId());
+        game.setChangeNickname(user.getChangeNickname());
+        game.setScore(gameDTO.getScore());
+
+        return gameRepository.save(game);
 
     }
 
-    public List<Game> getTopScores() {
-        return gameRepository.findTop5ByOrderByScoreDescCreatedDateAsc();
+    public List<Game> getTopScoresByGameName(String gameName) {
+        return gameRepository.findTop5ByGameNameOrderByScoreDescCreatedDateAsc(gameName);
+    }
+
+    public List<Game> getTopScoresForDefenseGame() {
+        return getTopScoresByGameName("메이플 랜덤 타워 디펜스");
+    }
+
+    public List<Game> getTopScoresForAvoidingGame() {
+        return getTopScoresByGameName("총알 피하기");
     }
 }

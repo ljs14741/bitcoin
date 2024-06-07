@@ -73,6 +73,28 @@
 
     <p>현재는 게임개발중</p>
     <p>모바일에서는 화면 전환해서 하면 될듯</p>
+
+    <table class="styled-table">
+        <thead>
+        <tr>
+            <th>Rank</th>
+            <th>게임명</th>
+            <th>닉네임</th>
+            <th>점수</th>
+            <th>게임 일자</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="game, iterStat : ${games}">
+            <td th:text="${iterStat.index + 1}">1</td>
+            <td th:text="${game.gameName}">게임명</td>
+            <td th:text="${game.changeNickname}">닉네임</td>
+            <td th:text="${game.score}">점수</td>
+            <td th:text="${#temporals.format(game.createdDate, 'yyyy년 M월 d일')}">게임 일자</td>
+        </tr>
+        </tbody>
+    </table>
+
     <button id="bgmToggle">BGM 끄기/켜기</button>
     <label for="volumeControl">BGM 볼륨:</label>
     <input type="range" id="volumeControl" min="0" max="100" value="100">
@@ -107,6 +129,9 @@
             alert("카카오톡 로그인을 후 메시지를 입력하세요.");
         }
     }
+
+    var csrfToken = [[${_csrf.token}]];
+    console.log('csrfToken: ' +csrfToken);
 </script>
 
 </body>

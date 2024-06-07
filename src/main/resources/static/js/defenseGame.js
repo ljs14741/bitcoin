@@ -387,6 +387,9 @@ window.onload = function() {
         enemy.health -= flame.attackPower; // 타워의 공격력만큼 적 체력 감소
 
         if (enemy.health <= 0) {
+            if (round === 10 && enemy.texture.key === 'boss') {
+                displayGameClear(scene);
+            }
             enemy.destroy(); // 적 제거
             enemy1DieSound.play(); // 적 죽음 소리 재생
             currency += 1; // 화폐 1원 증가
@@ -399,6 +402,34 @@ window.onload = function() {
             enemyCountText.setText(`Enemies: ${currentEnemyCount}`);
         }
     }
+
+    function displayGameClear(scene) {
+        // 게임 클리어 텍스트 추가
+        const gameClearText = scene.add.text(400, 300, '게임 클리어!', {
+            fontSize: '64px',
+            fill: '#FFF',
+            backgroundColor: '#000'
+        }).setOrigin(0.5);
+
+        // 다시하기 버튼 추가
+        const restartButton = scene.add.text(400, 400, '게임 다시하기', {
+            fontSize: '32px',
+            fill: '#FFF',
+            backgroundColor: '#000'
+        }).setOrigin(0.5).setInteractive();
+
+        restartButton.on('pointerdown', () => {
+            // 페이지를 다시 로드하여 게임을 초기화
+            location.reload();
+        });
+
+        // 모든 타이머 이벤트 제거
+        scene.time.removeAllEvents();
+
+        // 점수 저장
+        saveGameData(scene, 10); // 10라운드 클리어 시점 저장
+    }
+
 
     function startRound(scene) {
         let enemyCount = 0;
@@ -419,7 +450,7 @@ window.onload = function() {
             roundTimerEvent = scene.time.delayedCall(roundTime, () => {
                 endRound(scene);
             }, [], scene);
-        } else {
+        } else if (round === 10) {
             // 10라운드 보스 한 마리만 생성
             spawnEnemy(scene, path);
 
@@ -519,13 +550,13 @@ window.onload = function() {
 
     function endRound(scene) {
         enemySpawnEvent.remove(false);
-        if (round < maxRounds) {
+        if (round < 10) {
             round++;
             remainingTime = roundTime / 1000; // 새로운 라운드를 위해 시간 초기화
             roundText.setText(`Round: ${round}`);
             console.log(`Round ${round} 시작!`);
             startRound(scene);
-        } else if (round === maxRounds) {
+        } else if (round === 10) {
             console.log('보스 라운드 시작!');
             round++;
             remainingTime = roundTime / 1000;
@@ -587,7 +618,76 @@ window.onload = function() {
         if (roundTimerEvent) {
             roundTimerEvent.remove(false);
         }
+
+        saveGameData(scene, round - 1);
+
     }
+
+    function saveGameData(scene, score) {
+        const gameData = {
+            gameName: "메이플 랜덤 타워 디펜스",
+            kakaoId: 9999, // 여기에 적절한 kakaoId를 설정하세요
+            score: score // 전달된 점수 저장
+        };
+
+        fetch('/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify(gameData)
+        }).then(response => {
+            if (response.ok) {
+                return response.text().then(text => {
+                    if (text) {
+                        return JSON.parse(text);
+                    }
+                    return {}; // 비어 있는 응답 처리
+                });
+            }
+            throw new Error('Network response was not ok ' + response.statusText);
+        }).then(data => {
+            console.log('Success:', data);
+            updateGameScores(data);
+        }).catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    function updateGameScores(games) {
+        const tbody = document.querySelector('table tbody');
+        tbody.innerHTML = '';
+
+        games.forEach((game, index) => {
+            const row = document.createElement('tr');
+
+            const rankCell = document.createElement('td');
+            rankCell.textContent = index + 1;
+            row.appendChild(rankCell);
+
+            const nameCell = document.createElement('td');
+            nameCell.textContent = game.gameName;
+            row.appendChild(nameCell);
+
+            const nicknameCell = document.createElement('td');
+            nicknameCell.textContent = game.changeNickname;
+            row.appendChild(nicknameCell);
+
+            const scoreCell = document.createElement('td');
+            scoreCell.textContent = game.score;
+            row.appendChild(scoreCell);
+
+            const dateCell = document.createElement('td');
+            const createdDate = new Date(game.createdDate);
+            const formattedDate = `${createdDate.getFullYear()}년 ${createdDate.getMonth() + 1}월 ${createdDate.getDate()}일`;
+            dateCell.textContent = formattedDate;
+            row.appendChild(dateCell);
+
+            tbody.appendChild(row);
+        });
+    }
+
 
     function showTowerDetailsAndUpgradeButton(scene, tower) {
         const basePower = baseAttackPower[tower.grade];
