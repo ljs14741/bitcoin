@@ -52,6 +52,22 @@ window.onload = function() {
             backgroundMusic.play();
         }
 
+        // BGM 끄기/켜기 버튼 이벤트 설정
+        document.getElementById('bgmToggle').addEventListener('click', () => {
+            if (backgroundMusic.isPlaying) {
+                backgroundMusic.pause();
+            } else {
+                this.sound.context.resume();
+                backgroundMusic.play({ loop: true });
+            }
+        });
+
+        // 볼륨 조절 슬라이더 이벤트 설정
+        document.getElementById('volumeControl').addEventListener('input', function() {
+            const volume = this.value / 100;
+            backgroundMusic.setVolume(volume);
+        });
+
         // 타워를 그래픽스로 그리기
         const towerGraphics = this.make.graphics({ x: 0, y: 0, add: false });
         towerGraphics.fillStyle(0xFFFF00, 1);

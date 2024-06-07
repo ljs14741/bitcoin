@@ -103,7 +103,7 @@ window.onload = function() {
 
         // 배경 음악 재생
         backgroundMusic = this.sound.add('backgroundMusic');
-        // backgroundMusic.play({ loop: true });
+        backgroundMusic.play({ loop: true });
 
         // 공격 소리와 적 죽음 소리 로드
         towerAttackSound = this.sound.add('towerAttackSound');
