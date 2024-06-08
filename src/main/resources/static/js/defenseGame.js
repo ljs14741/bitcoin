@@ -54,7 +54,7 @@ window.onload = function() {
     let currency = 30; // 초기 화폐 양
     let currencyText;
     let backgroundMusic; // 전역 변수로 선언
-    let towerAttackSound; // 전역 변수로 선언
+    let enemy1AttackSound; // 전역 변수로 선언
     let enemy1DieSound; // 전역 변수로 선언
     let enemyCount = 0;
     let bossSpawned = false;
@@ -77,9 +77,9 @@ window.onload = function() {
     let isDoubleSpeed = false;
 
     function preload() {
-        this.load.audio('backgroundMusic', 'assets/audio/Main.mp3');
-        this.load.audio('towerAttackSound', 'assets/audio/TowerAttack.mp3'); // 공격 소리 추가
-        this.load.audio('enemy1DieSound', 'assets/audio/Enemy1Die.mp3'); // 적 죽음 소리 추가
+        this.load.audio('backgroundMusic', 'assets/audio/backgroundMusic.mp3');
+        this.load.audio('enemy1AttackSound', 'assets/audio/enemy1Attack.mp3'); // 적1 맞는 소리
+        this.load.audio('enemy1DieSound', 'assets/audio/enemy1Die.mp3'); // 적 죽음 소리 추가
 
         this.load.image('background', 'assets/defense/tiles/land_1.png');
         this.load.image('flameTower', 'assets/defense/towers/ccc.png');
@@ -105,8 +105,8 @@ window.onload = function() {
         backgroundMusic = this.sound.add('backgroundMusic');
         backgroundMusic.play({ loop: true });
 
-        // 공격 소리와 적 죽음 소리 로드
-        towerAttackSound = this.sound.add('towerAttackSound');
+        // 적 맞는 소리와 적 죽음 소리 로드
+        enemy1AttackSound = this.sound.add('enemy1AttackSound');
         enemy1DieSound = this.sound.add('enemy1DieSound');
 
         // BGM 끄기/켜기 버튼 이벤트 설정
@@ -128,7 +128,7 @@ window.onload = function() {
         //효과음 조절
         document.getElementById('sfxVolumeControl').addEventListener('input', function() {
             const volume = this.value / 100;
-            towerAttackSound.setVolume(volume);
+            enemy1AttackSound.setVolume(volume);
             enemy1DieSound.setVolume(volume);
         });
 
@@ -353,7 +353,6 @@ window.onload = function() {
         flame.target = target; // 목표 적 설정
         scene.flames.add(flame);
         flame.play('flame_anim');
-        towerAttackSound.play();
     }
 
     function updateFlames(scene) {
@@ -376,6 +375,7 @@ window.onload = function() {
         if (!flame.active || !enemy.active) return;
 
         flame.destroy(); // 불꽃 제거
+        enemy1AttackSound.play();
 
         // 적 위치에 불꽃 폭발 효과 (애니메이션이 있는 경우)
         const explosion = scene.add.sprite(enemy.x, enemy.y, 'flame_1').setScale(0.01); // 폭발 이미지 크기 조정
