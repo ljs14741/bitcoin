@@ -302,6 +302,21 @@ window.onload = function() {
             toggleSpeedText.on('pointerdown', () => {
                 isDoubleSpeed = !isDoubleSpeed;
                 self.time.timeScale = isDoubleSpeed ? 2 : 1;
+
+                // 모든 적의 이동 속도를 조정
+                self.enemies.getChildren().forEach(enemy => {
+                    const baseDuration = enemy.texture.key === 'boss' ? 30000 : 19750;
+                    const newDuration = baseDuration / (isDoubleSpeed ? 2 : 1);
+
+                    if (enemy.pathFollower) {
+                        enemy.pathFollower.tween.stop();
+                        enemy.startFollow({
+                            duration: newDuration,
+                            repeat: -1,
+                            rotateToPath: true
+                        });
+                    }
+                });
             });
 
             startGameText.on('pointerdown', () => {
@@ -534,8 +549,12 @@ window.onload = function() {
         scene.physics.add.existing(enemy);  // 적에 물리 속성 추가
         enemy.body.setCircle(enemy.displayWidth / 2);  // 원형 충돌 박스 설정
         scene.enemies.add(enemy);
+
+        const baseDuration = round < 10 ? 19750 : 30000;
+        const newDuration = baseDuration / (isDoubleSpeed ? 2 : 1);
+
         enemy.startFollow({
-            duration: round < 10 ? 19750 : 30000, // 이동속도 20000 -> 20초, 보스는 더 천천히 이동
+            duration: newDuration,
             repeat: -1,
             rotateToPath: true
         });
