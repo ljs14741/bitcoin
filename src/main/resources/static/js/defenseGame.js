@@ -56,6 +56,7 @@ window.onload = function() {
     let backgroundMusic; // 전역 변수로 선언
     let enemy1AttackSound; // 전역 변수로 선언
     let enemy1DieSound; // 전역 변수로 선언
+    let boss1DieSound;
     let enemyCount = 0;
     let bossSpawned = false;
     const MAX_ENEMIES = 150;
@@ -80,10 +81,12 @@ window.onload = function() {
         this.load.audio('backgroundMusic', 'assets/audio/backgroundMusic.mp3');
         this.load.audio('enemy1AttackSound', 'assets/audio/enemy1Attack.mp3'); // 적1 맞는 소리
         this.load.audio('enemy1DieSound', 'assets/audio/enemy1Die.mp3'); // 적 죽음 소리 추가
+        this.load.audio('boss1DieSound', 'assets/audio/boss1Die.mp3');
 
         this.load.image('background', 'assets/defense/tiles/land_1.png');
         this.load.image('flameTower', 'assets/defense/towers/ccc.png');
         this.load.image('path', 'assets/defense/tiles/decor_6.png');
+        this.load.image('soil', 'assets/defense/tiles/soil.png');
         this.load.image('flame_1', 'assets/defense/towers/flame_1.png');
         this.load.image('flame_2', 'assets/defense/towers/flame_2.png');
         this.load.image('cancel', 'assets/defense/cancel.png'); // cancel 이미지 로드
@@ -108,6 +111,7 @@ window.onload = function() {
         // 적 맞는 소리와 적 죽음 소리 로드
         enemy1AttackSound = this.sound.add('enemy1AttackSound');
         enemy1DieSound = this.sound.add('enemy1DieSound');
+        boss1DieSound = this.sound.add('boss1DieSound');
 
         // BGM 끄기/켜기 버튼 이벤트 설정
         document.getElementById('bgmToggle').addEventListener('click', () => {
@@ -134,6 +138,19 @@ window.onload = function() {
 
         // 배경 설정
         this.add.tileSprite(400, 300, 800, 600, 'background');
+
+
+        const soilPositions = [];
+        const soilSprites = [];
+
+        // 직사각형 내부에 soil 이미지를 그리드 형식으로 배치 (테두리 제외)
+        for (let x = INSTALL_RECT.left + 50; x < INSTALL_RECT.right; x += 50) {
+            for (let y = INSTALL_RECT.top + 50; y < INSTALL_RECT.bottom; y += 50) {
+                const soilSprite = this.add.image(x, y, 'soil').setScale(0.05);
+                soilPositions.push({ x: x, y: y, sprite: soilSprite });
+                soilSprites.push(soilSprite);
+            }
+        }
 
         // 경로 설정
         path = this.add.path(50, 150); // 전역 변수 path에 할당
@@ -192,11 +209,13 @@ window.onload = function() {
                 const x = pointer.worldX;
                 const y = pointer.worldY;
 
-                // 직사각형 내부인지 확인
-                const isInsideRectangle = (x >= INSTALL_RECT.left && x <= INSTALL_RECT.right && y >= INSTALL_RECT.top && y <= INSTALL_RECT.bottom);
+                // 직사각형 내부에 있는지 확인하고 테두리는 제외
+                const isInsideRectangle = (x > INSTALL_RECT.left && x < INSTALL_RECT.right && y > INSTALL_RECT.top && y < INSTALL_RECT.bottom);
                 const isOccupied = towers.some(tower => Phaser.Math.Distance.Between(tower.x, tower.y, x, y) <= TOWER_RADIUS);
 
-                if (isInsideRectangle && !isOccupied) {
+                const validSoilIndex = soilPositions.findIndex(pos => Phaser.Math.Distance.Between(pos.x, pos.y, x, y) <= TOWER_RADIUS);
+
+                if (isInsideRectangle && !isOccupied && validSoilIndex !== -1) {
                     const tower = self.add.sprite(x, y, 'flameTower').setScale(0.05);
                     tower.grade = selectedTowerGrade; // 타워의 등급 설정
                     tower.attackPower = getTowerAttackPower(tower.grade); // 타워의 공격력 설정
@@ -215,9 +234,14 @@ window.onload = function() {
                     tower.on('pointerdown', () => {
                         showTowerDetailsAndUpgradeButton(self, tower);
                     });
+
+                    // 설치된 위치의 soil 이미지 제거
+                    soilPositions[validSoilIndex].sprite.destroy();
+                    soilPositions.splice(validSoilIndex, 1); // 배열에서 해당 위치 제거
                 }
             }
         });
+
 
         this.input.on('pointermove', function(pointer) {
             if (cursorTower) {
@@ -227,8 +251,8 @@ window.onload = function() {
                 cursorTower.x = x;
                 cursorTower.y = y;
 
-                // 직사각형 내부인지 확인
-                const isInsideRectangle = (x >= INSTALL_RECT.left && x <= INSTALL_RECT.right && y >= INSTALL_RECT.top && y <= INSTALL_RECT.bottom);
+                // 직사각형 내부인지 확인하고 테두리는 제외
+                const isInsideRectangle = (x > INSTALL_RECT.left && x < INSTALL_RECT.right && y > INSTALL_RECT.top && y < INSTALL_RECT.bottom);
                 const isOccupied = towers.some(tower => Phaser.Math.Distance.Between(tower.x, tower.y, x, y) <= TOWER_RADIUS);
 
                 if (!isInsideRectangle || isOccupied) {
@@ -388,6 +412,7 @@ window.onload = function() {
 
         if (enemy.health <= 0) {
             if (round === 10 && enemy.texture.key === 'boss') {
+                boss1DieSound.play();
                 displayGameClear(scene);
             }
             enemy.destroy(); // 적 제거
