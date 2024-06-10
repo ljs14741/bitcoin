@@ -222,6 +222,7 @@ window.onload = function() {
                     tower.range = towerAttackRange[tower.grade]; // 타워의 사거리 설정
                     tower.setInteractive();
                     towers.push(tower);
+                    showTowerGradeNotification(self, selectedTowerGrade);  // 타워 등급 알림 표시
                     selectedTowerGrade = null;
                     cursorTower.destroy();
                     cursorTower = null;
@@ -234,10 +235,6 @@ window.onload = function() {
                     tower.on('pointerdown', () => {
                         showTowerDetailsAndUpgradeButton(self, tower);
                     });
-
-                    // 설치된 위치의 soil 이미지 제거
-                    soilPositions[validSoilIndex].sprite.destroy();
-                    soilPositions.splice(validSoilIndex, 1); // 배열에서 해당 위치 제거
                 }
             }
         });
@@ -272,14 +269,42 @@ window.onload = function() {
         const menuButton = this.add.sprite(750, 50, 'menu').setInteractive().setScale(1);
 
         menuButton.on('pointerdown', () => {
-            const towerMenu = this.add.container(550, 100).setSize(200, 200).setInteractive();
-            const background = this.add.rectangle(0, 0, 200, 200, 0x000000, 0.8).setOrigin(0);
-            const towerPurchaseText = this.add.text(10, 10, '랜덤 타워 구매(15원)', { fontSize: '24px', fill: '#FFF' }).setInteractive();
-            const toggleSpeedText = this.add.text(10, 50, '게임2배속On/Off', { fontSize: '24px', fill: '#FFF' }).setInteractive(); // 추가된 부분
-            const startGameText = this.add.text(10, 90, '게임시작', { fontSize: '24px', fill: '#FFF' }).setInteractive();
+            const towerMenu = this.add.container(550, 100).setSize(250, 200).setInteractive();
+            const background = this.add.rectangle(0, 0, 250, 200, 0x000000, 0.7).setOrigin(0, 0);
+
+            const style = { fontSize: '20px', fill: '#FFF', fontFamily: 'Arial', align: 'left' };
+
+            const gameDescriptionText = this.add.text(10, 10, '게임설명', style).setInteractive();
+            const towerPurchaseText = this.add.text(10, 50, '랜덤 타워 구매 (15원)', style).setInteractive();
+            const toggleSpeedText = this.add.text(10, 90, '게임 2배속 On/Off', style).setInteractive();
+            const startGameText = this.add.text(10, 130, '게임시작', style).setInteractive();
+
+            gameDescriptionText.on('pointerdown', () => {
+                // 게임 설명 표시
+                const descriptionBackground = this.add.rectangle(400, 300, 500, 300, 0x000000, 0.7).setOrigin(0.5); // 배경을 더 크게 설정
+                const descriptionText = this.add.text(400, 300, '김치 랜덤 디펜스 \n 플레이어는 메소를 사용하여 타워를 구매하고 모든 적을 섬멸해야합니다.\n지금은 10단계가 최종보스 \n\n타워 등급과 출현 확률:\n- 일반: 51%\n- 레어: 33%\n- 영웅: 10%\n- 유물: 5%\n- 전설: 1%\n\n각 타워는 등급에 따라 다른 공격력과 사거리를 가집니다. 전략적으로 타워를 배치하여 적을 물리치세요.\n\n*게임 배속은 존재하는 적에게는 적용되지 않습니다.\n5초뒤 사라짐', {
+                    fontSize: '16px',
+                    fill: '#FFF',
+                    fontFamily: 'Arial',
+                    align: 'center',
+                    wordWrap: { width: 480, useAdvancedWrap: true }
+                }).setOrigin(0.5);
+
+                // 설명 텍스트가 더 앞에 나오도록 설정
+                descriptionBackground.setDepth(11);
+                descriptionText.setDepth(12);
+
+                // 일정 시간 후 설명 제거
+                this.time.addEvent({
+                    delay: 10000, // 10초 동안 설명 표시
+                    callback: () => {
+                        descriptionBackground.destroy();
+                        descriptionText.destroy();
+                    }
+                });
+            });
 
             towerPurchaseText.on('pointerdown', () => {
-                // 기존 타워 구매 로직
                 if (currency >= 15) {
                     selectedTowerGrade = getRandomTowerGrade();
                     if (cursorTower) cursorTower.destroy();
@@ -288,6 +313,7 @@ window.onload = function() {
                     towerMenu.destroy();
                     currency -= 15;
                     currencyText.setText(`: ${currency}`);
+
                 } else {
                     const warningText = self.add.text(400, 300, '화폐가 부족합니다!', { fontSize: '32px', fill: '#FFF', backgroundColor: '#000' }).setOrigin(0.5);
                     self.time.addEvent({
@@ -303,7 +329,6 @@ window.onload = function() {
                 isDoubleSpeed = !isDoubleSpeed;
                 self.time.timeScale = isDoubleSpeed ? 2 : 1;
 
-                // 모든 적의 이동 속도를 조정
                 self.enemies.getChildren().forEach(enemy => {
                     const baseDuration = enemy.texture.key === 'boss' ? 30000 : 19750;
                     const newDuration = baseDuration / (isDoubleSpeed ? 2 : 1);
@@ -324,8 +349,10 @@ window.onload = function() {
                 startRound(self);
             });
 
-            towerMenu.add([background, towerPurchaseText, toggleSpeedText, startGameText]);
+            towerMenu.add([background, gameDescriptionText, towerPurchaseText, toggleSpeedText, startGameText]);
             self.add.existing(towerMenu);
+
+            towerMenu.setDepth(10);
 
             const closeMenu = function(pointer) {
                 if (!towerMenu.getBounds().contains(pointer.worldX, pointer.worldY)) {
@@ -338,6 +365,7 @@ window.onload = function() {
                 self.input.on('pointerdown', closeMenu);
             }, 100);
         });
+
 
         // 타워 공격 로직
         this.time.addEvent({
@@ -444,24 +472,31 @@ window.onload = function() {
     }
 
     function displayGameClear(scene) {
-        // 게임 클리어 텍스트 추가
-        const gameClearText = scene.add.text(400, 300, '게임 클리어!', {
-            fontSize: '64px',
+
+        const gameClearContainer = scene.add.container(400, 300).setSize(600, 300);
+        const gameClearBackground = scene.add.rectangle(0, 0, 500, 200, 0x000000, 0.8).setOrigin(0.5);
+
+        const gameClearText = scene.add.text(0, -50, '게임 클리어!', {
+            fontSize: '48px',
             fill: '#FFF',
-            backgroundColor: '#000'
+            fontFamily: 'Arial',
         }).setOrigin(0.5);
 
-        // 다시하기 버튼 추가
-        const restartButton = scene.add.text(400, 400, '게임 다시하기', {
-            fontSize: '32px',
+        const restartButton = scene.add.text(0, 50, '게임 다시하기', {
+            fontSize: '24px',
             fill: '#FFF',
-            backgroundColor: '#000'
+            backgroundColor: '#00ff00',
+            padding: { left: 20, right: 20, top: 10, bottom: 10 },
+            borderRadius: 5
         }).setOrigin(0.5).setInteractive();
 
         restartButton.on('pointerdown', () => {
             // 페이지를 다시 로드하여 게임을 초기화
             location.reload();
         });
+
+        gameClearContainer.add([gameClearBackground, gameClearText, restartButton]);
+        gameClearContainer.setDepth(100);
 
         // 모든 타이머 이벤트 제거
         scene.time.removeAllEvents();
@@ -470,9 +505,32 @@ window.onload = function() {
         saveGameData(scene, 10); // 10라운드 클리어 시점 저장
     }
 
+    function showTowerGradeNotification(scene, grade) {
+        const notificationContainer = scene.add.container(scene.cameras.main.centerX, scene.cameras.main.centerY).setSize(300, 100);
+        const notificationBackground = scene.add.rectangle(0, 0, 300, 100, 0x000000, 0.8).setOrigin(0.5);
+
+        const notificationText = scene.add.text(0, 0, `${grade} 등급이 생성되었습니다.`, {
+            fontSize: '24px',
+            fill: '#FFF',
+            fontFamily: 'Arial',
+            align: 'center'
+        }).setOrigin(0.5);
+
+        notificationContainer.add([notificationBackground, notificationText]);
+        notificationContainer.setDepth(100);
+
+        // 2초 후 알림 제거
+        scene.time.addEvent({
+            delay: 2000,
+            callback: () => {
+                notificationContainer.destroy();
+            }
+        });
+    }
+
+
 
     function startRound(scene) {
-        let enemyCount = 0;
 
         if (round < 10) {
             // 첫 번째 적을 즉시 생성
@@ -593,7 +651,19 @@ window.onload = function() {
     }
 
     function endRound(scene) {
-        enemySpawnEvent.remove(false);
+        if (round === 10) {
+            // 보스가 살아 있으면 게임 오버
+            const boss = scene.enemies.getChildren().find(enemy => enemy.texture.key === 'boss' && enemy.active);
+            if (boss) {
+                endGame(scene);
+                return;
+            }
+        }
+
+        if (enemySpawnEvent) {
+            enemySpawnEvent.remove(false);
+        }
+
         if (round < 10) {
             round++;
             remainingTime = roundTime / 1000; // 새로운 라운드를 위해 시간 초기화
@@ -631,24 +701,31 @@ window.onload = function() {
     }
 
     function endGame(scene) {
-        // 게임 종료 텍스트 추가
-        const gameOverText = scene.add.text(400, 300, '게임 종료!', {
-            fontSize: '64px',
-            fill: '#FFF',
-            backgroundColor: '#000'
-        }).setOrigin(0.5).setName('gameOverText');
 
-        // 게임 다시하기 버튼 추가
-        const restartButton = scene.add.text(400, 400, '게임 다시하기', {
-            fontSize: '32px',
+        const gameOverContainer = scene.add.container(400, 300).setSize(600, 300);
+        const gameOverBackground = scene.add.rectangle(0, 0, 500, 200, 0x000000, 0.8).setOrigin(0.5);
+
+        const gameOverText = scene.add.text(0, -50, '게임 종료!', {
+            fontSize: '48px',
             fill: '#FFF',
-            backgroundColor: '#000'
+            fontFamily: 'Arial',
+        }).setOrigin(0.5);
+
+        const restartButton = scene.add.text(0, 50, '게임 다시하기', {
+            fontSize: '24px',
+            fill: '#FFF',
+            backgroundColor: '#ff0000',
+            padding: { left: 20, right: 20, top: 10, bottom: 10 },
+            borderRadius: 5
         }).setOrigin(0.5).setInteractive();
 
         restartButton.on('pointerdown', () => {
             // 페이지를 다시 로드하여 게임을 초기화
             location.reload();
         });
+
+        gameOverContainer.add([gameOverBackground, gameOverText, restartButton]);
+        gameOverContainer.setDepth(100);
 
         // 모든 타이머 이벤트 제거
         scene.time.removeAllEvents();
@@ -669,7 +746,7 @@ window.onload = function() {
 
     function saveGameData(scene, score) {
         const gameData = {
-            gameName: "메이플 랜덤 타워 디펜스",
+            gameName: "김치 타워 디펜스",
             kakaoId: 9999, // 여기에 적절한 kakaoId를 설정하세요
             score: score // 전달된 점수 저장
         };
@@ -735,30 +812,20 @@ window.onload = function() {
 
     function showTowerDetailsAndUpgradeButton(scene, tower) {
         const basePower = baseAttackPower[tower.grade];
-        const detailsText = scene.add.text(tower.x, tower.y - 90, `등급: ${tower.grade}\n공격력: (${basePower} + ${towerUpgradeLevel * basePower})\n사거리: ${tower.range}`, {
-            fontSize: '16px',
-            fill: '#FFF',
-            backgroundColor: '#000'
-        });
+        const style = { fontSize: '16px', fill: '#FFF', fontFamily: 'Arial', align: 'left' };
+
+        // 배경 컨테이너 설정
+        const detailsContainer = scene.add.container(tower.x, tower.y - 120);
+        const background = scene.add.rectangle(0, 0, 250, 150, 0x000000, 0.7).setOrigin(0, 0);
+
+        const detailsText = scene.add.text(10, 10, `등급: ${tower.grade}\n공격력: (${basePower} + ${towerUpgradeLevel * basePower})\n사거리: ${tower.range}`, style);
 
         const upgradeCost = 20 + (towerUpgradeLevel * 2);
-        const upgradeText = scene.add.text(tower.x, tower.y - 60, `${towerUpgradeLevel + 1}단계업그레이드(${upgradeCost}원)`, {
-            fontSize: '24px',
-            fill: '#FFF',
-            backgroundColor: '#000'
-        }).setInteractive();
+        const upgradeText = scene.add.text(10, 70, `${towerUpgradeLevel + 1}단계업그레이드(${upgradeCost}원)`, style).setInteractive();
 
-        const sellText = scene.add.text(tower.x, tower.y - 30, `판매하기(${getSellPrice(tower.grade)}원)`, {
-            fontSize: '24px',
-            fill: '#FFF',
-            backgroundColor: '#000'
-        }).setInteractive();
+        const sellText = scene.add.text(10, 100, `판매하기(${getSellPrice(tower.grade)}원)`, style).setInteractive();
 
-        const moveText = scene.add.text(tower.x, tower.y, `이동`, {
-            fontSize: '24px',
-            fill: '#FFF',
-            backgroundColor: '#000'
-        }).setInteractive();
+        const moveText = scene.add.text(10, 130, `이동`, style).setInteractive();
 
         // 사거리 범위 표시
         const rangeCircle = scene.add.graphics();
@@ -777,49 +844,43 @@ window.onload = function() {
 
         // 이동 버튼 클릭 이벤트 추가
         moveText.on('pointerdown', () => {
-            moveTower(scene, tower, detailsText, upgradeText, sellText, moveText, rangeCircle);
+            moveTower(scene, tower, detailsContainer, rangeCircle);
         });
+
+        // 배경과 텍스트 추가
+        detailsContainer.add([background, detailsText, upgradeText, sellText, moveText]);
+        scene.add.existing(detailsContainer);
 
         // 일정 시간 후 텍스트와 사거리 범위 제거
         scene.time.addEvent({
             delay: 2000,
             callback: () => {
-                if (detailsText) detailsText.destroy();
-                if (upgradeText) upgradeText.destroy();
-                if (sellText) sellText.destroy();
-                if (moveText) moveText.destroy();
+                if (detailsContainer) detailsContainer.destroy();
                 if (rangeCircle) rangeCircle.destroy();
             }
         });
     }
 
-    function moveTower(scene, tower, detailsText, upgradeText, sellText, moveText, rangeCircle) {
-        // 텍스트와 사거리 범위 제거
-        detailsText.destroy();
-        upgradeText.destroy();
-        sellText.destroy();
-        moveText.destroy();
-        rangeCircle.destroy();
+    function moveTower(scene, tower, detailsContainer, rangeCircle) {
+        // UI 제거
+        if (detailsContainer) detailsContainer.destroy();
+        if (rangeCircle) rangeCircle.destroy();
 
-        // 현재 타워 위치를 저장
+        // 타워 이동 설정
         const originalX = tower.x;
         const originalY = tower.y;
-
-        // 타워를 드래그하여 이동하는 대신 클릭으로 위치를 선택하게 함
         let cursorTower = tower;
         cursorTower.setAlpha(0.5);
-        cursorTower.setInteractive();
+        cursorTower.disableInteractive(); // 이동 중에는 클릭 비활성화
 
         const cancelMarker = scene.add.sprite(cursorTower.x, cursorTower.y, 'cancel').setScale(0.1);
 
         const pointerMoveHandler = function(pointer) {
             const x = pointer.worldX;
             const y = pointer.worldY;
-
             cursorTower.x = x;
             cursorTower.y = y;
 
-            // 직사각형 내부인지 확인
             const isInsideRectangle = (x >= INSTALL_RECT.left && x <= INSTALL_RECT.right && y >= INSTALL_RECT.top && y <= INSTALL_RECT.bottom);
             const isOccupied = towers.some(t => t !== cursorTower && Phaser.Math.Distance.Between(t.x, t.y, x, y) <= TOWER_RADIUS);
 
@@ -836,8 +897,6 @@ window.onload = function() {
         scene.input.once('pointerdown', function(pointer) {
             const x = pointer.worldX;
             const y = pointer.worldY;
-
-            // 직사각형 내부인지 확인
             const isInsideRectangle = (x >= INSTALL_RECT.left && x <= INSTALL_RECT.right && y >= INSTALL_RECT.top && y <= INSTALL_RECT.bottom);
             const isOccupied = towers.some(t => t !== cursorTower && Phaser.Math.Distance.Between(t.x, t.y, x, y) <= TOWER_RADIUS);
 
@@ -846,41 +905,38 @@ window.onload = function() {
                 cursorTower.x = x;
                 cursorTower.y = y;
             } else {
-                // 잘못된 위치일 경우 원래 위치로 되돌림
                 cursorTower.x = originalX;
                 cursorTower.y = originalY;
                 cursorTower.setAlpha(1);
             }
 
-            // 이동 모드 해제
             cursorTower.disableInteractive();
             cancelMarker.destroy();
-            scene.input.off('pointermove', pointerMoveHandler); // pointermove 핸들러 제거
+            scene.input.off('pointermove', pointerMoveHandler);
 
-            // 타워 클릭 이벤트 핸들러 다시 설정
-            cursorTower.setInteractive();
-            cursorTower.on('pointerdown', () => {
-                showTowerDetailsAndUpgradeButton(scene, cursorTower);
+            // 다시 클릭 가능하도록 인터랙티브 설정
+            scene.time.delayedCall(100, () => {
+                cursorTower.setInteractive();
+                cursorTower.on('pointerdown', () => {
+                    showTowerDetailsAndUpgradeButton(scene, cursorTower);
+                });
             });
         });
     }
 
     function upgradeTower(scene, tower, detailsText, upgradeText, sellText, moveText, rangeCircle) {
-        const baseUpgradeCost = 20; // 업그레이드 시작 비용을 20원으로 설정
+        const baseUpgradeCost = 20;
         const upgradeCost = baseUpgradeCost + (towerUpgradeLevel * 2);
 
         if (currency >= upgradeCost) {
-            currency -= upgradeCost; // 화폐 감소
-            currencyText.setText(`: ${currency}`); // 화폐 텍스트 업데이트
+            currency -= upgradeCost;
+            currencyText.setText(`: ${currency}`);
+            towerUpgradeLevel += 1;
 
-            towerUpgradeLevel += 1; // 업그레이드 레벨 증가
-
-            // 모든 타워의 공격력을 갱신
             towers.forEach(t => {
                 t.attackPower = getTowerAttackPower(t.grade);
             });
 
-            // 모든 타워의 텍스트를 갱신
             towers.forEach(t => {
                 if (t.upgradeDetailsText && t.upgradeText) {
                     const basePower = baseAttackPower[t.grade];
@@ -889,17 +945,14 @@ window.onload = function() {
                 }
             });
 
-            // 현재 클릭된 타워의 텍스트도 갱신
             const basePower = baseAttackPower[tower.grade];
             detailsText.setText(`등급: ${tower.grade}\n공격력: (${basePower} + ${towerUpgradeLevel * basePower})\n사거리: ${tower.range}`);
             upgradeText.setText(`${towerUpgradeLevel + 1}단계업그레이드(${baseUpgradeCost + (towerUpgradeLevel * 2)}원)`);
 
-            // 사거리 범위 갱신
             rangeCircle.clear();
             rangeCircle.lineStyle(2, 0xff0000, 1);
             rangeCircle.strokeCircle(tower.x, tower.y, tower.range);
         } else {
-            // 화폐가 부족할 때 경고 메시지 표시
             const warningText = scene.add.text(400, 300, '화폐가 부족합니다!', { fontSize: '32px', fill: '#FFF', backgroundColor: '#000' }).setOrigin(0.5);
             scene.time.addEvent({
                 delay: 2000,
@@ -910,16 +963,16 @@ window.onload = function() {
         }
     }
 
-    function sellTower(scene, tower, detailsText, upgradeText, sellText, rangeCircle) {
+    function sellTower(scene, tower, detailsText, upgradeText, sellText, moveText, rangeCircle) {
         const sellPrice = getSellPrice(tower.grade);
-        currency += sellPrice; // 화폐 증가
-        currencyText.setText(`: ${currency}`); // 화폐 텍스트 업데이트
-        towers = towers.filter(t => t !== tower); // 타워 목록에서 제거
-        tower.destroy(); // 타워 제거
-        detailsText.destroy(); // 상세 텍스트 제거
-        upgradeText.destroy(); // 업그레이드 텍스트 제거
-        sellText.destroy(); // 판매 텍스트 제거
-        rangeCircle.destroy(); // 사거리 범위 제거
+        currency += sellPrice;
+        currencyText.setText(`: ${currency}`);
+        towers = towers.filter(t => t !== tower);
+        tower.destroy();
+        detailsText.destroy();
+        upgradeText.destroy();
+        sellText.destroy();
+        rangeCircle.destroy();
     }
 
     function getSellPrice(grade) {
