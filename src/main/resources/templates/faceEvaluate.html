@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Evaluator</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<body>
+<h1>Face Evaluator</h1>
+<form id="upload-form" enctype="multipart/form-data">
+    <input type="file" id="image-files" name="images" multiple accept="image/*">
+    <button type="button" onclick="uploadImages()">Upload</button>
+</form>
+<h2>Evaluation Results</h2>
+<div id="results"></div>
+<script>
+    async function uploadImages() {
+        const files = document.getElementById('image-files').files;
+        if (files.length === 0) {
+            alert('사진을 업로드하세요');
+            return;
+        }
+        const formData = new FormData();
+        for (let i = 0; i < files.length; i++) {
+            formData.append('images', files[i]);
+        }
+
+        const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+        const headers = {};
+        headers[csrfHeader] = csrfToken;
+
+        const response = await fetch('/api/evaluate', {
+            method: 'POST',
+            headers: headers,
+            body: formData,
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Error:', errorText);
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        document.getElementById('results').innerHTML = data.results.map(result => `<p>${result}</p>`).join('');
+    }
+</script>
+</body>
+</html>
