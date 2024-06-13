@@ -53,7 +53,7 @@ public class GameService {
     }
 
     public List<Game> getTopScoresForDefenseGame() {
-        return getTopScoresByGameName("메이플 랜덤 타워 디펜스");
+        return getTopScoresByGameName("김치 타워 디펜스");
     }
 
     public List<Game> getTopScoresForAvoidingGame() {
