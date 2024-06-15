@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>투표 수정하기</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/vote.css}">
     <link rel="icon" href="/img/favicon/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" sizes="57x57" href="/img/favicon/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="/img/favicon/apple-icon-60x60.png">
@@ -24,44 +26,7 @@
     <meta name="theme-color" content="#ffffff">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6890085609044109"
             crossorigin="anonymous"></script>
-    <script>
-        function addOption() {
-            var optionList = document.getElementById("optionList");
-            var optionItem = document.createElement("li");
-            var span = document.createElement("span");
-            span.classList.add("option-label");
-            var input = document.createElement("input");
-            input.type = "text";
-            input.name = "options";
-            input.classList.add("vote-input");
-            optionItem.appendChild(span);
-            optionItem.appendChild(input);
-            optionList.appendChild(optionItem);
-            updateOptionNumbers();
-        }
 
-        function removeOption() {
-            var optionList = document.getElementById("optionList");
-            if (optionList.childElementCount > 2) {
-                optionList.removeChild(optionList.lastChild);
-            }
-            updateOptionNumbers();
-        }
-
-        function updateOptionNumbers() {
-            var optionList = document.getElementById("optionList");
-            var options = optionList.getElementsByTagName("li");
-            for (var i = 0; i < options.length; i++) {
-                var span = options[i].getElementsByClassName("option-label")[0];
-                var input = options[i].getElementsByTagName("input")[0];
-                span.textContent = "항목 " + (i + 1) + ": ";
-            }
-        }
-
-        window.onload = function() {
-            updateOptionNumbers();
-        };
-    </script>
 </head>
 <body>
 <div class="vote-container">
@@ -80,5 +45,45 @@
         <button type="submit" class="vote-button">투표 수정</button>
     </form>
 </div>
+
+<script>
+    function addOption() {
+        var optionList = document.getElementById("optionList");
+        var optionItem = document.createElement("li");
+        var span = document.createElement("span");
+        span.classList.add("option-label");
+        var input = document.createElement("input");
+        input.type = "text";
+        input.name = "options";
+        input.classList.add("vote-input");
+        optionItem.appendChild(span);
+        optionItem.appendChild(input);
+        optionList.appendChild(optionItem);
+        updateOptionNumbers();
+    }
+
+    function removeOption() {
+        var optionList = document.getElementById("optionList");
+        if (optionList.childElementCount > 2) {
+            optionList.removeChild(optionList.lastChild);
+        }
+        updateOptionNumbers();
+    }
+
+    function updateOptionNumbers() {
+        var optionList = document.getElementById("optionList");
+        var options = optionList.getElementsByTagName("li");
+        for (var i = 0; i < options.length; i++) {
+            var span = options[i].getElementsByClassName("option-label")[0];
+            var input = options[i].getElementsByTagName("input")[0];
+            span.textContent = "항목 " + (i + 1) + ": ";
+        }
+    }
+
+    window.onload = function() {
+        updateOptionNumbers();
+    };
+</script>
+
 </body>
 </html>
