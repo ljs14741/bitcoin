@@ -1,0 +1,193 @@
+/* 폰트 */
+@font-face {
+    font-family: 'TTHakgyoansimUndongjangL';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_keris@1.0/TTHakgyoansimUndongjangL.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'IBMPlexSansKR-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/IBMPlexSansKR-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Body 스타일 */
+body {
+    font-family: 'IBMPlexSansKR-Regular', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    color: #343a40;
+    text-align: center;
+    vertical-align: center;
+}
+
+/* 공통 버튼 스타일 */
+button, .vote-button, .result-button {
+    background-color: #5239AA;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-family: 'IBMPlexSansKR-Regular', Arial, sans-serif;
+}
+
+button:hover, .vote-button:hover, .result-button:hover {
+    background-color: #3F3955;
+}
+
+/* 공통 링크 스타일 */
+a {
+    color: #5239AA;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #3F3955;
+    text-decoration: underline;
+}
+
+/* 공통 테이블 스타일 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #5239AA;
+    color: white;
+}
+
+td {
+    border-bottom: 1px solid #ddd;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* 공통 섹션 스타일 */
+section {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 0 1rem 2rem;
+}
+
+.section-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.section-row > section {
+    flex: 1;
+    min-width: 250px;
+    box-sizing: border-box;
+}
+
+/* 공통 제목 스타일 */
+h2 {
+    font-family: 'TTHakgyoansimUndongjangL', serif;
+    color: #343a40;
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* toparea_state 스타일 */
+.toparea_state_wrapper {
+    display: flex;
+    justify-content: center; /* 가운데 정렬 */
+    align-items: center;
+    position: absolute;
+    top: 60px; /* 헤더 바로 아래에 위치 */
+    width: 100%; /* 전체 너비 사용 */
+}
+
+.toparea_state {
+    display: flex;
+    align-items: center;
+}
+
+.toparea_state a {
+    color: #808080; /* 링크 색상: 회색 */
+    text-decoration: none; /* 링크 밑줄 제거 */
+}
+
+.toparea_state p {
+    color: #808080; /* 링크 색상: 회색 */
+}
+
+.toparea_state a:hover {
+    text-decoration: underline; /* 마우스 오버 시 밑줄 추가 */
+}
+
+.divider {
+    margin: 0 10px; /* 좌우 간격 */
+    color: #808080; /* 구분자 색상 */
+}
+
+/* 모바일 스타일 */
+@media screen and (max-width: 768px) {
+    .chat-buttons {
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .header-buttons {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .btn-submit {
+        width: calc(100% - 2px);
+    }
+
+    header .main-nav ul {
+        display: none;
+        flex-direction: column;
+        background-color: #000;
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        width: 200px;
+        border-radius: 10px;
+        z-index: 1000;
+    }
+    header .main-nav ul.active {
+        display: flex;
+    }
+    header .hamburger {
+        display: block;
+    }
+
+    .section-row {
+        flex-direction: column;
+    }
+
+    .section-row > section {
+        min-width: 100%;
+    }
+
+    #chat {
+        margin: 120px 1rem 2rem;
+    }
+}
