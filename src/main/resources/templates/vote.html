@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>익명 투표하기</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/vote.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
     <link rel="icon" href="/img/favicon/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" sizes="57x57" href="/img/favicon/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="/img/favicon/apple-icon-60x60.png">
@@ -26,6 +24,23 @@
     <meta name="theme-color" content="#ffffff">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6890085609044109"
             crossorigin="anonymous"></script>
+    <script>
+        function validateVoteForm() {
+            const options = document.getElementsByName('optionNumber');
+            let isChecked = false;
+            for (let i = 0; i < options.length; i++) {
+                if (options[i].checked) {
+                    isChecked = true;
+                    break;
+                }
+            }
+            if (!isChecked) {
+                alert('선택지를 체크하세요');
+                return false;
+            }
+            return true;
+        }
+    </script>
 </head>
 <body>
 <div class="vote-container">
@@ -49,23 +64,5 @@
         </script>
     </div>
 </div>
-
-<script>
-    function validateVoteForm() {
-        const options = document.getElementsByName('optionNumber');
-        let isChecked = false;
-        for (let i = 0; i < options.length; i++) {
-            if (options[i].checked) {
-                isChecked = true;
-                break;
-            }
-        }
-        if (!isChecked) {
-            alert('선택지를 체크하세요');
-            return false;
-        }
-        return true;
-    }
-</script>
 </body>
 </html>

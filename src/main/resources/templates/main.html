@@ -11,16 +11,10 @@
     <meta name="naver-site-verification" content="7bf5ed460d4c7ce510734301ed66231be04df7ba" />
     <meta name="msvalidate.01" content="CDD92023DE164E539D882BD93CF03BCC" />
     <meta name="google-site-verification" content="6n2SJb2lATZ_KUu0EfXjXrOn2yTT-VcNv7aRmHJGoTU" />
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6890085609044109"
-            crossorigin="anonymous"></script>
-
-    <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/chat.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="icon" href="/img/favicon/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" sizes="57x57" href="/img/favicon/apple-icon-57x57.png">
@@ -40,6 +34,8 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6890085609044109"
+            crossorigin="anonymous"></script>
 </head>
 <body>
 <header>
@@ -100,6 +96,48 @@
         </div>
     </div>
 
+    <div class="section-row">
+        <section class="intro">
+            <h2>Binary의 서비스</h2>
+            <p>필요하신 것을 요청해 주시면 무엇이든 제작해 드리겠습니다.</p>
+            <p>채팅창에 요청해 주시면 최대한 만들어 보겠습니다.</p>
+            <p>욕은 자제해 주시고 매너 채팅 부탁드립니다~</p>
+            <p>웹페이지 예쁘게 꾸며 주신 상윤님 감사합니다. ^^</p>
+        </section>
+
+        <section class="intro">
+            <h2>사용자 요청 목록</h2>
+            <div class="service">
+                <button onclick="window.location.href='https://binary96.store/getLotto'">로또 당첨 순위</button>
+            </div>
+            <div class="service">
+                <button onclick="window.location.href='https://binary96.store/lucky'">오늘의 운세</button>
+            </div>
+        </section>
+
+        <!-- vote_id가 1인 투표 정보 표시 -->
+        <section class="vote-container">
+            <h2>익명 투표</h2>
+            <div class="vote">
+                <div>
+                    <span th:text="${vote.title}" style="font-size: 24px;">투표 제목</span>
+                </div>
+                <div>
+                    <span th:text="${voteCount} + '명이 투표에 참여했어요'">참여 인원</span>
+                </div>
+                <div>
+                    <form th:action="@{/vote/{id}(id=${vote.id})}" method="get">
+                        <button type="submit">투표 하러가기</button>
+                    </form>
+                    <form th:action="@{/vote/results/{id}(id=${vote.id})}" method="get">
+                        <button type="submit">투표 결과보기</button>
+                    </form>
+                    <button onclick="window.location.href='https://binary96.store/voteList'">투표 목록가기</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
     <br>
     <section class="intro">
         <h2>방문해 주셔서 감사합니다!</h2>
@@ -110,6 +148,10 @@
         </div>
     </section>
 
+    <div class="btn-container">
+        <button onclick="window.location.href='https://blog.naver.com/ljs14741'">네이버블로그</button>
+        <button onclick="window.location.href='https://jindduya.tistory.com/'">티스토리블로그</button>
+    </div>
 </main>
 <footer>
     <p>&copy; 2024 뭐든지 만들어드립니다. </p>
