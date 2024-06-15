@@ -21,6 +21,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/chat.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="icon" href="/img/favicon/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" sizes="57x57" href="/img/favicon/apple-icon-57x57.png">
@@ -74,10 +75,22 @@
     </div>
 </div>
 
-<main class="container">
+<div class="profile-section">
+    <img th:src="@{/img/testImg.png}" alt="Profile Image">
+    <div class="profile-info">
+        <h1>Binary's Services - 뭐든지 만들어드립니다.</h1>
+        <p>안녕하세요. 4년차 웹 개발자 이진수입니다.<br>
+           채팅창에 요청해 주시면 뭐든지 최선을 다해 만들어 드리겠습니다.
+        </p>
+        <div class="profile-buttons">
+            <button onclick="window.location.href='https://github.com/ljs14741'">Github</button>
+            <button onclick="window.location.href='https://blog.naver.com/ljs14741'">Blog</button>
+        </div>
+    </div>
+</div>
 
     <!-- 채팅 시스템 -->
-    <div id="chat">
+    <div id="chat" class = "main-section">
         <h2 class="chat-title">채팅창</h2>
         <div id="chat-box" style="height: 400px; overflow-y: scroll;">
             <div id="messages">
@@ -89,7 +102,6 @@
             </div>
         </div>
         <input type="text" id="username-input" placeholder="사용자 이름(카톡 로그인 하세요.) 닉네임 변경 가능" readonly>
-        <!--        <input type="text" id="username-input" th:placeholder="${session.nickname}" readonly>-->
         <input type="text" id="message-input" placeholder="메시지를 입력하세요" onkeypress="if(event.keyCode==13) sendMessage()">
         <div class="chat-buttons">
             <button class="btn-changeName" onclick="changeNickname()">닉네임 변경하기</button>
@@ -101,7 +113,7 @@
     </div>
 
     <br>
-    <section class="intro">
+    <section class="intro main-section">
         <h2>방문해 주셔서 감사합니다!</h2>
         <p>오늘의 방문자 수: <span th:text="${dailyCount}">0</span></p>
         <p>전체 방문자 수: <span th:text="${totalCount}">0</span></p>

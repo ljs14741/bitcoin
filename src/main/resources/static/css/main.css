@@ -1,0 +1,56 @@
+/* 프로필 섹션의 스타일 */
+.profile-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255, 228, 196, 0.8); /* 연한 베이지 배경색 */
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px auto; /* 위아래 마진 설정 */
+    max-width: 1000px; /* 전체 섹션의 최대 너비를 설정 */
+}
+
+.profile-section img {
+    width: 50%; /* 이미지 너비를 줄임 */
+    height: auto;
+    border-radius: 10px;
+    margin-right: 20px;
+}
+
+.profile-info {
+    width: 50%; /* 텍스트와 버튼 영역의 너비를 줄임 */
+    background: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.profile-info h1 {
+    font-size: 20px; /* 폰트 크기를 줄임 */
+    margin-bottom: 10px;
+}
+
+.profile-info p {
+    font-size: 14px; /* 폰트 크기를 줄임 */
+    margin-bottom: 20px;
+}
+
+.profile-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.profile-buttons button {
+    padding: 10px 15px; /* 버튼 크기를 줄임 */
+    border: none;
+    border-radius: 5px;
+    background-color: #ff6b6b;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px; /* 버튼 폰트 크기를 줄임 */
+}
+
+.profile-buttons button:hover {
+    background-color: #ff4757;
+}

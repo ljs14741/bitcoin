@@ -26,18 +26,17 @@ body {
 
 /* 공통 버튼 스타일 */
 button, .vote-button, .result-button {
-    background-color: #5239AA;
-    color: white;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
+    background-color: #ff6b6b;
+    color: #fff;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-family: 'IBMPlexSansKR-Regular', Arial, sans-serif;
+    font-size: 16px;
 }
 
 button:hover, .vote-button:hover, .result-button:hover {
-    background-color: #3F3955;
+    background-color: #ff4757;
 }
 
 /* 공통 링크 스타일 */
@@ -80,6 +79,15 @@ tbody tr:nth-child(even) {
     background-color: #f2f2f2;
 }
 
+.main-section {
+    max-width: 1000px; /* 전체 섹션의 최대 너비를 설정 */
+    margin: 20px auto; /* 위아래 마진과 중앙 정렬 */
+    background: rgba(255, 228, 196, 0.8); /* 연한 베이지 배경색 */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 /* 공통 섹션 스타일 */
 section {
     background-color: white;
@@ -115,9 +123,9 @@ h2 {
     display: flex;
     justify-content: center; /* 가운데 정렬 */
     align-items: center;
-    position: absolute;
-    top: 60px; /* 헤더 바로 아래에 위치 */
     width: 100%; /* 전체 너비 사용 */
+    margin-bottom: 20px;
+    padding-top: 60px;
 }
 
 .toparea_state {

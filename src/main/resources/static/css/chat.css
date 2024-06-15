@@ -8,14 +8,15 @@
 }
 
 #chat {
-    background-color: #f9f9f9;
+    background-color: rgba(255, 228, 196, 0.8);
     padding: 1rem;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 100px 1rem 2rem;
+    margin: 20px auto; /* 위아래 마진을 주고 중앙 정렬 */
     display: flex;
     align-items: center;
     flex-flow: column;
+    max-width: 1000px;
 }
 
 #chat-box {
@@ -25,7 +26,7 @@
     height: 300px;
     overflow-y: scroll;
     margin-bottom: 1rem;
-    background-color: white;
+    background: rgba(255, 255, 255, 0.8);
     border-radius: 5px;
     box-sizing: border-box;
 }
@@ -34,6 +35,20 @@
     list-style-type: none;
     padding: 0;
     margin: 0;
+    text-align: left; /* 왼쪽 정렬 설정 */
+    width: 100%; /* 전체 너비 사용 */
+}
+
+/* 개별 메시지 스타일 수정 */
+#messages div {
+    text-align: left; /* 왼쪽 정렬 설정 */
+    margin-bottom: 10px; /* 메시지 사이 간격 */
+}
+
+.message-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* 왼쪽 정렬 설정 */
 }
 
 /* 사용자 이름 스타일 */
@@ -70,19 +85,17 @@
 }
 
 button {
-    padding: 0 1rem;
-    font-size: 14px;
-    font-family: 'TTHakgyoansimUndongjangL', Arial, sans-serif;
-    background-color: #5239AA;
-    color: white;
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
+    background-color: #ff6b6b;
+    color: #fff;
     cursor: pointer;
-    height: 40px; /* 버튼 높이에 맞게 조정 */
+    font-size: 16px;
 }
 
 button:hover {
-    background-color: #3F3955;
+    background-color: #ff4757;
 }
 
 .kakao-login-container {
