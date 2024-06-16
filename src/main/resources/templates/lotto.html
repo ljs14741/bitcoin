@@ -54,59 +54,62 @@
     </div>
 </header>
 
-<section class="intro" style="margin: 100px">
-    <h2>가장 많이 나온 번호 순위</h2>
-</section>
-<table border="1">
-    <thead>
-    <tr>
-        <th>번호</th>
-        <th>나온 횟수 <i class="fas fa-sort"></i></th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="entry : ${numberFrequencies}">
-        <td th:text="${entry.key}"></td>
-        <td th:text="${entry.value}"></td>
-    </tr>
-    </tbody>
-</table>
+<div class="intro" style="margin: 100px">
+    <h2 class="main-title">로또 당첨 순위</h2>
+</div>
+<h3>가장 많이 나온 번호 순위</h3>
+<div class="table-responsive">
+    <table class="styled-table">
+        <thead>
+        <tr>
+            <th>번호</th>
+            <th>나온 횟수 <i class="fas fa-sort"></i></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="entry : ${numberFrequencies}">
+            <td th:text="${entry.key}"></td>
+            <td th:text="${entry.value}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<br>
+<h3>역대 로또 번호 목록</h3>
+<div class="table-responsive">
+    <table class="styled-table">
+        <thead>
+        <tr>
+            <th>회차 번호</th>
+            <th>Number 1</th>
+            <th>Number 2</th>
+            <th>Number 3</th>
+            <th>Number 4</th>
+            <th>Number 5</th>
+            <th>Number 6</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="lotto : ${lottoList}">
+            <td th:text="${lotto.roundNumber}"></td>
+            <td th:text="${lotto.number1}"></td>
+            <td th:text="${lotto.number2}"></td>
+            <td th:text="${lotto.number3}"></td>
+            <td th:text="${lotto.number4}"></td>
+            <td th:text="${lotto.number5}"></td>
+            <td th:text="${lotto.number6}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 <br>
 <section class="intro">
-    <h2>역대 로또 번호 목록</h2>
+    <div id="bottom" class="intro-container">
+        후원해 주시면 감사합니다! &#127877; → <a href="https://toss.me/godofdeath">복채 보내기</a>
+    </div>
 </section>
-<table border="1">
-    <thead>
-    <tr>
-        <th>회차 번호</th>
-        <th>Number 1</th>
-        <th>Number 2</th>
-        <th>Number 3</th>
-        <th>Number 4</th>
-        <th>Number 5</th>
-        <th>Number 6</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="lotto : ${lottoList}">
-        <td th:text="${lotto.roundNumber}"></td>
-        <td th:text="${lotto.number1}"></td>
-        <td th:text="${lotto.number2}"></td>
-        <td th:text="${lotto.number3}"></td>
-        <td th:text="${lotto.number4}"></td>
-        <td th:text="${lotto.number5}"></td>
-        <td th:text="${lotto.number6}"></td>
-    </tr>
-    </tbody>
-</table>
-
-    <br>
-    <section class="intro">
-        <div id="bottom" class="intro-container">
-            후원해 주시면 감사합니다! &#127877; → <a href="https://toss.me/godofdeath">복채 보내기</a>
-        </div>
-    </section>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

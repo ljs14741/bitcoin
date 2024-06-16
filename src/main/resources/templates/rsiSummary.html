@@ -57,52 +57,54 @@
     </div>
 </header>
 
-<section class="intro" style="margin: 100px">
-    <h2>코인 RSI 값</h2>
-    <h3>10분마다 RSI값을 계산합니다.</h3>
-    <h4>매수하기 좋은 코인: RSI값이 30이하인 경우</h4>
-    <h4>매도하기 좋은 코인: RSI값이 70이상인 경우</h4>
-    <h4>RSI란?</h4>
-    <p>RSI(상대 강도 지수, Relative Strength Index)는 기술적 분석에서 많이 사용되는 지표로, 자산의 가격 변동 속도와 변화를 측정하여 과매수(overbought) 또는 과매도(oversold) 상태를 판단하는 데 도움을 줍니다.
-        <br>
-        RSI는 0에서 100 사이의 값으로 표시되며, 일반적으로 다음과 같은 기준으로 해석됩니다:
-        <br>
-        <strong>70 이상</strong>: 자산이 과매수 상태일 가능성이 높아 <strong>매도 시점</strong>을 고려할 수 있습니다.
-        <br>
-        <strong>30 이하</strong>: 자산이 과매도 상태일 가능성이 높아 <strong>매수 시점</strong>을 고려할 수 있습니다.
-        <br>
-        RSI는 주로 14일 동안의 데이터로 계산되지만, 투자자의 필요에 따라 기간을 조정할 수 있습니다.
-        <br>
-        RSI 값이 높다는 것은 최근 가격 상승이 강하다는 것을 의미하며, 반대로 RSI 값이 낮다는 것은 최근 가격 하락이 강하다는 것을 의미합니다.
-    </p>
-</section>
+<div class="intro" style="margin: 100px;">
+    <h2 class="main-title">코인 RSI 정보</h2>
+    <div class="content-box">
+        <h3>10분마다 RSI값을 계산합니다.</h3>
+        <div class="info-box">
+            <h4>매수하기 좋은 코인: <span class="highlight">RSI값이 30이하인 경우</span></h4>
+            <h4>매도하기 좋은 코인: <span class="highlight">RSI값이 70이상인 경우</span></h4>
+        </div>
+        <div class="rsi-description">
+            <h4>RSI란?</h4>
+            <p>RSI(상대 강도 지수, Relative Strength Index)는 기술적 분석에서 많이 사용되는 지표로, 자산의 가격 변동 속도와 변화를 측정하여 과매수 또는 과매도 상태를 판단하는 데 도움을 줍니다.<br>
+                RSI는 0에서 100 사이의 값으로 표시되며, 일반적으로 다음과 같은 기준으로 해석됩니다:</p>
+            <p><strong>70 이상</strong>: 자산이 과매수 상태일 가능성이 높아 <strong>매도 시점</strong>을 고려할 수 있습니다.<br>
+                <strong>30 이하</strong>: 자산이 과매도 상태일 가능성이 높아 <strong>매수 시점</strong>을 고려할 수 있습니다.</p>
+            <p>RSI는 주로 14일 동안의 데이터로 계산되지만, 투자자의 필요에 따라 기간을 조정할 수 있습니다.<br>
+                RSI 값이 높다는 것은 최근 가격 상승이 강하다는 것을 의미하며, 반대로 RSI 값이 낮다는 것은 최근 가격 하락이 강하다는 것을 의미합니다.</p>
+        </div>
+    </div>
+</div>
 
-<table border="1">
-    <thead>
-    <tr>
-        <th>Market <i class="fas fa-sort"></i></th>
-        <th>한글명 <i class="fas fa-sort"></i></th>
-        <th>RSI 계산 시간 <i class="fas fa-sort"></i></th>
-        <th>RSI 15 <i class="fas fa-sort"></i></th>
-        <th>RSI 60 <i class="fas fa-sort"></i></th>
-        <th>RSI Daily <i class="fas fa-sort"></i></th>
-        <th>RSI Weekly <i class="fas fa-sort"></i></th>
-        <th>RSI Monthly <i class="fas fa-sort"></i></th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="rsi : ${rsiList}">
-        <td th:text="${rsi.market}"></td>
-        <td th:text="${rsi.koreanName}"></td>
-        <td th:text="${rsi.updatedDate}"></td>
-        <td th:text="${rsi.rsi15}"></td>
-        <td th:text="${rsi.rsi60}"></td>
-        <td th:text="${rsi.rsiDaily}"></td>
-        <td th:text="${rsi.rsiWeekly}"></td>
-        <td th:text="${rsi.rsiMonthly}"></td>
-    </tr>
-    </tbody>
-</table>
+<div class="table-responsive">
+    <table class="styled-table">
+        <thead>
+        <tr>
+            <th>Market <i class="fas fa-sort"></i></th>
+            <th>한글명 <i class="fas fa-sort"></i></th>
+            <th>RSI 계산 시간 <i class="fas fa-sort"></i></th>
+            <th>RSI 15 <i class="fas fa-sort"></i></th>
+            <th>RSI 60 <i class="fas fa-sort"></i></th>
+            <th>RSI Daily <i class="fas fa-sort"></i></th>
+            <th>RSI Weekly <i class="fas fa-sort"></i></th>
+            <th>RSI Monthly <i class="fas fa-sort"></i></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="rsi : ${rsiList}">
+            <td th:text="${rsi.market}"></td>
+            <td th:text="${rsi.koreanName}"></td>
+            <td th:text="${rsi.updatedDate}"></td>
+            <td th:text="${rsi.rsi15}"></td>
+            <td th:text="${rsi.rsi60}"></td>
+            <td th:text="${rsi.rsiDaily}"></td>
+            <td th:text="${rsi.rsiWeekly}"></td>
+            <td th:text="${rsi.rsiMonthly}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 <br>
     <section class="intro">
