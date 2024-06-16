@@ -54,3 +54,22 @@
 .profile-buttons button:hover {
     background-color: #ff4757;
 }
+
+/* 모바일용 스타일 */
+@media screen and (max-width: 768px) {
+    .profile-section {
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+    }
+
+    .profile-section img {
+        width: 100%; /* 모바일에서는 이미지 너비를 전체로 설정 */
+        margin-right: 0; /* 오른쪽 마진 제거 */
+        margin-bottom: 20px; /* 이미지 아래에 마진 추가 */
+    }
+
+    .profile-info {
+        width: 100%; /* 모바일에서는 텍스트와 버튼 영역의 너비를 전체로 설정 */
+    }
+}

@@ -78,3 +78,23 @@ header .hamburger {
     font-size: 24px;
     cursor: pointer;
 }
+
+@media screen and (max-width: 768px) {
+    header .main-nav ul {
+        display: none;
+        flex-direction: column;
+        background-color: #000;
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        width: 200px;
+        border-radius: 10px;
+        z-index: 1000;
+    }
+    header .main-nav ul.active {
+        display: flex;
+    }
+    header .hamburger {
+        display: block;
+    }
+}
