@@ -62,21 +62,20 @@
     </div>
 </div>
 
-<div class="vote-container" style="margin: 100px">
-    <h2>익명 투표</h2>
-    <button onclick="createVote()">투표 만들기!</button>
+<div class="intro" style="margin: 20px">
+    <h2 class="main-title">익명 투표</h2>
+</div>
+
+<div class="vote-list-container">
+    <button class="create-vote-button" onclick="createVote()">투표 만들기!</button>
     <ul class="vote-options">
-        <li th:each="vote : ${votes}">
-            <div>
-                <span th:text="${vote.title}">투표</span>
+        <li th:each="vote : ${votes}" class="vote-item">
+            <div class="vote-info">
+                <h3 th:text="${vote.title}">투표</h3>
+                <p th:text="'생성시간: ' + ${vote.formattedCreatedDate}">생성시간</p>
+                <p th:text="${voteResults[vote.id]} + '명이 투표에 참여했어요'">몇명참여</p>
             </div>
-            <div>
-                <span th:text="'생성시간: ' + ${vote.formattedCreatedDate}">생성시간</span>
-            </div>
-            <div>
-                <span th:text="${voteResults[vote.id]} + '명이 투표에 참여했어요'">몇명참여</span>
-            </div>
-            <div>
+            <div class="vote-actions">
                 <form th:action="@{/vote/{id}(id=${vote.id})}" method="get">
                     <button type="submit" class="vote-button">투표 하러가기</button>
                 </form>
@@ -86,9 +85,10 @@
                 <button type="button" class="vote-button" th:voteId="${vote.id}" th:kakaoId="${vote.kakaoId}" th:onclick="editVote(this.getAttribute('voteId'), this.getAttribute('kakaoId'))">투표 수정하기</button>
             </div>
         </li>
+        <li class="vote-item empty"></li>
+        <li class="vote-item empty"></li>
     </ul>
 </div>
-
 <script th:inline="javascript">
     function toggleMenu() {
         const nav = document.querySelector('header .main-nav ul');
@@ -121,8 +121,6 @@
         const currentUrl = encodeURIComponent(window.location.href);
         window.location.href = `/oauth/kakao?state=${currentUrl}`;
     }
-
-
 </script>
 </body>
 </html>
