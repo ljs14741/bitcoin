@@ -33,6 +33,7 @@ button, .vote-button, .result-button {
     color: #fff;
     cursor: pointer;
     font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
 button:hover, .vote-button:hover, .result-button:hover {
@@ -88,27 +89,6 @@ tbody tr:nth-child(even) {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* 공통 섹션 스타일 */
-section {
-    background-color: white;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin: 0 1rem 2rem;
-}
-
-.section-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-}
-
-.section-row > section {
-    flex: 1;
-    min-width: 250px;
-    box-sizing: border-box;
-}
-
 /* 공통 제목 스타일 */
 h2 {
     font-family: 'TTHakgyoansimUndongjangL', serif;
@@ -116,6 +96,33 @@ h2 {
     font-size: 1.75rem;
     margin-bottom: 1rem;
     text-align: center;
+}
+
+.main-title {
+    color: #ffffff;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(90deg, #ff7e5f, #feb47b); /* 그라데이션 색상 */
+    -webkit-background-clip: text; /* 텍스트에 그라데이션 적용 */
+    color: transparent; /* 배경색이 텍스트에만 적용되도록 투명색 사용 */
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    color: #ffffff;
+    text-shadow:
+            0 0 5px rgba(255, 126, 95, 0.5),
+            0 0 10px rgba(255, 126, 95, 0.5),
+            0 0 20px rgba(255, 126, 95, 0.5),
+            0 0 40px rgba(255, 126, 95, 0.5),
+            0 0 80px rgba(255, 126, 95, 0.5);
+}
+
+.main-title::after {
+    content: "";
+    display: block;
+    width: 60px; /* 밑줄 길이 */
+    height: 4px; /* 밑줄 두께 */
+    background-color: #ff7e5f; /* 밑줄 색상 */
+    margin: 0.5rem auto 0; /* 밑줄의 상하 간격과 중앙 정렬 */
+    border-radius: 2px; /* 밑줄의 끝을 둥글게 처리 */
 }
 
 /* toparea_state 스타일 */
@@ -149,6 +156,66 @@ h2 {
 .divider {
     margin: 0 10px; /* 좌우 간격 */
     color: #808080; /* 구분자 색상 */
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* lucky.html의 form */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.container-lucky {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.spinner {
+    display: none;
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+.loading {
+    display: block;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 /* 모바일 스타일 */
