@@ -12,13 +12,6 @@
     <meta name="naver-site-verification" content="7bf5ed460d4c7ce510734301ed66231be04df7ba" />
     <meta name="msvalidate.01" content="CDD92023DE164E539D882BD93CF03BCC" />
     <meta name="google-site-verification" content="6n2SJb2lATZ_KUu0EfXjXrOn2yTT-VcNv7aRmHJGoTU" />
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6890085609044109"
-            crossorigin="anonymous"></script>
-
     <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/chat.css}">
@@ -42,91 +35,76 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
+    <script th:src="@{/js/header.js}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6890085609044109" crossorigin="anonymous"></script>
 </head>
 <body>
-<header>
-    <div class="container">
-        <div class="logo" onclick="window.location.href='https://binary96.store/'">
-            <h1>뭐든지 만들어드립니다</h1>
-        </div>
-        <nav class="main-nav">
-            <ul>
-                <li><a href="https://binary96.store/lucky"><i class="fas fa-star"></i>오늘의 운세</a></li>
-                <li><a href="https://binary96.store/game"><i class="fas fa-gamepad"></i>게임</a></li>
-                <li><a href="https://binary96.store/voteList"><i class="fas fa-vote-yea"></i>익명 투표!</a></li>
-                <li><a href="https://kimchilotto.netlify.app/"><i class="fas fa-ticket-alt"></i>로또 추첨기</a></li>
-                <li><a href="https://godofdeath.pages.dev/"><i class="fas fa-skull-crossbones"></i>죽음 예측 테스트</a></li>
-                <li><a href="https://binary96.store/rsiSummary"><i class="fas fa-chart-line"></i>코인 RSI 정보</a></li>
-                <li><a href="https://binary96.store/getLotto"><i class="fas fa-medal"></i>로또 당첨 순위</a></li>
-            </ul>
-        </nav>
-        <div class="hamburger" onclick="toggleMenu()">
-            <i class="fas fa-bars"></i>
+    <header th:replace="/fragment/header :: headerFragment"></header>
+
+    <div class="toparea_state_wrapper">
+        <div class="toparea_state">
+            <a href="/oauth/kakao">카카오로그인</a>
+            <span class="divider">|</span>
+            <a href="javascript:void(0);" onclick="changeNickname()">닉네임변경</a>
+            <span class="divider">|</span>
+            <p class="nickname-text" th:text="'닉네임: ' + ${user.changeNickname}"></p>
         </div>
     </div>
-</header>
 
-<div class="toparea_state_wrapper">
-    <div class="toparea_state">
-        <a href="/oauth/kakao">카카오로그인</a>
-        <span class="divider">|</span>
-        <a href="javascript:void(0);" onclick="changeNickname()">닉네임변경</a>
-        <span class="divider">|</span>
-        <p class="nickname-text" th:text="'닉네임: ' + ${user.changeNickname}"></p>
-    </div>
-</div>
-
-<div class="profile-section">
-    <img th:src="@{/img/testImg.png}" alt="Profile Image">
-    <div class="profile-info">
-        <h1>Binary's Services - 뭐든지 만들어드립니다.</h1>
-        <p>안녕하세요. 4년차 웹 개발자 이진수입니다.<br>
-           채팅창에 요청해 주시면 뭐든지 최선을 다해 만들어 드리겠습니다.
-        </p>
-        <div class="profile-buttons">
-            <button onclick="window.location.href='https://github.com/ljs14741'">Github</button>
-            <button onclick="window.location.href='https://blog.naver.com/ljs14741'">Blog</button>
-        </div>
-    </div>
-</div>
-
-    <!-- 채팅 시스템 -->
-    <div id="chat" class = "main-section">
-        <h2 class="chat-title">채팅창</h2>
-        <div id="chat-box" style="height: 400px; overflow-y: scroll;">
-            <div id="messages">
-                <div th:each="message : ${messages}">
-                    <span th:text="'[' + ${#temporals.format(message.createdDate, 'yyyy. M. d. a h:mm:ss')} + '] '"></span>
-                    <span style="color: #4CAF50;" th:text="${message.username}"></span>
-                    <span th:text="'님: ' + ${message.message}"></span>
-                </div>
+    <div class="profile-section">
+        <img th:src="@{/img/testImg.png}" alt="Profile Image">
+        <div class="profile-info">
+            <h1>Binary's Services - 뭐든지 만들어드립니다.</h1>
+            <p>안녕하세요. 4년차 웹 개발자 이진수입니다.<br>
+               채팅창에 요청해 주시면 뭐든지 최선을 다해 만들어 드리겠습니다.
+            </p>
+            <div class="profile-buttons">
+                <button onclick="window.location.href='https://github.com/ljs14741'">Github</button>
+                <button onclick="window.location.href='https://blog.naver.com/ljs14741'">Blog</button>
             </div>
         </div>
-        <input type="text" id="username-input" placeholder="사용자 이름(카톡 로그인 하세요.) 닉네임 변경 가능" readonly>
-        <input type="text" id="message-input" placeholder="메시지를 입력하세요" onkeypress="if(event.keyCode==13) sendMessage()">
-        <div class="chat-buttons">
-            <button class="btn-changeName" onclick="changeNickname()">닉네임 변경하기</button>
-            <button class="btn-submit" onclick="sendMessage()">전송</button>
-            <a href="/oauth/kakao" class="kakao-link">
-                <img id="kakao-login-btn" th:src="@{/img/kakao_login_medium_narrow.png}" alt="카카오톡 로그인">
-            </a>
-        </div>
     </div>
 
-    <br>
-    <section class="intro main-section">
-        <h2>방문해 주셔서 감사합니다!</h2>
-        <p>오늘의 방문자 수: <span th:text="${dailyCount}">0</span></p>
-        <p>전체 방문자 수: <span th:text="${totalCount}">0</span></p>
-        <div id="bottom" class="intro-container">
-            후원해 주시면 감사합니다! &#127877; → <a href="https://toss.me/godofdeath">복채 보내기</a>
+        <!-- 채팅 시스템 -->
+        <div id="chat" class = "main-section">
+            <h2 class="chat-title">채팅창</h2>
+            <div id="chat-box" style="height: 400px; overflow-y: scroll;">
+                <div id="messages">
+                    <div th:each="message : ${messages}">
+                        <span th:text="'[' + ${#temporals.format(message.createdDate, 'yyyy. M. d. a h:mm:ss')} + '] '"></span>
+                        <span style="color: #4CAF50;" th:text="${message.username}"></span>
+                        <span th:text="'님: ' + ${message.message}"></span>
+                    </div>
+                </div>
+            </div>
+            <input type="text" id="username-input" placeholder="사용자 이름(카톡 로그인 하세요.) 닉네임 변경 가능" readonly>
+            <input type="text" id="message-input" placeholder="메시지를 입력하세요" onkeypress="if(event.keyCode==13) sendMessage()">
+            <div class="chat-buttons">
+                <button class="btn-changeName" onclick="changeNickname()">닉네임 변경하기</button>
+                <button class="btn-submit" onclick="sendMessage()">전송</button>
+                <a href="/oauth/kakao" class="kakao-link">
+                    <img id="kakao-login-btn" th:src="@{/img/kakao_login_medium_narrow.png}" alt="카카오톡 로그인">
+                </a>
+            </div>
         </div>
-    </section>
 
-</main>
-<footer>
-    <p>&copy; 2024 뭐든지 만들어드립니다. </p>
-</footer>
+        <br>
+        <section class="intro main-section">
+            <h2>방문해 주셔서 감사합니다!</h2>
+            <p>오늘의 방문자 수: <span th:text="${dailyCount}">0</span></p>
+            <p>전체 방문자 수: <span th:text="${totalCount}">0</span></p>
+            <div id="bottom" class="intro-container">
+                후원해 주시면 감사합니다! &#127877; → <a href="https://toss.me/godofdeath">복채 보내기</a>
+            </div>
+        </section>
+
+    </main>
+    <footer>
+        <p>&copy; 2024 뭐든지 만들어드립니다. </p>
+    </footer>
 
 <script th:inline="javascript">
     var stompClient = null;

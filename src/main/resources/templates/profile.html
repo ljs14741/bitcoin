@@ -25,51 +25,25 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
+    <script th:src="@{/js/header.js}"></script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6890085609044109" crossorigin="anonymous"></script>
 </head>
 <body>
-<header>
-    <div class="container">
-        <div class="logo" onclick="window.location.href='https://binary96.store/'">
-            <h1>뭐든지 만들어드립니다</h1>
-        </div>
-        <nav class="main-nav">
-            <ul>
-                <li><a href="https://binary96.store/lucky"><i class="fas fa-star"></i>오늘의 운세</a></li>
-                <li><a href="https://binary96.store/game"><i class="fas fa-gamepad"></i>게임</a></li>
-                <li><a href="https://binary96.store/voteList"><i class="fas fa-vote-yea"></i>익명 투표!</a></li>
-                <li><a href="https://kimchilotto.netlify.app/"><i class="fas fa-ticket-alt"></i>로또 추첨기</a></li>
-                <li><a href="https://godofdeath.pages.dev/"><i class="fas fa-skull-crossbones"></i>죽음 예측 테스트</a></li>
-                <li><a href="https://binary96.store/rsiSummary"><i class="fas fa-chart-line"></i>코인 RSI 정보</a></li>
-                <li><a href="https://binary96.store/getLotto"><i class="fas fa-medal"></i>로또 당첨 순위</a></li>
-            </ul>
-        </nav>
-        <div class="hamburger" onclick="toggleMenu()">
-            <i class="fas fa-bars"></i>
-        </div>
+    <header th:replace="/fragment/header :: headerFragment"></header>
+
+    <div class="intro" style="margin: 100px">
+        <h2 class="main-title">닉네임 수정</h2>
     </div>
-</header>
+    <p th:text="'현재 닉네임: ' + ${user.changeNickname}"></p>
 
-<div class="intro" style="margin: 100px">
-    <h2 class="main-title">닉네임 수정</h2>
-</div>
-<p th:text="'현재 닉네임: ' + ${user.changeNickname}"></p>
+    <form th:action="@{/updateNickname}" method="post">
+        <label for="newNickname">변경할 닉네임:</label>
+        <input type="text" id="newNickname" name="newNickname" required>
+        <button type="submit">변경하기</button>
+    </form>
 
-<form th:action="@{/updateNickname}" method="post">
-    <label for="newNickname">변경할 닉네임:</label>
-    <input type="text" id="newNickname" name="newNickname" required>
-    <button type="submit">변경하기</button>
-</form>
+    <p th:if="${error}" th:text="${error}"></p>
 
-<p th:if="${error}" th:text="${error}"></p>
-
-<a href="/">메인 화면</a>
-
-<script>
-    function toggleMenu() {
-        const nav = document.querySelector('header .main-nav ul');
-        nav.classList.toggle('active');
-    }
-</script>
+    <a href="/">메인 화면</a>
 </body>
 </html>

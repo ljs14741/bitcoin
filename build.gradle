@@ -55,7 +55,7 @@ dependencies {
     implementation 'org.seleniumhq.selenium:selenium-java:4.14.1'
     implementation 'org.seleniumhq.selenium:selenium-chrome-driver:4.14.1'
 
-
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 }
 
 tasks.named('test') {
