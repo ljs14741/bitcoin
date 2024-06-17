@@ -52,10 +52,6 @@ a:hover {
 }
 
 /* 공통 테이블 스타일 */
-.table-responsive {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch; /* iOS의 부드러운 스크롤을 위해 */
-}
 
 .styled-table {
     border-collapse: collapse;
@@ -259,7 +255,6 @@ h3 {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
     text-align: left;
     max-width: 1000px; /* 너비 조정 */
     margin: 0 auto; /* 중앙 정렬 */
@@ -334,9 +329,6 @@ h3 {
         margin: 120px 1rem 2rem;
     }
 
-    .table-responsive {
-        overflow-x: auto;
-    }
     table {
         width: 100%; /* 전체 너비 사용 */
     }
@@ -345,5 +337,9 @@ h3 {
         max-width: 100%; /* 모바일에서는 전체 너비 사용 */
         padding: 20px 10px; /* 양 옆에 약간의 패딩 추가 */
         margin: 10px; /* 화면 여백 조정 */
+    }
+
+    .styled-table {
+        font-size: 16px; /* 모바일에서는 폰트 크기 조정 */
     }
 }
