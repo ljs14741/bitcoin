@@ -42,16 +42,10 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6890085609044109" crossorigin="anonymous"></script>
 </head>
 <body>
-    <header th:replace="/fragment/header :: headerFragment"></header>
+    <header th:replace="fragment/header :: headerFragment"></header>
 
-    <div class="toparea_state_wrapper">
-        <div class="toparea_state">
-            <a href="/oauth/kakao">카카오로그인</a>
-            <span class="divider">|</span>
-            <a href="javascript:void(0);" onclick="changeNickname()">닉네임변경</a>
-            <span class="divider">|</span>
-            <p class="nickname-text" th:text="'닉네임: ' + ${user.changeNickname}"></p>
-        </div>
+    <div class="intro">
+        <h2 class="main-title">뭐든지 만들어드립니다</h2>
     </div>
 
     <div class="profile-section">
@@ -108,7 +102,6 @@
 
 <script th:inline="javascript">
     var stompClient = null;
-    var username = "";
 
     function connect() {
         var socket = new SockJS('/ws');
@@ -184,11 +177,6 @@
         connect();
         scrollToBottom();
     });
-
-    function toggleMenu() {
-        const nav = document.querySelector('header .main-nav ul');
-        nav.classList.toggle('active');
-    }
 </script>
 </body>
 </html>

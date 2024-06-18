@@ -14,6 +14,10 @@
 }
 
 /* Body 스타일 */
+.intro {
+    margin-top: 90px;
+}
+
 body {
     font-family: 'IBMPlexSansKR-Regular', Arial, sans-serif;
     margin: 0;
@@ -163,39 +167,6 @@ h3 {
     background-color: #ff7e5f; /* 밑줄 색상 */
     margin: 0.5rem auto 0; /* 밑줄의 상하 간격과 중앙 정렬 */
     border-radius: 2px; /* 밑줄의 끝을 둥글게 처리 */
-}
-
-/* toparea_state 스타일 */
-.toparea_state_wrapper {
-    display: flex;
-    justify-content: center; /* 가운데 정렬 */
-    align-items: center;
-    width: 100%; /* 전체 너비 사용 */
-    margin-bottom: 20px;
-    padding-top: 60px;
-}
-
-.toparea_state {
-    display: flex;
-    align-items: center;
-}
-
-.toparea_state a {
-    color: #808080; /* 링크 색상: 회색 */
-    text-decoration: none; /* 링크 밑줄 제거 */
-}
-
-.toparea_state p {
-    color: #808080; /* 링크 색상: 회색 */
-}
-
-.toparea_state a:hover {
-    text-decoration: underline; /* 마우스 오버 시 밑줄 추가 */
-}
-
-.divider {
-    margin: 0 10px; /* 좌우 간격 */
-    color: #808080; /* 구분자 색상 */
 }
 
 .container {

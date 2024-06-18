@@ -29,9 +29,9 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6890085609044109" crossorigin="anonymous"></script>
 </head>
 <body>
-    <header th:replace="/fragment/header :: headerFragment"></header>
+    <header th:replace="fragment/header :: headerFragment"></header>
 
-    <div class="intro" style="margin: 100px">
+    <div class="intro">
         <h2 class="main-title">닉네임 수정</h2>
     </div>
     <p th:text="'현재 닉네임: ' + ${user.changeNickname}"></p>

@@ -34,15 +34,9 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6890085609044109" crossorigin="anonymous"></script>
 </head>
 <body>
-    <header th:replace="/fragment/header :: headerFragment"></header>
+    <header th:replace="fragment/header :: headerFragment"></header>
 
-    <div class="toparea_state_wrapper">
-        <div class="toparea_state">
-            <a href="javascript:void(0);" onclick="redirectToKakaoLogin(event)">카카오로그인</a>
-        </div>
-    </div>
-
-    <div class="intro" style="margin: 20px">
+    <div class="intro">
         <h2 class="main-title">익명 투표</h2>
     </div>
 
@@ -89,12 +83,6 @@
         } else {
             alert("카카오톡 로그인을 후 투표를 생성하시오.");
         }
-    }
-
-    function redirectToKakaoLogin(event) {
-        event.preventDefault();
-        const currentUrl = encodeURIComponent(window.location.href);
-        window.location.href = `/oauth/kakao?state=${currentUrl}`;
     }
 </script>
 </body>

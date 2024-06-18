@@ -9,6 +9,8 @@
     <meta property="og:title" content="김치 랜덤 디펜스">
     <meta property="og:description" content="김치 랜덤 디펜스">
     <link rel="stylesheet" th:href="@{/css/gameStyle.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="icon" href="/img/favicon/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" sizes="57x57" href="/img/favicon/apple-icon-57x57.png">
@@ -36,26 +38,23 @@
             crossorigin="anonymous"></script>
 </head>
 <body>
-    <header th:replace="/fragment/header :: headerFragment"></header>
+    <header th:replace="fragment/header :: headerFragment"></header>
 
-    <div class="toparea_state_wrapper">
-        <div class="toparea_state">
-            <a href="javascript:void(0);" onclick="redirectToKakaoLogin(event)">카카오로그인</a>
-            <span class="divider">|</span>
-            <a href="javascript:void(0);" onclick="changeNickname()">닉네임변경</a>
-            <span class="divider">|</span>
-            <p class="nickname-text" th:text="'닉네임: ' + ${user.changeNickname}"></p>
-        </div>
+    <div class="intro">
+        <h2 class="main-title">김치 랜덤 타워 디펜스</h2>
     </div>
 
-    <main class="content">
-        <h1>김치 랜덤 타워 디펜스</h1>
+    <div class="container-game">
         <a href="https://binary96.store/game"><i class="fas fa-gamepad"></i>총알피하기게임</a>
         <a href="https://binary96.store/defenseGame"><i class="fas fa-gamepad"></i>디펜스게임</a>
+        <p>카카오 로그인 하셔서 순위에 도전해보세요!<br>
+           로그인 하지 않으면 '비로그인 유저'로 기록됩니다.<br>
+           로그인 후 닉네임은 메인 화면에서 변경 가능
+        </p>
+        <p>모바일에서는 화면 전환하셔서 하시면됩니다.</p>
+    </div>
 
-        <p>현재는 게임개발중</p>
-        <p>모바일에서는 화면 전환해서 하면 될듯</p>
-
+    <div>
         <table class="styled-table">
             <thead>
             <tr>
@@ -76,13 +75,15 @@
             </tr>
             </tbody>
         </table>
+    </div>
 
+    <div class="container-game">
         <button id="bgmToggle">BGM 끄기/켜기</button>
         <label for="volumeControl">BGM 볼륨:</label>
         <input type="range" id="volumeControl" min="0" max="100" value="100">
         <label for="sfxVolumeControl">효과음 볼륨:</label>
         <input type="range" id="sfxVolumeControl" min="0" max="100" value="100">
-    </main>
+    </div>
 
 <script th:inline="javascript">
 
@@ -91,22 +92,6 @@
             window.location.href = "/oauth/kakao";
         });
     });
-
-    function redirectToKakaoLogin(event) {
-        event.preventDefault();
-        const currentUrl = encodeURIComponent(window.location.href);
-        window.location.href = `/oauth/kakao?state=${currentUrl}`;
-    }
-
-    function changeNickname() {
-        var sessionNickname = [[${session.nickname}]];
-
-        if (sessionNickname !== null && sessionNickname !== undefined) {
-            window.location.href = '/profile';
-        } else {
-            alert("카카오톡 로그인을 후 메시지를 입력하세요.");
-        }
-    }
 
     var csrfToken = [[${_csrf.token}]];
     console.log('csrfToken: ' +csrfToken);

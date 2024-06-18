@@ -28,7 +28,7 @@ header .logo {
 
 header .logo h1 {
     font-family: 'TTHakgyoansimUndongjangL', serif;
-    font-size: 24px;
+    font-size: 21px;
     margin: 0;
 }
 
@@ -57,7 +57,7 @@ header .main-nav ul li {
 header .main-nav ul li a {
     color: white;
     text-decoration: none;
-    font-size: 16px;
+    font-size: 14px;
     display: flex;
     align-items: center;
     padding: 5px 10px;
