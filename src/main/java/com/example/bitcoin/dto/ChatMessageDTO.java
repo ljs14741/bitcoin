@@ -16,6 +16,8 @@ public class ChatMessageDTO {
 
     private String message;
 
+    private String imageUrl;
+
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
 }

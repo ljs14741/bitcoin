@@ -74,6 +74,8 @@
 
 #message-input {
     height: 70px;
+    border: none;
+    outline: none;
 }
 
 .chat-buttons {
@@ -121,4 +123,44 @@ button:hover {
 
 input::placeholder {
     font-family: 'IBMPlexSansKR-Regular', Arial, sans-serif;
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px;
+    background-color: #fff;
+    position: relative;
+}
+
+.upload-btn {
+    cursor: pointer;
+    color: #4CAF50;
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.upload-btn:hover {
+    color: #2E7D32;
+}
+
+#image-preview {
+    margin-left: 10px;
+    display: none;
+    width: 50px;
+    height: 50px;
+}
+
+/* 추가된 스타일 */
+.message-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.message-container img {
+    margin-right: 10px;
+    max-width: 50px;
 }

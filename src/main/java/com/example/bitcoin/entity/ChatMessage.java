@@ -29,6 +29,9 @@ public class ChatMessage {
     @Column(name = "message")
     private String message;
 
+    @Column(name = "image_url")  // 이미지 URL 저장할 필드 추가
+    private String imageUrl;
+
     @CreatedDate
     @Column(updatable = false, name = "created_date")
     private LocalDateTime createdDate;
