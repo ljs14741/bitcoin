@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>투표 모임 만들기</title>
+</head>
+<body>
+<h2>투표 모임 만들기</h2>
+<form action="#" th:action="@{/meet/new}" th:object="${meet}" method="post">
+    <div>
+        <label for="meetName">모임명:</label>
+        <input type="text" id="meetName" th:field="*{meetName}" required>
+    </div>
+    <div>
+        <label for="createdPassword">모임 생성 패스워드:</label>
+        <input type="password" id="createdPassword" th:field="*{createdPassword}" required>
+    </div>
+    <div>
+        <label for="meetPassword">모임 패스워드:</label>
+        <input type="password" id="meetPassword" th:field="*{meetPassword}" required>
+    </div>
+    <div>
+        <button type="submit">저장</button>
+    </div>
+</form>
+</body>
+</html>

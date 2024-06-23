@@ -1,8 +1,11 @@
 package com.example.bitcoin.service;
 
+import com.example.bitcoin.dto.VoteDTO;
+import com.example.bitcoin.entity.Meet;
 import com.example.bitcoin.entity.Options;
 import com.example.bitcoin.entity.Vote;
 import com.example.bitcoin.entity.VoteResult;
+import com.example.bitcoin.repository.MeetRepository;
 import com.example.bitcoin.repository.VoteResultRepository;
 import com.example.bitcoin.repository.VoteRepository;
 import com.example.bitcoin.repository.OptionRepository;
@@ -26,9 +29,32 @@ public class VoteService {
     @Autowired
     private VoteResultRepository voteResultRepository;
 
+    @Autowired
+    private MeetRepository meetRepository;
+
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일 a h시 m분");
 
-    public Vote createVote(Vote vote, List<String> options) {
+    public Vote createVote(VoteDTO voteDTO, List<String> options) {
+        Meet meet = null;
+        if (voteDTO.getMeetId() != null) {
+            meet = meetRepository.findById(voteDTO.getMeetId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid meet ID: " + voteDTO.getMeetId()));
+        }
+
+        Vote vote = Vote.builder()
+                .id(voteDTO.getId())
+                .kakaoId(voteDTO.getKakaoId())
+                .votePassword(voteDTO.getVotePassword())
+                .meet(meet)
+                .voteType(voteDTO.getVoteType())
+                .endTime(voteDTO.getEndTime())
+                .title(voteDTO.getTitle())
+                .formattedCreatedDate(voteDTO.getFormattedCreatedDate())
+                .updYn("N")
+                .delYn("N")
+                .createdDate(voteDTO.getCreatedDate())
+                .updatedDate(voteDTO.getUpdatedDate())
+                .build();
 
         Vote savedVote = voteRepository.save(vote);
         long optionNumber = 1;
@@ -58,8 +84,26 @@ public class VoteService {
         }
     }
 
-    public List<Vote> getAllVotes() {
-        List<Vote> votes = voteRepository.findAllOrderByCreatedDateDesc();
+//    public List<Vote> getAllVotes() {
+//        List<Vote> votes = voteRepository.findAllOrderByCreatedDateDesc();
+//        for (Vote vote : votes) {
+//            vote.setFormattedCreatedDate(vote.getCreatedDate().format(formatter));
+//        }
+//        return votes;
+//    }
+
+    // 공개 투표만 조회
+    public List<Vote> getAllPublicVotes() {
+        List<Vote> votes = voteRepository.findAllPublicVotesOrderByCreatedDateDesc();
+        for (Vote vote : votes) {
+            vote.setFormattedCreatedDate(vote.getCreatedDate().format(formatter));
+        }
+        return votes;
+    }
+
+    // 비공개 투표 조회 (선택한 모임)
+    public List<Vote> getAllPrivateVotes(Long meetId) {
+        List<Vote> votes = voteRepository.findPrivateVotesByMeetId(meetId);
         for (Vote vote : votes) {
             vote.setFormattedCreatedDate(vote.getCreatedDate().format(formatter));
         }

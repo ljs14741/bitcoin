@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>모임 수정</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/vote.css}">
+</head>
+<body>
+<header th:replace="fragment/header :: headerFragment"></header>
+<div class="edit-meet">
+    <h2>모임 수정</h2>
+    <form th:action="@{/meet/edit/{id}(id=${meet.id})}" th:object="${meet}" method="post">
+        <label for="meetName">모임명:</label>
+        <input type="text" id="meetName" th:field="*{meetName}" required>
+        <label for="createdPassword">모임 생성 패스워드:</label>
+        <input type="text" id="createdPassword" th:field="*{createdPassword}" required>
+        <label for="meetPassword">모임 패스워드:</label>
+        <input type="text" id="meetPassword" th:field="*{meetPassword}" required>
+        <button type="submit">수정하기</button>
+    </form>
+</div>
+</body>
+</html>

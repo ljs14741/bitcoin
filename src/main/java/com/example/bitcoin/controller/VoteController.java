@@ -1,7 +1,11 @@
 package com.example.bitcoin.controller;
 
+import com.example.bitcoin.dto.MeetDTO;
+import com.example.bitcoin.dto.VoteDTO;
+import com.example.bitcoin.entity.Meet;
 import com.example.bitcoin.entity.Options;
 import com.example.bitcoin.entity.Vote;
+import com.example.bitcoin.service.MeetService;
 import com.example.bitcoin.service.VoteService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,10 +28,17 @@ public class VoteController {
     @Autowired
     private VoteService voteService;
 
-    //투표 목록 조회
+    @Autowired
+    private MeetService meetService;
+
+    @Autowired
+    private MeetController meetController;
+
+    // 공개 투표 목록 조회
     @GetMapping("/voteList")
-    public String listVotes(Model model) {
-        List<Vote> votes = voteService.getAllVotes();
+    public String publicListVotes(Model model, HttpSession session) {
+//        List<Vote> votes = voteService.getAllVotes();
+        List<Vote> votes = voteService.getAllPublicVotes();
         Map<Long, Long> voteResults = new HashMap<>();
 
         for (Vote vote : votes) {
@@ -36,26 +47,41 @@ public class VoteController {
             voteResults.put(voteId, resultCount);
         }
 
+        List<MeetDTO> meets = meetService.getAllMeets();
+        model.addAttribute("meets", meets);
+
         model.addAttribute("votes", votes);
         model.addAttribute("voteResults", voteResults);
+
+        session.setAttribute("dummy", "dummyValue");
         return "voteList";
     }
 
     // 투표 생성 화면 조회
     @GetMapping("/vote/new")
-    public String newVoteForm(Model model) {
-        model.addAttribute("vote", new Vote());
+    public String newVoteForm(@RequestParam(required = false) String voteType, Model model,@RequestParam(required = false) Long meetId) {
+//        MeetDTO meet = new MeetDTO();
+//        meet.setId(meet.getId());
+        log.info("그래그래: " + meetId);
+//
+//        model.addAttribute("meet", meet);
+        VoteDTO vote = new VoteDTO();
+        vote.setMeetId(meetId);
+
+        model.addAttribute("vote", vote);
+        model.addAttribute("voteType", voteType);
         return "newVote";
     }
+
 
     // 투표 수정 화면 조회
     @GetMapping("/vote/edit/{id}")
     public String editVoteForm(@PathVariable Long id, Model model, HttpSession session) {
-        Long kakaoId = (Long) session.getAttribute("kakaoId");
+//        Long kakaoId = (Long) session.getAttribute("kakaoId");
         Vote vote = voteService.getVoteById(id);
-        if (!vote.getKakaoId().equals(kakaoId)) {
-            return "redirect:/voteList";
-        }
+//        if (!vote.getKakaoId().equals(kakaoId)) {
+//            return "redirect:/voteList";
+//        }
         List<Options> options = voteService.getOptionsByVoteId(id);
 
         model.addAttribute("vote", vote);
@@ -65,19 +91,32 @@ public class VoteController {
 
     // 투표 생성하기
     @PostMapping("/vote")
-    public String createVote(@ModelAttribute Vote vote, @RequestParam List<String> options, HttpSession session) {
-        Long kakaoId = (Long) session.getAttribute("kakaoId");
-        vote.setKakaoId(kakaoId);
-        voteService.createVote(vote, options);
-        return "redirect:/voteList";
+    public String createVote(@ModelAttribute VoteDTO voteDTO, @RequestParam List<String> options, @RequestParam(required = false) String voteType, HttpSession session, Model model) {
+//        log.info("가나다: " + vote.getVoteType());
+//        Long kakaoId = (Long) session.getAttribute("kakaoId");
+//        vote.setKakaoId(kakaoId);
+//        Vote vote = convertToDTO(vote);
+        if ("PRIVATE".equals(voteType)) {
+            voteDTO.setVoteType(Vote.VoteType.PRIVATE);
+            voteService.createVote(voteDTO, options);
+            return meetController.getMeetById(voteDTO.getMeetId(), model);
+        } else {
+            voteDTO.setVoteType(Vote.VoteType.PUBLIC);
+            voteService.createVote(voteDTO, options);
+            return "redirect:/voteList";
+        }
+//        voteService.createVote(voteDTO, options);
+
+//        voteService.createVote(vote, options);
+//        return "redirect:/voteList";
     }
 
     // 투표 수정하기
     @PostMapping("/vote/update/{id}")
     public String updateVote(@PathVariable Long id, @ModelAttribute Vote vote, @RequestParam List<String> options, HttpSession session) {
-        Long kakaoId = (Long) session.getAttribute("kakaoId");
-        vote.setId(id);
-        vote.setKakaoId(kakaoId);
+//        Long kakaoId = (Long) session.getAttribute("kakaoId");
+//        vote.setId(id);
+//        vote.setKakaoId(kakaoId);
         voteService.updateVote(vote, options);
         return "redirect:/voteList";
     }

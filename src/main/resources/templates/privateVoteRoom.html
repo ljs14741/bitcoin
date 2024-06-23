@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${meet.meetName} + ' - 비공개 투표방'"></title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/vote.css}">
+  <script th:src="@{/js/header.js}"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6890085609044109" crossorigin="anonymous"></script>
+  <!-- 필요한 스타일시트, 메타 태그 등 추가 -->
+</head>
+<body>
+
+<div class="intro">
+  <h2 class="main-title" th:text="${meet.meetName} + ' - 비공개 투표방'"></h2>
+</div>
+
+<div class="vote-list-container">
+  <div id="public-votes" class="tab active">
+<!--    <button class="create-vote-button" onclick="createVote()">투표 만들기!</button>-->
+    <form id="create-vote-form" th:action="@{/vote/new}" method="get">
+      <input type="hidden" name="voteType" value="PRIVATE">
+      <input type="hidden" name="meetId" th:value="${meet.id}">
+      <button type="submit" class="create-vote-button">투표 만들기!</button>
+    </form>
+
+    <ul class="vote-options">
+      <li th:each="vote : ${votes}" class="vote-item">
+        <div class="vote-info">
+          <h3 th:text="${vote.title}">투표</h3>
+          <p th:text="'생성시간: ' + ${vote.formattedCreatedDate}">생성시간</p>
+          <p th:text="${voteResults[vote.id]} + '명이 투표에 참여했어요'">몇명참여</p>
+        </div>
+        <div class="vote-actions">
+          <form th:action="@{/vote/{id}(id=${vote.id})}" method="get">
+            <button type="submit" class="vote-button">투표 하러가기</button>
+          </form>
+          <form th:action="@{/vote/results/{id}(id=${vote.id})}" method="get">
+            <button type="submit" class="result-button">투표 결과보기</button>
+          </form>
+          <form th:action="@{/vote/edit/{id}(id=${vote.id})}" method="get">
+            <button type="submit" class="vote-button">투표 수정하기</button>
+          </form>
+          <!--                    <button type="button" class="vote-button" th:voteId="${vote.id}" th:onclick="editVote(this.getAttribute('voteId'))">투표 수정하기</button>-->
+          <!--                    <button type="button" class="vote-button" th:voteId="${vote.id}" th:kakaoId="${vote.kakaoId}" th:onclick="editVote(this.getAttribute('voteId'), this.getAttribute('kakaoId'))">투표 수정하기</button>-->
+        </div>
+      </li>
+      <li class="vote-item empty"></li>
+      <li class="vote-item empty"></li>
+    </ul>
+  </div>
+</div>
+<script>
+  // function createVote() {
+  //   window.location.href = "/vote/new?voteType=PRIVATE";
+  // }
+</script>
+</body>
+</html>

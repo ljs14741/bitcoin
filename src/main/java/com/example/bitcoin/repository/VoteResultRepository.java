@@ -17,4 +17,6 @@ public interface VoteResultRepository extends JpaRepository<VoteResult, Long> {O
     List<VoteResult> findByVoteId(Long voteId);
 
     Long countByVoteIdAndOptionNumber(Long voteId, Long optionNumber);
+
+    void deleteByOptionNumber(Long optionNumber);
 }
