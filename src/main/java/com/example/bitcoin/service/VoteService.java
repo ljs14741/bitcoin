@@ -155,6 +155,11 @@ public class VoteService {
                 .collect(Collectors.groupingBy(VoteResult::getOptionNumber, Collectors.counting()));
     }
 
+    public boolean checkVotePassword(Long voteId, String password) {
+        Vote vote = voteRepository.findById(voteId).orElse(null);
+        return vote != null && password.equals(vote.getVotePassword());
+    }
+
     public VoteDTO convertToDTO(Vote vote) {
         return VoteDTO.builder()
                 .id(vote.getId())

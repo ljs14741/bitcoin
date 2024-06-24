@@ -194,4 +194,19 @@ public class VoteController {
         cookie.setMaxAge(60 * 60 * 24 * 365); // 1년 동안 유효
         response.addCookie(cookie);
     }
+
+    @PostMapping("/vote/checkPassword")
+    @ResponseBody
+    public Map<String, Object> checkVotePassword(@RequestBody Map<String, String> params) {
+        Long voteId = Long.parseLong(params.get("voteId"));
+        String password = params.get("password");
+
+        log.debug("Received checkPassword request for voteId: {}, password: {}", voteId, password);
+
+        boolean isPasswordCorrect = voteService.checkVotePassword(voteId, password);
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", isPasswordCorrect);
+
+        return response;
+    }
 }

@@ -8,6 +8,8 @@
     <meta name="description" content="익명으로 투표 만들고 투표할 수 있습니다.">
     <meta property="og:title" content="익명 투표">
     <meta property="og:description" content="익명으로 투표 만들고 투표할 수 있습니다.">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
@@ -66,10 +68,12 @@
                     <form th:action="@{/vote/results/{id}(id=${vote.id})}" method="get">
                         <button type="submit" class="result-button">투표 결과보기</button>
                     </form>
-                    <form th:action="@{/vote/edit/{id}(id=${vote.id})}" method="get">
+                    <form th:attr="onsubmit='return checkPasswordAndSubmit(this, \'/vote/edit/' + ${vote.id} + '\', \'GET\');'">
+                        <input type="hidden" name="voteId" th:value="${vote.id}">
                         <button type="submit" class="vote-button">투표 수정하기</button>
                     </form>
-                    <form th:action="@{/vote/delete/{id}(id=${vote.id})}" method="post">
+                    <form th:attr="onsubmit='return checkPasswordAndSubmit(this, \'/vote/delete/' + ${vote.id} + '\');'" method="post">
+                        <input type="hidden" name="voteId" th:value="${vote.id}">
                         <button type="submit" class="vote-button">투표 삭제하기</button>
                     </form>
                 </div>
@@ -80,6 +84,71 @@
         </div>
     </div>
     <script th:inline="javascript">
+
+        function checkPasswordAndSubmit(form, action, method = 'POST') {
+            const password = prompt("비밀번호를 입력하세요:");
+            if (password !== null) {
+                const voteId = form.voteId.value;
+                const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+                fetch('/vote/checkPassword', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        [csrfHeader]: csrfToken // CSRF 토큰을 헤더에 포함
+                    },
+                    body: JSON.stringify({ voteId: voteId, password: password })
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            if (method === 'GET') {
+                                // GET 요청으로 페이지 리다이렉트
+                                window.location.href = action;
+                            } else {
+                                // POST 요청으로 폼을 동적으로 생성하여 제출
+                                const tempForm = document.createElement("form");
+                                tempForm.method = method;
+                                tempForm.action = action;
+
+                                const inputVoteId = document.createElement("input");
+                                inputVoteId.type = "hidden";
+                                inputVoteId.name = "voteId";
+                                inputVoteId.value = voteId;
+                                tempForm.appendChild(inputVoteId);
+
+                                const inputPassword = document.createElement("input");
+                                inputPassword.type = "hidden";
+                                inputPassword.name = "password";
+                                inputPassword.value = password;
+                                tempForm.appendChild(inputPassword);
+
+                                const inputCsrf = document.createElement("input");
+                                inputCsrf.type = "hidden";
+                                inputCsrf.name = "_csrf";
+                                inputCsrf.value = csrfToken;
+                                tempForm.appendChild(inputCsrf);
+
+                                document.body.appendChild(tempForm);
+                                tempForm.submit();
+                            }
+                        } else {
+                            alert('비밀번호가 틀렸습니다.'); // 비밀번호가 틀리면 경고창 표시
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred. Please try again.');
+                    });
+            }
+            return false; // 폼의 기본 제출 동작을 막음
+        }
 
         // 탭 열기 함수
         function openTab(evt, tabName) {

@@ -57,14 +57,16 @@
                     <h3 th:text="${meet.meetName}">모임명</h3>
                 </div>
                 <div class="vote-actions">
-                    <form onsubmit="return checkPassword(this);">
+                    <form th:attr="onsubmit='return checkPasswordAndSubmit(this, \'/meet/join\');'">
                         <input type="hidden" name="meetId" th:value="${meet.id}">
                         <button type="submit" class="vote-button">모임 참여</button>
                     </form>
-                    <form th:action="@{/meet/edit/{id}(id=${meet.id})}" method="get">
+                    <form th:attr="onsubmit='return checkPasswordAndSubmit(this, \'/meet/edit/' + ${meet.id} + '\', \'GET\');'">
+                        <input type="hidden" name="meetId" th:value="${meet.id}">
                         <button type="submit" class="vote-button">모임 수정</button>
                     </form>
-                    <form th:action="@{/meet/delete/{id}(id=${meet.id})}" method="post">
+                    <form th:attr="onsubmit='return checkPasswordAndSubmit(this, \'/meet/delete/' + ${meet.id} + '\');'" method="post">
+                        <input type="hidden" name="meetId" th:value="${meet.id}">
                         <button type="submit" class="vote-button">모임 삭제</button>
                     </form>
                 </div>
@@ -76,6 +78,71 @@
 </div>
 
 <script th:inline="javascript">
+    function checkPasswordAndSubmit(form, action, method = 'POST') {
+        const password = prompt("비밀번호를 입력하세요:");
+        if (password !== null) {
+            const meetId = form.meetId.value;
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+            fetch('/meet/checkPassword', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [csrfHeader]: csrfToken // CSRF 토큰을 헤더에 포함
+                },
+                body: JSON.stringify({ meetId: meetId, password: password })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        if (method === 'GET') {
+                            // GET 요청으로 페이지 리다이렉트
+                            window.location.href = action;
+                        } else {
+                            // POST 요청으로 폼을 동적으로 생성하여 제출
+                            const tempForm = document.createElement("form");
+                            tempForm.method = method;
+                            tempForm.action = action;
+
+                            const inputMeetId = document.createElement("input");
+                            inputMeetId.type = "hidden";
+                            inputMeetId.name = "meetId";
+                            inputMeetId.value = meetId;
+                            tempForm.appendChild(inputMeetId);
+
+                            const inputPassword = document.createElement("input");
+                            inputPassword.type = "hidden";
+                            inputPassword.name = "password";
+                            inputPassword.value = password;
+                            tempForm.appendChild(inputPassword);
+
+                            const inputCsrf = document.createElement("input");
+                            inputCsrf.type = "hidden";
+                            inputCsrf.name = "_csrf";
+                            inputCsrf.value = csrfToken;
+                            tempForm.appendChild(inputCsrf);
+
+                            document.body.appendChild(tempForm);
+                            tempForm.submit();
+                        }
+                    } else {
+                        alert('비밀번호가 틀렸습니다.'); // 비밀번호가 틀리면 경고창 표시
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');
+                });
+        }
+        return false; // 폼의 기본 제출 동작을 막음
+    }
+
     function checkPassword(form) {
         const password = prompt("비밀번호를 입력하세요:");
         if (password !== null) {
