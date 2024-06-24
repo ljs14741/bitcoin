@@ -1,15 +1,19 @@
 package com.example.bitcoin.controller;
 
 import com.example.bitcoin.dto.MeetDTO;
+import com.example.bitcoin.entity.Meet;
 import com.example.bitcoin.entity.Vote;
+import com.example.bitcoin.repository.MeetRepository;
 import com.example.bitcoin.service.MeetService;
 import com.example.bitcoin.service.VoteService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +29,9 @@ public class MeetController {
 
     @Autowired
     private VoteService voteService;
+
+    @Autowired
+    private MeetRepository meetRepository;
 
     @GetMapping("/new")
     public String createMeetForm(Model model) {
@@ -155,5 +162,10 @@ public class MeetController {
         }
 
         return response;
+    }
+
+    @Scheduled(fixedRate = 60000) // 매 분마다 실행
+    public void checkAndDeleteExpiredMeetings() {
+        meetService.deleteExpiredMeets();
     }
 }

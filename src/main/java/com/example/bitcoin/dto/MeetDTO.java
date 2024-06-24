@@ -14,6 +14,7 @@ public class MeetDTO {
     private String meetName;
     private String createdPassword;
     private String meetPassword;
+    private LocalDateTime endDateTime;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
 }

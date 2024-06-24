@@ -155,13 +155,21 @@ public class VoteController {
             setSessionIdCookie(response, sessionId);
         }
 
+        Vote vote = voteService.getVoteById(id);
+        Long meetId = vote.getMeet() != null ? vote.getMeet().getId() : null;
+
         try {
             voteService.vote(id, optionNumber, sessionId);
         } catch (IllegalArgumentException e) {
             return "redirect:/vote/" + id + "?error=" + e.getMessage();
         }
 
-        return "redirect:/voteList";
+        if (vote.getVoteType() == Vote.VoteType.PUBLIC) {
+            return "redirect:/voteList";
+        } else {
+            return "redirect:/meet/" + meetId;
+        }
+
     }
 
     // 투표 결과 화면 조회

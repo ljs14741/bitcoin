@@ -19,6 +19,23 @@
     text-align: center;
 }
 
+.tab-buttons-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.tab-buttons {
+    display: flex;
+    justify-content: center;
+}
+
+.create-vote-form {
+    position: absolute;
+    right: 0;
+}
+
 .create-vote-button {
     padding: 10px 20px;
     border: none;

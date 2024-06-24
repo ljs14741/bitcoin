@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,6 +37,7 @@ public class MeetService {
                 .meetName(meetDTO.getMeetName())
                 .createdPassword(meetDTO.getCreatedPassword())
                 .meetPassword(meetDTO.getMeetPassword())
+                .endDateTime(meetDTO.getEndDateTime())
                 .build();
         meetRepository.save(meet);
         meetDTO.setId(meet.getId());
@@ -51,6 +53,7 @@ public class MeetService {
             meetDTO.setMeetName(meet.getMeetName());
             meetDTO.setCreatedPassword(meet.getCreatedPassword());
             meetDTO.setMeetPassword(meet.getMeetPassword());
+            meetDTO.setEndDateTime(meet.getEndDateTime());
             meetDTO.setCreatedDate(meet.getCreatedDate());
             meetDTO.setUpdatedDate(meet.getUpdatedDate());
             return meetDTO;
@@ -64,6 +67,7 @@ public class MeetService {
             meetDTO.setMeetName(meet.getMeetName());
             meetDTO.setCreatedPassword(meet.getCreatedPassword());
             meetDTO.setMeetPassword(meet.getMeetPassword());
+            meetDTO.setEndDateTime(meet.getEndDateTime());
             meetDTO.setCreatedDate(meet.getCreatedDate());
             meetDTO.setUpdatedDate(meet.getUpdatedDate());
 
@@ -77,6 +81,7 @@ public class MeetService {
             meet.setMeetName(meetDTO.getMeetName());
             meet.setCreatedPassword(meetDTO.getCreatedPassword());
             meet.setMeetPassword(meetDTO.getMeetPassword());
+            meet.setEndDateTime(meetDTO.getEndDateTime());
             meetRepository.save(meet);
         });
     }
@@ -104,5 +109,14 @@ public class MeetService {
 
         // 6. 마지막으로 모임 삭제
         meetRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void deleteExpiredMeets() {
+        LocalDateTime now = LocalDateTime.now();
+        List<Meet> expiredMeets = meetRepository.findByEndDateTimeBefore(now);
+        for (Meet meet : expiredMeets) {
+            deleteMeet(meet.getId());
+        }
     }
 }

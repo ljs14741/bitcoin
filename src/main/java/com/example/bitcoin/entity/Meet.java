@@ -30,6 +30,9 @@ public class Meet {
     @Column(name = "meet_password")
     private String meetPassword;
 
+    @Column(name = "end_date_time")
+    private LocalDateTime endDateTime;
+
     @CreatedDate
     @Column(updatable = false, name = "created_date")
     private LocalDateTime createdDate;

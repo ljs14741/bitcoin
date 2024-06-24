@@ -43,14 +43,19 @@
 </div>
 
 <div class="vote-list-container">
-    <div class="tab-buttons">
-        <button class="tab-button" onclick="openTab(event, 'public-votes')">공개투표</button>
-        <button class="tab-button active" onclick="openTab(event, 'private-votes')">비공개투표</button>
+    <div class="tab-buttons-wrapper">
+        <div class="tab-buttons">
+            <button class="tab-button" onclick="openTab(event, 'public-votes')">공개투표</button>
+            <button class="tab-button active" onclick="openTab(event, 'private-votes')">비공개투표</button>
+        </div>
+        <div id="create-vote-form" class="create-vote-form">
+            <button class="create-vote-button" onclick="window.location.href='/meet/new'">투표 모임 만들기</button>
+        </div>
     </div>
 
     <div id="private-votes" class="tab active">
-        <button class="create-vote-button" onclick="window.location.href='/meet/new'">투표 모임 만들기</button>
-        <h3>비공개투표 모임 목록</h3>
+
+        <h3>비공개 투표 모임 목록</h3>
         <ul class="vote-options">
             <li th:each="meet : ${meets}" class="vote-item">
                 <div class="vote-info">

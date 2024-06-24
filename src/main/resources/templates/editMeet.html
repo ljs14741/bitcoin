@@ -54,6 +54,10 @@
                     <label class="form-label" for="meetPassword">모임 패스워드:</label>
                     <input type="text" id="meetPassword" th:field="*{meetPassword}" required>
                 </div>
+                <div>
+                    <label class="form-label" for="endDateTime">모임 종료 시간:</label>
+                    <input type="datetime-local" id="endDateTime" th:field="*{endDateTime}" required>
+                </div>
                 <div class="form-actions">
                     <button type="submit">수정하기</button>
                 </div>

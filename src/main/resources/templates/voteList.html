@@ -43,17 +43,20 @@
     </div>
 
     <div class="vote-list-container">
-        <div class="tab-buttons">
-            <button class="tab-button active" onclick="openTab(event, 'public-votes')">공개투표</button>
-            <button class="tab-button" onclick="openTab(event, 'private-votes')">비공개투표</button>
+        <div class="tab-buttons-wrapper">
+            <div class="tab-buttons">
+                <button class="tab-button active" onclick="openTab(event, 'public-votes')">공개투표</button>
+                <button class="tab-button" onclick="openTab(event, 'private-votes')">비공개투표</button>
+            </div>
+            <form id="create-vote-form" th:action="@{/vote/new}" method="get" class="create-vote-form">
+                <input type="hidden" name="voteType" value="PUBLIC">
+                <button type="submit" class="create-vote-button">투표 만들기!</button>
+            </form>
         </div>
 
         <!-- 공개 투표 탭 내용 -->
         <div id="public-votes" class="tab">
-            <form id="create-vote-form" th:action="@{/vote/new}" method="get">
-                <input type="hidden" name="voteType" value="PUBLIC">
-                <button type="submit" class="create-vote-button">투표 만들기!</button>
-            </form>
+            <h3>공개 투표 목록</h3>
         <ul class="vote-options">
             <li th:each="vote : ${votes}" class="vote-item">
                 <div class="vote-info">
