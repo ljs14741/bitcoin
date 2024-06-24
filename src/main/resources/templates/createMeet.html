@@ -6,13 +6,13 @@
 </head>
 <body>
 <h2>투표 모임 만들기</h2>
-<form action="#" th:action="@{/meet/new}" th:object="${meet}" method="post">
+<form action="#" th:action="@{/meet/new}" th:object="${meet}" method="post" onsubmit="return validateForm()">
     <div>
         <label for="meetName">모임명:</label>
         <input type="text" id="meetName" th:field="*{meetName}" required>
     </div>
     <div>
-        <label for="createdPassword">모임 생성 패스워드:</label>
+        <label for="createdPassword">모임 관리자 패스워드:</label>
         <input type="password" id="createdPassword" th:field="*{createdPassword}" required>
     </div>
     <div>
@@ -23,5 +23,18 @@
         <button type="submit">저장</button>
     </div>
 </form>
+
+<script>
+    function validateForm() {
+        var inputs = document.querySelectorAll("input[required]");
+        for (var i = 0; i < inputs.length; i++) {
+            if (inputs[i].value.trim() === "") {
+                alert("모든 필드를 채워주세요.");
+                return false;
+            }
+        }
+        return true;
+    }
+</script>
 </body>
 </html>

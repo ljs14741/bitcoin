@@ -38,15 +38,20 @@
     </div>
 
     <div class="vote-container">
-        <form th:action="@{/vote/update/{id}(id=${vote.id})}" method="post" class="vote-form">
+        <form th:action="@{/vote/update/{id}(id=${vote.id})}" method="post" class="vote-form" onsubmit="return validateForm()">
+            <div>
+                <label for="votePassword" class="form-label">투표 비밀번호:</label>
+                <input type="text" id="votePassword" name="votePassword" class="vote-input form-control" th:value="${vote.votePassword}" required>
+            </div>
+
             <div class="form-group">
                 <label for="title" class="form-label">투표 제목:</label>
-                <input type="text" id="title" name="title" class="vote-input form-control" th:value="${vote.title}">
+                <input type="text" id="title" name="title" class="vote-input form-control" th:value="${vote.title}" required>
             </div>
             <ul id="optionList" class="vote-options">
                 <li th:each="option, iter : ${options}" class="form-group">
                     <span class="option-label" th:text="'항목 ' + ${iter.index + 1} + ': '"></span>
-                    <input type="text" name="options" class="vote-input form-control" th:value="${option.optionText}">
+                    <input type="text" name="options" class="vote-input form-control" th:value="${option.optionText}" required>
                 </li>
             </ul>
             <div class="form-actions">
@@ -67,6 +72,7 @@
         input.type = "text";
         input.name = "options";
         input.classList.add("vote-input");
+        input.required = true;
         optionItem.appendChild(span);
         optionItem.appendChild(input);
         optionList.appendChild(optionItem);
@@ -86,9 +92,19 @@
         var options = optionList.getElementsByTagName("li");
         for (var i = 0; i < options.length; i++) {
             var span = options[i].getElementsByClassName("option-label")[0];
-            var input = options[i].getElementsByTagName("input")[0];
             span.textContent = "항목 " + (i + 1) + ": ";
         }
+    }
+
+    function validateForm() {
+        var inputs = document.querySelectorAll(".vote-input");
+        for (var i = 0; i < inputs.length; i++) {
+            if (inputs[i].value.trim() === "") {
+                alert("모든 필드를 채워주세요.");
+                return false;
+            }
+        }
+        return true;
     }
 
     window.onload = function() {

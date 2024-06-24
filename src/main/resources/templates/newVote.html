@@ -37,21 +37,21 @@
     </div>
 
     <div class="vote-container">
-        <form th:action="@{/vote}" method="post" class="vote-form">
+        <form th:action="@{/vote}" method="post" class="vote-form" onsubmit="return validateForm()">
             <input type="hidden" name="voteType" th:value="${voteType}">
             <input type="hidden" name="meetId" th:value="${vote.meetId}">
             <div>
-                <label for="title" class="form-label">투표 비밀번호:</label>
-                <input type="text" id="votePassword" name="votePassword" class="vote-input form-control">
+                <label for="votePassword" class="form-label">투표 비밀번호:</label>
+                <input type="text" id="votePassword" name="votePassword" class="vote-input form-control" required>
             </div>
 
             <div class="form-group">
                 <label for="title" class="form-label">투표 제목:</label>
-                <input type="text" id="title" name="title" class="vote-input form-control">
+                <input type="text" id="title" name="title" class="vote-input form-control" required>
             </div>
             <ul id="optionList" class="vote-options">
-                <li class="form-group">항목 1: <input type="text" name="options" class="vote-input form-control"></li>
-                <li class="form-group">항목 2: <input type="text" name="options" class="vote-input form-control"></li>
+                <li class="form-group">항목 1: <input type="text" name="options" class="vote-input form-control" required></li>
+                <li class="form-group">항목 2: <input type="text" name="options" class="vote-input form-control" required></li>
             </ul>
             <div class="form-actions">
                 <button type="button" onclick="addOption()" class="vote-button">선택지 추가</button>
@@ -69,6 +69,7 @@
         input.type = "text";
         input.name = "options";
         input.classList.add("vote-input");
+        input.required = true;
         optionItem.appendChild(document.createTextNode("항목 " + (optionList.childElementCount + 1) + ": "));
         optionItem.appendChild(input);
         optionList.appendChild(optionItem);
@@ -88,6 +89,17 @@
         for (var i = 0; i < options.length; i++) {
             options[i].firstChild.nodeValue = "항목 " + (i + 1) + ": ";
         }
+    }
+
+    function validateForm() {
+        var inputs = document.querySelectorAll(".vote-input");
+        for (var i = 0; i < inputs.length; i++) {
+            if (inputs[i].value.trim() === "") {
+                alert("모든 필드를 채워주세요.");
+                return false;
+            }
+        }
+        return true;
     }
 
     window.onload = function() {
