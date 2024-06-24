@@ -84,13 +84,20 @@ public class VoteService {
         }
     }
 
-//    public List<Vote> getAllVotes() {
-//        List<Vote> votes = voteRepository.findAllOrderByCreatedDateDesc();
-//        for (Vote vote : votes) {
-//            vote.setFormattedCreatedDate(vote.getCreatedDate().format(formatter));
-//        }
-//        return votes;
-//    }
+    // 투표 삭제
+    @Transactional
+    public void deleteVote(Long id) {
+
+        List<Options> options = optionRepository.findByVoteId(id);
+        for (Options option : options) {
+            // 각 옵션과 관련된 모든 투표 결과 삭제
+            voteResultRepository.deleteByOptionNumber(option.getOptionNumber());
+            // 옵션 삭제
+            optionRepository.delete(option);
+        }
+        // 투표 삭제
+        voteRepository.deleteById(id);
+    }
 
     // 공개 투표만 조회
     public List<Vote> getAllPublicVotes() {
@@ -146,5 +153,52 @@ public class VoteService {
     public Map<Long, Long> getResultCountByVoteIdGrouped(Long voteId) {
         return voteResultRepository.findByVoteId(voteId).stream()
                 .collect(Collectors.groupingBy(VoteResult::getOptionNumber, Collectors.counting()));
+    }
+
+    public VoteDTO convertToDTO(Vote vote) {
+        return VoteDTO.builder()
+                .id(vote.getId())
+                .kakaoId(vote.getKakaoId())
+                .votePassword(vote.getVotePassword())
+                .meetId(vote.getMeet() != null ? vote.getMeet().getId() : null)
+                .voteType(vote.getVoteType())
+                .endTime(vote.getEndTime())
+                .title(vote.getTitle())
+                .formattedCreatedDate(vote.getFormattedCreatedDate())
+                .updYn(vote.getUpdYn())
+                .delYn(vote.getDelYn())
+                .createdDate(vote.getCreatedDate())
+                .updatedDate(vote.getUpdatedDate())
+                .build();
+    }
+
+    // Convert VoteDTO to Vote entity
+    public Vote convertToEntity(VoteDTO voteDTO) {
+        Meet meet = null;
+        if (voteDTO.getMeetId() != null) {
+            meet = meetRepository.findById(voteDTO.getMeetId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid meet ID: " + voteDTO.getMeetId()));
+        }
+
+        return Vote.builder()
+                .id(voteDTO.getId())
+                .kakaoId(voteDTO.getKakaoId())
+                .votePassword(voteDTO.getVotePassword())
+                .meet(meet)
+                .voteType(voteDTO.getVoteType())
+                .endTime(voteDTO.getEndTime())
+                .title(voteDTO.getTitle())
+                .formattedCreatedDate(voteDTO.getFormattedCreatedDate())
+                .updYn("Y")
+                .delYn("N")
+                .createdDate(voteDTO.getCreatedDate())
+                .updatedDate(voteDTO.getUpdatedDate())
+                .build();
+    }
+
+    // Fetch Vote by ID and return as VoteDTO
+    public VoteDTO getVoteDTOById(Long id) {
+        Vote vote = voteRepository.findById(id).orElseThrow(() -> new RuntimeException("Vote not found"));
+        return convertToDTO(vote);
     }
 }

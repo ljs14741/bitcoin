@@ -20,7 +20,7 @@ public class VoteDTO {
     private Long meetId;
     private Long kakaoId;
     private String votePassword;
-    private Meet meet;
+//    private Meet meet;
     private Vote.VoteType voteType;
     private LocalDateTime endTime;
     private String title;

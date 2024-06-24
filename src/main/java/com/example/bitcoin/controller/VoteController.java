@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +38,6 @@ public class VoteController {
     // 공개 투표 목록 조회
     @GetMapping("/voteList")
     public String publicListVotes(Model model, HttpSession session) {
-//        List<Vote> votes = voteService.getAllVotes();
         List<Vote> votes = voteService.getAllPublicVotes();
         Map<Long, Long> voteResults = new HashMap<>();
 
@@ -60,11 +60,6 @@ public class VoteController {
     // 투표 생성 화면 조회
     @GetMapping("/vote/new")
     public String newVoteForm(@RequestParam(required = false) String voteType, Model model,@RequestParam(required = false) Long meetId) {
-//        MeetDTO meet = new MeetDTO();
-//        meet.setId(meet.getId());
-        log.info("그래그래: " + meetId);
-//
-//        model.addAttribute("meet", meet);
         VoteDTO vote = new VoteDTO();
         vote.setMeetId(meetId);
 
@@ -76,26 +71,21 @@ public class VoteController {
 
     // 투표 수정 화면 조회
     @GetMapping("/vote/edit/{id}")
-    public String editVoteForm(@PathVariable Long id, Model model, HttpSession session) {
-//        Long kakaoId = (Long) session.getAttribute("kakaoId");
-        Vote vote = voteService.getVoteById(id);
-//        if (!vote.getKakaoId().equals(kakaoId)) {
-//            return "redirect:/voteList";
-//        }
+    public String editVoteForm(@PathVariable Long id, Model model) {
+        VoteDTO voteDTO = voteService.getVoteDTOById(id);
+        log.info("가가가: " + voteDTO.getMeetId());
+
         List<Options> options = voteService.getOptionsByVoteId(id);
 
-        model.addAttribute("vote", vote);
+
+        model.addAttribute("vote", voteDTO);
         model.addAttribute("options", options);
         return "editVote";
     }
 
     // 투표 생성하기
     @PostMapping("/vote")
-    public String createVote(@ModelAttribute VoteDTO voteDTO, @RequestParam List<String> options, @RequestParam(required = false) String voteType, HttpSession session, Model model) {
-//        log.info("가나다: " + vote.getVoteType());
-//        Long kakaoId = (Long) session.getAttribute("kakaoId");
-//        vote.setKakaoId(kakaoId);
-//        Vote vote = convertToDTO(vote);
+    public String createVote(@ModelAttribute VoteDTO voteDTO, @RequestParam List<String> options, @RequestParam(required = false) String voteType, Model model) {
         if ("PRIVATE".equals(voteType)) {
             voteDTO.setVoteType(Vote.VoteType.PRIVATE);
             voteService.createVote(voteDTO, options);
@@ -105,21 +95,27 @@ public class VoteController {
             voteService.createVote(voteDTO, options);
             return "redirect:/voteList";
         }
-//        voteService.createVote(voteDTO, options);
-
-//        voteService.createVote(vote, options);
-//        return "redirect:/voteList";
     }
 
-    // 투표 수정하기
+    // 투표 수정
     @PostMapping("/vote/update/{id}")
-    public String updateVote(@PathVariable Long id, @ModelAttribute Vote vote, @RequestParam List<String> options, HttpSession session) {
-//        Long kakaoId = (Long) session.getAttribute("kakaoId");
-//        vote.setId(id);
-//        vote.setKakaoId(kakaoId);
+    @Transactional
+    public String updateVote(@PathVariable Long id, @ModelAttribute VoteDTO voteDTO, @RequestParam List<String> options, HttpSession session, @RequestParam(required = false) Long meetId) {
+        log.info("나나나: " + voteDTO.getMeetId());
+
+        voteDTO.setMeetId(meetId);
+        Vote vote = voteService.convertToEntity(voteDTO);
+        vote.setId(id);
+        log.info("나나다: " + vote.getVoteType());
         voteService.updateVote(vote, options);
-        return "redirect:/voteList";
+
+        if (vote.getVoteType() == Vote.VoteType.PUBLIC) {
+            return "redirect:/voteList";
+        } else {
+            return "redirect:/meet/" + meetId;
+        }
     }
+
 
     // 투표 화면 조회
     @GetMapping("/vote/{id}")
@@ -132,6 +128,21 @@ public class VoteController {
             model.addAttribute("error", error);
         }
         return "vote";
+    }
+
+    // 투표 삭제
+    @PostMapping("/vote/delete/{id}")
+    public String deleteVote(@PathVariable Long id) {
+        Vote vote = voteService.getVoteById(id);
+        Long meetId = vote.getMeet() != null ? vote.getMeet().getId() : null;
+
+        voteService.deleteVote(id);
+
+        if (vote.getVoteType() == Vote.VoteType.PUBLIC) {
+            return "redirect:/voteList";
+        } else {
+            return "redirect:/meet/" + meetId;
+        }
     }
 
     // 투표하기

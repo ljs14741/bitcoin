@@ -9,7 +9,6 @@
   <link rel="stylesheet" type="text/css" th:href="@{/css/vote.css}">
   <script th:src="@{/js/header.js}"></script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6890085609044109" crossorigin="anonymous"></script>
-  <!-- 필요한 스타일시트, 메타 태그 등 추가 -->
 </head>
 <body>
 
@@ -19,7 +18,6 @@
 
 <div class="vote-list-container">
   <div id="public-votes" class="tab active">
-<!--    <button class="create-vote-button" onclick="createVote()">투표 만들기!</button>-->
     <form id="create-vote-form" th:action="@{/vote/new}" method="get">
       <input type="hidden" name="voteType" value="PRIVATE">
       <input type="hidden" name="meetId" th:value="${meet.id}">
@@ -43,8 +41,9 @@
           <form th:action="@{/vote/edit/{id}(id=${vote.id})}" method="get">
             <button type="submit" class="vote-button">투표 수정하기</button>
           </form>
-          <!--                    <button type="button" class="vote-button" th:voteId="${vote.id}" th:onclick="editVote(this.getAttribute('voteId'))">투표 수정하기</button>-->
-          <!--                    <button type="button" class="vote-button" th:voteId="${vote.id}" th:kakaoId="${vote.kakaoId}" th:onclick="editVote(this.getAttribute('voteId'), this.getAttribute('kakaoId'))">투표 수정하기</button>-->
+          <form th:action="@{/vote/delete/{id}(id=${vote.id})}" method="post">
+            <button type="submit" class="vote-button">투표 삭제하기</button>
+          </form>
         </div>
       </li>
       <li class="vote-item empty"></li>
@@ -53,9 +52,6 @@
   </div>
 </div>
 <script>
-  // function createVote() {
-  //   window.location.href = "/vote/new?voteType=PRIVATE";
-  // }
 </script>
 </body>
 </html>
