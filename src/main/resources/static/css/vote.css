@@ -132,4 +132,30 @@
         width: 100%;
         min-width: auto; /* 모바일에서 최소 너비를 해제 */
     }
+
+    .tab-buttons-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .tab-buttons {
+        justify-content: flex-start;
+        width: 100%;
+    }
+
+    .tab-button {
+        flex: 1;
+    }
+
+    .create-vote-form {
+        position: static;
+        margin-top: 10px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .create-vote-button {
+        width: 100%;
+    }
 }
