@@ -41,6 +41,9 @@
             <input type="hidden" name="voteType" th:value="${voteType}">
             <input type="hidden" name="meetId" th:value="${vote.meetId}">
             <div>
+                <p>* 투표 관리자 비밀번호는 투표 수정 및 삭제 용도입니다.</p>
+            </div>
+            <div>
                 <label for="votePassword" class="form-label">투표 관리자 비밀번호:</label>
                 <input type="text" id="votePassword" name="votePassword" class="vote-input form-control" required>
             </div>
@@ -48,6 +51,11 @@
             <div class="form-group">
                 <label for="title" class="form-label">투표 제목:</label>
                 <input type="text" id="title" name="title" class="vote-input form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="allowMultipleVotes" class="form-label">중복 투표 허용:</label>
+                <input type="hidden" id="hiddenAllowMultipleVotes" name="allowMultipleVotes" value="false">
+                <input type="checkbox" id="allowMultipleVotes" name="allowMultipleVotes" class="vote-input" value="true">
             </div>
             <ul id="optionList" class="vote-options">
                 <li class="form-group">항목 1: <input type="text" name="options" class="vote-input form-control" required></li>
@@ -99,11 +107,23 @@
                 return false;
             }
         }
+
         return true;
     }
 
     window.onload = function() {
         updateOptionNumbers();
+
+        var allowMultipleVotesCheckbox = document.getElementById("allowMultipleVotes");
+        var hiddenAllowMultipleVotes = document.getElementById("hiddenAllowMultipleVotes");
+
+        // 초기 상태 설정
+        hiddenAllowMultipleVotes.value = allowMultipleVotesCheckbox.checked ? "true" : "false";
+
+        allowMultipleVotesCheckbox.addEventListener('change', function() {
+            alert('체크박스 상태 변경: ' + (this.checked ? 'true' : 'false'));
+            hiddenAllowMultipleVotes.value = this.checked ? "true" : "false";
+        });
     };
 </script>
 </body>

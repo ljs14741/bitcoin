@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,6 +48,7 @@ public class VoteService {
                 .votePassword(voteDTO.getVotePassword())
                 .meet(meet)
                 .voteType(voteDTO.getVoteType())
+                .allowMultipleVotes(voteDTO.getAllowMultipleVotes())
                 .endTime(voteDTO.getEndTime())
                 .title(voteDTO.getTitle())
                 .formattedCreatedDate(voteDTO.getFormattedCreatedDate())
@@ -72,7 +74,11 @@ public class VoteService {
     @Transactional
     public void updateVote(Vote vote, List<String> options) {
         Vote savedVote = voteRepository.save(vote);
-        optionRepository.deleteByVoteId(savedVote.getId());
+//        optionRepository.deleteByVoteId(savedVote.getId()); // 여기서 동시성 제어 문제가 발생. 기존 코드: 한 번의 SQL DELETE 문으로 일괄 삭제. 수정된 코드: 여러 번의 SQL DELETE 문으로 개별 삭제. // 삭제 작업을 더 세밀하게 제어 -> 동시성제어
+        List<Options> existingOptions = optionRepository.findByVoteId(savedVote.getId());
+        for (Options option : existingOptions) {
+            optionRepository.delete(option);
+        }
         long optionNumber = 1;
         for (String optionText : options) {
             Options option = new Options();
@@ -127,7 +133,8 @@ public class VoteService {
 
     public void vote(Long voteId, Long optionNumber, String sessionId) {
         // 중복 투표 확인
-        if (voteResultRepository.findByVoteIdAndUserId(voteId, sessionId).isPresent()) {
+        List<VoteResult> existingVotes = voteResultRepository.findByVoteIdAndUserId(voteId, sessionId);
+        if (!existingVotes.isEmpty()) {
             throw new IllegalArgumentException("You have already voted.");
         }
 
@@ -135,11 +142,41 @@ public class VoteService {
         Options option = optionRepository.findByVoteIdAndOptionNumber(voteId, optionNumber).orElseThrow(() -> new RuntimeException("Option not found"));
 
         VoteResult voteResult = new VoteResult();
-        voteResult.setOptionNumber(optionNumber); // 수동으로 번호 설정
+        voteResult.setOptionNumber(optionNumber);
         voteResult.setVote(vote);
-        voteResult.setUserId(sessionId); // 사용자 세션 ID 설정
+        voteResult.setUserId(sessionId);
 
         voteResultRepository.save(voteResult);
+    }
+
+    // 중복 투표 처리
+    @Transactional
+    public void voteMultiple(Long voteId, List<Long> optionNumbers, String sessionId) {
+        List<VoteResult> existingVotes = voteResultRepository.findByVoteIdAndUserId(voteId, sessionId);
+        if (!existingVotes.isEmpty()) {
+            throw new IllegalArgumentException("You have already voted.");
+        }
+
+        Vote vote = getVoteById(voteId);
+
+        for (Long optionNumber : optionNumbers) {
+            Options option = optionRepository.findByVoteIdAndOptionNumber(voteId, optionNumber)
+                    .orElseThrow(() -> new RuntimeException("Option not found"));
+
+            VoteResult voteResult = new VoteResult();
+            voteResult.setOptionNumber(optionNumber);
+            voteResult.setVote(vote);
+            voteResult.setUserId(sessionId);
+            voteResultRepository.save(voteResult);
+        }
+    }
+
+    public Long getUniqueUserCountByVoteId(Long voteId) {
+        List<VoteResult> voteResults = voteResultRepository.findByVoteId(voteId);
+        Set<String> uniqueUserIds = voteResults.stream()
+                .map(VoteResult::getUserId)
+                .collect(Collectors.toSet());
+        return (long) uniqueUserIds.size();
     }
 
     public List<Options> getOptionsByVoteId(Long voteId) {
@@ -168,6 +205,7 @@ public class VoteService {
                 .meetId(vote.getMeet() != null ? vote.getMeet().getId() : null)
                 .voteType(vote.getVoteType())
                 .endTime(vote.getEndTime())
+                .allowMultipleVotes(vote.getAllowMultipleVotes())
                 .title(vote.getTitle())
                 .formattedCreatedDate(vote.getFormattedCreatedDate())
                 .updYn(vote.getUpdYn())
@@ -192,6 +230,7 @@ public class VoteService {
                 .meet(meet)
                 .voteType(voteDTO.getVoteType())
                 .endTime(voteDTO.getEndTime())
+                .allowMultipleVotes(voteDTO.getAllowMultipleVotes())
                 .title(voteDTO.getTitle())
                 .formattedCreatedDate(voteDTO.getFormattedCreatedDate())
                 .updYn("Y")

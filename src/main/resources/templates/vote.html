@@ -41,10 +41,14 @@
     </div>
 
     <div class="vote-container">
+        <p th:if="${vote.allowMultipleVotes}" style="color: green;">중복투표: O</p>
+        <p th:unless="${vote.allowMultipleVotes}" style="color: red;">중복투표: X</p>
+
         <form th:action="@{/vote/{id}(id=${vote.id})}" method="post" class="vote-form" onsubmit="return validateVoteForm()">
             <ul class="vote-options">
                 <li th:each="option : ${options}" class="form-group">
-                    <input type="radio" th:id="${option.id}" th:name="optionNumber" th:value="${option.optionNumber}">
+                    <input type="checkbox" th:id="${option.id}" th:name="optionNumbers" th:value="${option.optionNumber}" th:if="${vote.allowMultipleVotes}">
+                    <input type="radio" th:id="${option.id}" th:name="optionNumbers" th:value="${option.optionNumber}" th:unless="${vote.allowMultipleVotes}">
                     <label th:for="${option.id}" th:text="${option.optionText}">Option</label>
                 </li>
             </ul>
@@ -62,7 +66,7 @@
 
 <script>
     function validateVoteForm() {
-        const options = document.getElementsByName('optionNumber');
+        const options = document.getElementsByName('optionNumbers');
         let isChecked = false;
         for (let i = 0; i < options.length; i++) {
             if (options[i].checked) {

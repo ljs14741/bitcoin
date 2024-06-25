@@ -37,6 +37,9 @@ public class Vote {
     @Column(name = "vote_type")
     private VoteType voteType;
 
+    @Column(name = "allow_multiple_votes")
+    private Boolean allowMultipleVotes = false;
+
     @Column(name = "upd_yn")
     private String updYn = "N";
 

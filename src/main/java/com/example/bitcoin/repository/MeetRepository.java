@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface MeetRepository extends JpaRepository<Meet, Long> {
     List<Meet> findByEndDateTimeBefore(LocalDateTime endDateTime);
+
+    List<Meet> findAllByOrderByCreatedDateDesc();
 }

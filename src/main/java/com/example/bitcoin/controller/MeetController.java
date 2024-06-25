@@ -69,14 +69,13 @@ public class MeetController {
         MeetDTO meet = optionalMeet.get();
         model.addAttribute("meet", meet);
 
-//        List<Vote> votes = voteService.getAllPrivateVotes();
         List<Vote> votes = voteService.getAllPrivateVotes(id);
         Map<Long, Long> voteResults = new HashMap<>();
 
         for (Vote vote : votes) {
             Long voteId = vote.getId();
-            Long resultCount = voteService.getResultCountByVoteId(voteId);
-            voteResults.put(voteId, resultCount);
+            Long uniqueUserCount = voteService.getUniqueUserCountByVoteId(voteId);
+            voteResults.put(voteId, uniqueUserCount);
         }
 
         model.addAttribute("votes", votes);
@@ -97,8 +96,8 @@ public class MeetController {
 
                 for (Vote vote : votes) {
                     Long voteId = vote.getId();
-                    Long resultCount = voteService.getResultCountByVoteId(voteId);
-                    voteResults.put(voteId, resultCount);
+                    Long uniqueUserCount = voteService.getUniqueUserCountByVoteId(voteId);
+                    voteResults.put(voteId, uniqueUserCount);
                 }
 
                 model.addAttribute("votes", votes);

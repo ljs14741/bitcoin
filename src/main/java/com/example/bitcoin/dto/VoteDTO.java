@@ -22,6 +22,7 @@ public class VoteDTO {
     private String votePassword;
 //    private Meet meet;
     private Vote.VoteType voteType;
+    private Boolean allowMultipleVotes;
     private LocalDateTime endTime;
     private String title;
     private String formattedCreatedDate;

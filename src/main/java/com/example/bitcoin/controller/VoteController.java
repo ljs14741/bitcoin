@@ -43,8 +43,9 @@ public class VoteController {
 
         for (Vote vote : votes) {
             Long voteId = vote.getId();
-            Long resultCount = voteService.getResultCountByVoteId(voteId);
-            voteResults.put(voteId, resultCount);
+            Long uniqueUserCount = voteService.getUniqueUserCountByVoteId(voteId);
+            log.info("아아: " + uniqueUserCount);
+            voteResults.put(voteId, uniqueUserCount);
         }
 
         List<MeetDTO> meets = meetService.getAllMeets();
@@ -86,6 +87,12 @@ public class VoteController {
     // 투표 생성하기
     @PostMapping("/vote")
     public String createVote(@ModelAttribute VoteDTO voteDTO, @RequestParam List<String> options, @RequestParam(required = false) String voteType, Model model) {
+        log.info("가나다라: " + voteDTO.getAllowMultipleVotes());
+
+        if (voteDTO.getAllowMultipleVotes() == null) {
+            voteDTO.setAllowMultipleVotes(false);
+        }
+
         if ("PRIVATE".equals(voteType)) {
             voteDTO.setVoteType(Vote.VoteType.PRIVATE);
             voteService.createVote(voteDTO, options);
@@ -147,20 +154,33 @@ public class VoteController {
 
     // 투표하기
     @PostMapping("/vote/{id}")
-    public String submitVote(@PathVariable Long id, @RequestParam Long optionNumber, HttpServletRequest request, HttpServletResponse response, Model model) {
+    public String submitVote(@PathVariable Long id, @RequestParam List<Long> optionNumbers, HttpServletRequest request, HttpServletResponse response, Model model) {
         String sessionId = getSessionIdFromCookie(request);
 
         if (sessionId == null) {
             sessionId = UUID.randomUUID().toString();
             setSessionIdCookie(response, sessionId);
+            log.debug("Generated new session ID: " + sessionId);
+        } else {
+            log.debug("Using existing session ID: " + sessionId);
         }
 
         Vote vote = voteService.getVoteById(id);
         Long meetId = vote.getMeet() != null ? vote.getMeet().getId() : null;
 
         try {
-            voteService.vote(id, optionNumber, sessionId);
+            if (vote.getAllowMultipleVotes()) {
+                log.debug("Multiple votes allowed. Voting with session ID: " + sessionId);
+                voteService.voteMultiple(id, optionNumbers, sessionId);
+            } else {
+                if (optionNumbers.size() > 1) {
+                    throw new IllegalArgumentException("중복 투표가 허용되지 않습니다.");
+                }
+                log.debug("Single vote allowed. Voting with session ID: " + sessionId);
+                voteService.vote(id, optionNumbers.get(0), sessionId);
+            }
         } catch (IllegalArgumentException e) {
+            log.error("Voting error: " + e.getMessage());
             return "redirect:/vote/" + id + "?error=" + e.getMessage();
         }
 
@@ -188,10 +208,12 @@ public class VoteController {
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if ("VOTE_SESSION_ID".equals(cookie.getName())) {
+                    log.debug("Found session ID in cookie: " + cookie.getValue());
                     return cookie.getValue();
                 }
             }
         }
+        log.debug("No session ID found in cookies.");
         return null;
     }
 
@@ -201,6 +223,7 @@ public class VoteController {
         cookie.setPath("/");
         cookie.setMaxAge(60 * 60 * 24 * 365); // 1년 동안 유효
         response.addCookie(cookie);
+        log.debug("Set session ID cookie: " + sessionId);
     }
 
     @PostMapping("/vote/checkPassword")

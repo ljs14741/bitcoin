@@ -46,13 +46,20 @@
             <input type="hidden" name="voteType" th:value="${vote.voteType}">
             <input type="hidden" name="meetId" th:value="${vote.meetId}">
             <div>
-                <label for="votePassword" class="form-label">투표 비밀번호:</label>
+                <p>* 투표 관리자 비밀번호는 투표 수정 및 삭제 용도입니다.</p>
+            </div>
+            <div>
+                <label for="votePassword" class="form-label">투표 관리자 비밀번호:</label>
                 <input type="text" id="votePassword" name="votePassword" class="vote-input form-control" th:value="${vote.votePassword}" required>
             </div>
-
             <div class="form-group">
                 <label for="title" class="form-label">투표 제목:</label>
                 <input type="text" id="title" name="title" class="vote-input form-control" th:value="${vote.title}" required>
+            </div>
+            <div class="form-group">
+                <label for="allowMultipleVotes" class="form-label">중복 투표 허용:</label>
+                <input type="hidden" id="hiddenAllowMultipleVotes" name="allowMultipleVotes" value="false">
+                <input type="checkbox" id="allowMultipleVotes" name="allowMultipleVotes" class="vote-input" th:checked="${vote.allowMultipleVotes}" value="true">
             </div>
             <ul id="optionList" class="vote-options">
                 <li th:each="option, iter : ${options}" class="form-group">
@@ -115,6 +122,16 @@
 
     window.onload = function() {
         updateOptionNumbers();
+
+        var allowMultipleVotesCheckbox = document.getElementById("allowMultipleVotes");
+        var hiddenAllowMultipleVotes = document.getElementById("hiddenAllowMultipleVotes");
+
+        // 초기 상태 설정
+        hiddenAllowMultipleVotes.value = allowMultipleVotesCheckbox.checked ? "true" : "false";
+
+        allowMultipleVotesCheckbox.addEventListener('change', function() {
+            hiddenAllowMultipleVotes.value = this.checked ? "true" : "false";
+        });
     };
 </script>
 

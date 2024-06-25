@@ -47,7 +47,7 @@ public class MeetService {
     }
 
     public List<MeetDTO> getAllMeets() {
-        return meetRepository.findAll().stream().map(meet -> {
+        return meetRepository.findAllByOrderByCreatedDateDesc().stream().map(meet -> {
             MeetDTO meetDTO = new MeetDTO();
             meetDTO.setId(meet.getId());
             meetDTO.setMeetName(meet.getMeetName());
