@@ -6,6 +6,7 @@ import com.example.bitcoin.entity.Vote;
 import com.example.bitcoin.repository.MeetRepository;
 import com.example.bitcoin.service.MeetService;
 import com.example.bitcoin.service.VoteService;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -62,34 +63,40 @@ public class MeetController {
 
     // 모임 참여
     @GetMapping("/{id}")
-    public String getMeetById(@PathVariable Long id, Model model) {
-        meetService.getMeetById(id).ifPresent(meet -> model.addAttribute("meet", meet));
+    public String getMeetById(@PathVariable Long id, Model model, HttpSession session) {
         Optional<MeetDTO> optionalMeet = meetService.getMeetById(id);
+        if (optionalMeet.isPresent()) {
+            MeetDTO meet = optionalMeet.get();
+            String sessionPassword = (String) session.getAttribute("meetPassword");
+            if (meet.getMeetPassword().equals(sessionPassword)) {
+                model.addAttribute("meet", meet);
+                List<Vote> votes = voteService.getAllPrivateVotes(id);
+                Map<Long, Long> voteResults = new HashMap<>();
 
-        MeetDTO meet = optionalMeet.get();
-        model.addAttribute("meet", meet);
+                for (Vote vote : votes) {
+                    Long voteId = vote.getId();
+                    Long uniqueUserCount = voteService.getUniqueUserCountByVoteId(voteId);
+                    voteResults.put(voteId, uniqueUserCount);
+                }
 
-        List<Vote> votes = voteService.getAllPrivateVotes(id);
-        Map<Long, Long> voteResults = new HashMap<>();
-
-        for (Vote vote : votes) {
-            Long voteId = vote.getId();
-            Long uniqueUserCount = voteService.getUniqueUserCountByVoteId(voteId);
-            voteResults.put(voteId, uniqueUserCount);
+                model.addAttribute("votes", votes);
+                model.addAttribute("voteResults", voteResults);
+                return "privateVoteRoom";
+            } else {
+                model.addAttribute("error", "비밀번호가 필요합니다.");
+                return "redirect:/privateVoteList";
+            }
         }
-
-        model.addAttribute("votes", votes);
-        model.addAttribute("voteResults", voteResults);
-
-        return "privateVoteRoom";
+        return "redirect:/privateVoteList";
     }
 
     @PostMapping("/join")
-    public String joinMeet(@RequestParam Long meetId, @RequestParam String password, Model model) {
+    public String joinMeet(@RequestParam Long meetId, @RequestParam String password, Model model, HttpSession session) {
         Optional<MeetDTO> optionalMeet = meetService.getMeetById(meetId);
         if (optionalMeet.isPresent()) {
             MeetDTO meet = optionalMeet.get();
             if (meet.getMeetPassword().equals(password)) {
+                session.setAttribute("meetPassword", password);
                 model.addAttribute("meet", meet);
                 List<Vote> votes = voteService.getAllPrivateVotes(meetId);
                 Map<Long, Long> voteResults = new HashMap<>();

@@ -121,7 +121,6 @@
         hiddenAllowMultipleVotes.value = allowMultipleVotesCheckbox.checked ? "true" : "false";
 
         allowMultipleVotesCheckbox.addEventListener('change', function() {
-            alert('체크박스 상태 변경: ' + (this.checked ? 'true' : 'false'));
             hiddenAllowMultipleVotes.value = this.checked ? "true" : "false";
         });
     };

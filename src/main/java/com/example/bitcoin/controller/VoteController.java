@@ -86,7 +86,7 @@ public class VoteController {
 
     // 투표 생성하기
     @PostMapping("/vote")
-    public String createVote(@ModelAttribute VoteDTO voteDTO, @RequestParam List<String> options, @RequestParam(required = false) String voteType, Model model) {
+    public String createVote(@ModelAttribute VoteDTO voteDTO, @RequestParam List<String> options, @RequestParam(required = false) String voteType, Model model, Long meetId) {
         log.info("가나다라: " + voteDTO.getAllowMultipleVotes());
 
         if (voteDTO.getAllowMultipleVotes() == null) {
@@ -96,7 +96,9 @@ public class VoteController {
         if ("PRIVATE".equals(voteType)) {
             voteDTO.setVoteType(Vote.VoteType.PRIVATE);
             voteService.createVote(voteDTO, options);
-            return meetController.getMeetById(voteDTO.getMeetId(), model);
+            voteDTO.setMeetId(meetId);
+//            return meetController.getMeetById(voteDTO.getMeetId(), model);
+            return "redirect:/meet/" + meetId;
         } else {
             voteDTO.setVoteType(Vote.VoteType.PUBLIC);
             voteService.createVote(voteDTO, options);
