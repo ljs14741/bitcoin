@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>밥좀묵자 - 메뉴 선택</title>
+    <style>
+        .category-container {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        .category {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<h1>밥좀묵자</h1>
+<div class="category-container">
+    <div class="category">
+        <img src="path/to/image.png" alt="족발·보쌈">
+        <p>족발·보쌈</p>
+    </div>
+    <div class="category">
+        <img src="path/to/image.png" alt="돈가스·회·일식">
+        <p>돈가스·회·일식</p>
+    </div>
+    <!-- Add other categories similarly -->
+</div>
+
+<button onclick="getRandomCategory()">카테고리 랜덤 뽑기</button>
+<button onclick="getRandomFood()">음식 랜덤 뽑기</button>
+<div>
+    <form action="/food/randomFood" method="get">
+        <label for="categoryId">카테고리 선택:</label>
+        <select id="categoryId" name="categoryId">
+            <option value="">전체</option>
+            <!-- Populate categories here -->
+        </select>
+        <button type="submit">랜덤 음식 뽑기</button>
+    </form>
+</div>
+
+<div>
+    <form action="/food" method="post">
+        <label for="food1">음식 1:</label>
+        <input type="text" id="food1" name="foodName1" required>
+        <label for="food2">음식 2:</label>
+        <input type="text" id="food2" name="foodName2" required>
+        <div id="additionalFoods"></div>
+        <button type="button" onclick="addFoodInput()">추가</button>
+        <button type="submit">등록</button>
+    </form>
+</div>
+
+<script>
+    function getRandomCategory() {
+        window.location.href = '/food/randomCategory';
+    }
+
+    function getRandomFood() {
+        window.location.href = '/food/randomFood';
+    }
+
+    function addFoodInput() {
+        var div = document.createElement('div');
+        div.innerHTML = '<label for="additionalFood">추가 음식:</label><input type="text" name="additionalFood">';
+        document.getElementById('additionalFoods').appendChild(div);
+    }
+</script>
+</body>
+</html>

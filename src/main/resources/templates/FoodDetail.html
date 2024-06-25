@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>밥좀묵자 - 메뉴 상세</title>
+</head>
+<body>
+<h1>카테고리 내 음식 목록</h1>
+<ul>
+    <!-- Populate with foods from selected category -->
+    <th:block th:each="food : ${foods}">
+        <li th:text="${food.foodName}"></li>
+    </th:block>
+</ul>
+</body>
+</html>
