@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로또 번호 당첨 순위</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <meta name="title" content="로또 번호 당첨 순위">
+    <meta name="description" content="로또 번호 당첨 순위를 알려드립니다~ ">
+    <meta property="og:title" content="로또 번호 당첨 순위">
+    <meta property="og:description" content="로또 번호 당첨 순위를 알려드립니다~ ">
+    <link rel="icon" href="/img/favicon/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="57x57" href="/img/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/img/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/img/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/img/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/img/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/img/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/img/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/img/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/img/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/img/favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <script src="/js/header.js"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6890085609044109" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header th:replace="fragment/header :: headerFragment"></header>
+
+    <div class="intro">
+        <h2 class="main-title">로또 당첨 순위</h2>
+    </div>
+    <h3>가장 많이 나온 번호 순위</h3>
+    <div class="table-responsive">
+        <table class="styled-table">
+            <thead>
+            <tr>
+                <th>번호</th>
+                <th>나온 횟수 <i class="fas fa-sort"></i></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="entry : ${numberFrequencies}">
+                <td th:text="${entry.key}"></td>
+                <td th:text="${entry.value}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <br>
+    <h3>역대 로또 번호 목록</h3>
+    <div class="table-responsive">
+        <table class="styled-table">
+            <thead>
+            <tr>
+                <th>회차 번호</th>
+                <th>Number 1</th>
+                <th>Number 2</th>
+                <th>Number 3</th>
+                <th>Number 4</th>
+                <th>Number 5</th>
+                <th>Number 6</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="lotto : ${lottoList}">
+                <td th:text="${lotto.roundNumber}"></td>
+                <td th:text="${lotto.number1}"></td>
+                <td th:text="${lotto.number2}"></td>
+                <td th:text="${lotto.number3}"></td>
+                <td th:text="${lotto.number4}"></td>
+                <td th:text="${lotto.number5}"></td>
+                <td th:text="${lotto.number6}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <br>
+    <section class="intro">
+        <div id="bottom" class="intro-container">
+            후원해 주시면 감사합니다! &#127877; → <a href="https://toss.me/godofdeath">복채 보내기</a>
+        </div>
+    </section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const table = document.querySelector('table');
+        const ths = table.querySelectorAll('th');
+        const tbody = table.querySelector('tbody');
+
+        ths.forEach(th => {
+            th.addEventListener('click', function () {
+                const index = Array.from(ths).indexOf(th);
+                const isAscending = th.classList.toggle('ascending');
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+
+                rows.sort((a, b) => {
+                    const aValue = a.children[index].textContent.trim();
+                    const bValue = b.children[index].textContent.trim();
+                    if (aValue === bValue) return 0;
+                    if (isAscending) {
+                        return aValue > bValue ? 1 : -1;
+                    } else {
+                        return aValue < bValue ? 1 : -1;
+                    }
+                });
+
+                tbody.innerHTML = '';
+                rows.forEach(row => {
+                    tbody.appendChild(row);
+                });
+
+                // 아이콘 회전
+                ths.forEach(otherTh => {
+                    if (otherTh !== th) {
+                        otherTh.querySelector('i').classList.remove('fa-sort-up', 'fa-sort-down');
+                    }
+                });
+                const icon = th.querySelector('i');
+                if (isAscending) {
+                    icon.classList.remove('fa-sort-down');
+                    icon.classList.add('fa-sort-up');
+                } else {
+                    icon.classList.remove('fa-sort-up');
+                    icon.classList.add('fa-sort-down');
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

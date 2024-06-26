@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>익명 투표하기</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="title" content="익명 투표 하기">
+    <meta name="description" content="익명 투표 하기">
+    <meta property="og:title" content="익명 투표 하기">
+    <meta property="og:description" content="익명 투표 하기">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/vote.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="icon" href="/img/favicon/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="57x57" href="/img/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/img/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/img/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/img/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/img/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/img/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/img/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/img/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/img/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/img/favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <script th:src="@{/js/header.js}"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6890085609044109" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header th:replace="fragment/header :: headerFragment"></header>
+
+    <div class="intro">
+        <h2 class="main-title" th:text="${vote.title}">익명 투표하기</h2>
+    </div>
+
+    <div class="vote-container">
+        <p th:if="${vote.allowMultipleVotes}" style="color: green;">중복투표: O</p>
+        <p th:unless="${vote.allowMultipleVotes}" style="color: red;">중복투표: X</p>
+
+        <form th:action="@{/vote/{id}(id=${vote.id})}" method="post" class="vote-form" onsubmit="return validateVoteForm()">
+            <ul class="vote-options">
+                <li th:each="option : ${options}" class="form-group">
+                    <input type="checkbox" th:id="${option.id}" th:name="optionNumbers" th:value="${option.optionNumber}" th:if="${vote.allowMultipleVotes}">
+                    <input type="radio" th:id="${option.id}" th:name="optionNumbers" th:value="${option.optionNumber}" th:unless="${vote.allowMultipleVotes}">
+                    <label th:for="${option.id}" th:text="${option.optionText}">Option</label>
+                </li>
+            </ul>
+            <div class="form-actions">
+                <button type="submit" class="vote-button">투표하기</button>
+            </div>
+        </form>
+        <div th:if="${error}" class="error-message" th:text="${error}"></div>
+        <div th:if="${error}">
+            <script>
+                alert([[${error}]]);
+            </script>
+        </div>
+    </div>
+
+<script>
+    function validateVoteForm() {
+        const options = document.getElementsByName('optionNumbers');
+        let isChecked = false;
+        for (let i = 0; i < options.length; i++) {
+            if (options[i].checked) {
+                isChecked = true;
+                break;
+            }
+        }
+        if (!isChecked) {
+            alert('선택지를 체크하세요');
+            return false;
+        }
+        return true;
+    }
+</script>
+</body>
+</html>

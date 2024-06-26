@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.example.bitcoin.LottoServiceTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-06-11T05:29:18" hostname="DESKTOP-O4JRRER" time="0.041">
+  <properties/>
+  <testcase name="lottoTest()" classname="com.example.bitcoin.LottoServiceTest" time="0.041"/>
+  <system-out><![CDATA[2024-06-11T14:29:18.591+09:00  INFO 17068 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.bitcoin.LottoServiceTest]: LottoServiceTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2024-06-11T14:29:18.596+09:00  INFO 17068 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.bitcoin.BitcoinApplication for test class com.example.bitcoin.LottoServiceTest
+2024-06-11T14:29:18.626+09:00 DEBUG 17068 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        l1_0.lotto_id,
+        l1_0.created_date,
+        l1_0.number1,
+        l1_0.number2,
+        l1_0.number3,
+        l1_0.number4,
+        l1_0.number5,
+        l1_0.number6,
+        l1_0.round_number,
+        l1_0.updated_date 
+    from
+        lotto l1_0 
+    order by
+        l1_0.round_number desc 
+    limit
+        ?
+Hibernate: 
+    select
+        l1_0.lotto_id,
+        l1_0.created_date,
+        l1_0.number1,
+        l1_0.number2,
+        l1_0.number3,
+        l1_0.number4,
+        l1_0.number5,
+        l1_0.number6,
+        l1_0.round_number,
+        l1_0.updated_date 
+    from
+        lotto l1_0 
+    order by
+        l1_0.round_number desc 
+    limit
+        ?
+2024-06-11T14:29:18.645+09:00  INFO 17068 --- [    Test worker] com.example.bitcoin.LottoServiceTest     : 가나: 1121
+2024-06-11T14:29:18.646+09:00  INFO 17068 --- [    Test worker] com.example.bitcoin.LottoServiceTest     : drwNo: 1120
+2024-06-11T14:29:18.646+09:00  INFO 17068 --- [    Test worker] com.example.bitcoin.LottoServiceTest     : drwNo+1: 11201
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

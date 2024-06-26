@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>비공개 투표</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="title" content="비공개 투표 모임 목록">
+    <meta name="description" content="비공개 투표 모임 목록">
+    <meta property="og:title" content="비공개 투표 모임 목록">
+    <meta property="og:description" content="비공개 투표 모임 목록">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/vote.css}">
+    <link rel="icon" href="/img/favicon/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="57x57" href="/img/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/img/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/img/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/img/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/img/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/img/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/img/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/img/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/img/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/img/favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <script th:src="@{/js/header.js}"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6890085609044109" crossorigin="anonymous"></script>
+</head>
+<body>
+<header th:replace="fragment/header :: headerFragment"></header>
+
+<div class="intro">
+    <h2 class="main-title">비공개 투표</h2>
+</div>
+
+<div class="vote-list-container">
+    <div class="tab-buttons-wrapper">
+        <div class="tab-buttons">
+            <button class="tab-button" onclick="openTab(event, 'public-votes')">공개투표</button>
+            <button class="tab-button active" onclick="openTab(event, 'private-votes')">비공개투표</button>
+        </div>
+        <div id="create-vote-form" class="create-vote-form">
+            <button class="create-vote-button" onclick="window.location.href='/meet/new'">모임 만들기</button>
+        </div>
+    </div>
+
+    <div id="private-votes" class="tab active">
+
+        <h3>비공개 투표 모임 목록</h3>
+        <ul class="vote-options">
+            <li th:each="meet : ${meets}" class="vote-item">
+                <div class="vote-info">
+                    <h3 th:text="${meet.meetName}">모임명</h3>
+                </div>
+                <div class="vote-actions">
+                    <form th:attr="onsubmit='return checkPasswordAndSubmit(this, \'/meet/join\');'">
+                        <input type="hidden" name="meetId" th:value="${meet.id}">
+                        <button type="submit" class="vote-button">모임 참여</button>
+                    </form>
+                    <form th:attr="onsubmit='return checkPasswordAndSubmit(this, \'/meet/edit/' + ${meet.id} + '\', \'GET\');'">
+                        <input type="hidden" name="meetId" th:value="${meet.id}">
+                        <button type="submit" class="vote-button">모임 수정</button>
+                    </form>
+                    <form th:attr="onsubmit='return checkPasswordAndSubmit(this, \'/meet/delete/' + ${meet.id} + '\');'" method="post">
+                        <input type="hidden" name="meetId" th:value="${meet.id}">
+                        <button type="submit" class="vote-button">모임 삭제</button>
+                    </form>
+                </div>
+            </li>
+            <li class="vote-item empty"></li>
+            <li class="vote-item empty"></li>
+        </ul>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    function checkPasswordAndSubmit(form, action, method = 'POST') {
+        const password = prompt("비밀번호를 입력하세요:");
+        if (password !== null) {
+            const meetId = form.meetId.value;
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+            fetch('/meet/checkPassword', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [csrfHeader]: csrfToken // CSRF 토큰을 헤더에 포함
+                },
+                body: JSON.stringify({ meetId: meetId, password: password })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        if (method === 'GET') {
+                            // GET 요청으로 페이지 리다이렉트
+                            window.location.href = action;
+                        } else {
+                            // POST 요청으로 폼을 동적으로 생성하여 제출
+                            const tempForm = document.createElement("form");
+                            tempForm.method = method;
+                            tempForm.action = action;
+
+                            const inputMeetId = document.createElement("input");
+                            inputMeetId.type = "hidden";
+                            inputMeetId.name = "meetId";
+                            inputMeetId.value = meetId;
+                            tempForm.appendChild(inputMeetId);
+
+                            const inputPassword = document.createElement("input");
+                            inputPassword.type = "hidden";
+                            inputPassword.name = "password";
+                            inputPassword.value = password;
+                            tempForm.appendChild(inputPassword);
+
+                            const inputCsrf = document.createElement("input");
+                            inputCsrf.type = "hidden";
+                            inputCsrf.name = "_csrf";
+                            inputCsrf.value = csrfToken;
+                            tempForm.appendChild(inputCsrf);
+
+                            document.body.appendChild(tempForm);
+                            tempForm.submit();
+                        }
+                    } else {
+                        alert('비밀번호가 틀렸습니다.'); // 비밀번호가 틀리면 경고창 표시
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');
+                });
+        }
+        return false; // 폼의 기본 제출 동작을 막음
+    }
+
+    function checkPassword(form) {
+        const password = prompt("비밀번호를 입력하세요:");
+        if (password !== null) {
+            const meetId = form.meetId.value;
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+            fetch('/meet/checkPassword', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [csrfHeader]: csrfToken // CSRF 토큰을 헤더에 포함
+                },
+                body: JSON.stringify({ meetId: meetId, password: password })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        // 비밀번호가 맞으면 폼을 동적으로 생성하여 제출
+                        const tempForm = document.createElement("form");
+                        tempForm.method = "POST";
+                        tempForm.action = "/meet/join";
+
+                        const inputMeetId = document.createElement("input");
+                        inputMeetId.type = "hidden";
+                        inputMeetId.name = "meetId";
+                        inputMeetId.value = meetId;
+                        tempForm.appendChild(inputMeetId);
+
+                        const inputPassword = document.createElement("input");
+                        inputPassword.type = "hidden";
+                        inputPassword.name = "password";
+                        inputPassword.value = password;
+                        tempForm.appendChild(inputPassword);
+
+                        const inputCsrf = document.createElement("input");
+                        inputCsrf.type = "hidden";
+                        inputCsrf.name = "_csrf";
+                        inputCsrf.value = csrfToken;
+                        tempForm.appendChild(inputCsrf);
+
+                        document.body.appendChild(tempForm);
+                        tempForm.submit();
+                    } else {
+                        alert('비밀번호가 틀렸습니다.'); // 비밀번호가 틀리면 경고창 표시
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');
+                });
+        }
+        return false; // 폼의 기본 제출 동작을 막음
+    }
+
+    function openTab(evt, tabName) {
+        if (tabName === 'public-votes') {
+            window.location.href = '/voteList';
+            return;
+        }
+
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tab");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tab-button");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        if (evt) {
+            evt.currentTarget.className += " active";
+        } else {
+            document.querySelector(`.tab-button[onclick="openTab(event, '${tabName}')"]`).className += " active";
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        var activeTab = 'private-votes';
+        openTab(null, activeTab);
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오늘의 운세</title>
+    <meta name="title" content="네이버 오늘의 운세">
+    <meta name="description" content="생년월일을 한번만 저장하고 네이버 오늘의 운세를 1초만에 확인하세요!">
+    <meta property="og:title" content="네이버 오늘의 운세">
+    <meta property="og:description" content="생년월일을 한번만 저장하고 네이버 오늘의 운세를 1초만에 확인하세요!">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="icon" href="/img/favicon/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="57x57" href="/img/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/img/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/img/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/img/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/img/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/img/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/img/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/img/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/img/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/img/favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <script th:src="@{/js/header.js}"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6890085609044109" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header th:replace="fragment/header :: headerFragment"></header>
+
+    <div class="intro">
+        <h2 class="main-title">오늘의 운세</h2>
+    </div>
+
+    <div class="container-lucky">
+        <form id="userForm" action="#" th:action="@{/saveUser}" th:object="${user}" method="post" class="form-group" onsubmit="return checkLoginAndSubmit()">
+            <div class="form-group">
+                <label for="gender" class="form-label">성별</label>
+                <select id="gender" th:field="*{gender}" class="form-control">
+                    <option value="남성">남성</option>
+                    <option value="여성">여성</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="solarLunar" class="form-label">양력/음력</label>
+                <select id="solarLunar" th:field="*{solarLunar}" class="form-control">
+                    <option value="양력">양력</option>
+                    <option value="음력 평달">음력 평달</option>
+                    <option value="음력 윤달">음력 윤달</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="birthTime" class="form-label">태어난 시간</label>
+                <select id="birthTime" th:field="*{birthTime}" class="form-control">
+                    <option value="모름">모름</option>
+                    <option value="子(자) 23:30 ~ 01:29">子(자) 23:30 ~ 01:29</option>
+                    <option value="丑(축) 01:30 ~ 03:29">丑(축) 01:30 ~ 03:29</option>
+                    <option value="寅(인) 03:30 ~ 05:29">寅(인) 03:30 ~ 05:29</option>
+                    <option value="卯(묘) 05:30 ~ 07:29">卯(묘) 05:30 ~ 07:29</option>
+                    <option value="辰(진) 07:30 ~ 09:29">辰(진) 07:30 ~ 09:29</option>
+                    <option value="巳(사) 09:30 ~ 11:29">巳(사) 09:30 ~ 11:29</option>
+                    <option value="午(오) 11:30 ~ 13:29">午(오) 11:30 ~ 13:29</option>
+                    <option value="未(미) 13:30 ~ 15:29">未(미) 13:30 ~ 15:29</option>
+                    <option value="申(신) 15:30 ~ 17:29">申(신) 15:30 ~ 17:29</option>
+                    <option value="酉(유) 17:30 ~ 19:29">酉(유) 17:30 ~ 19:29</option>
+                    <option value="戌(술) 19:30 ~ 21:29">戌(술) 19:30 ~ 21:29</option>
+                    <option value="亥(해) 21:30 ~ 23:29">亥(해) 21:30 ~ 23:29</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="birthDate" class="form-label">생년월일</label>
+                <input type="date" id="birthDate" th:field="*{birthDate}" class="form-control" required/>
+            </div>
+            <div>
+                <p>저장된 생년월일: <span th:text="${user.birthDate}">저장된 생년월일</span></p>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">저장</button>
+            <p>저장 버튼 클릭하면 약 15초 정도 시간이 소요됩니다. 양해 부탁드립니다.</p>
+            <p>한번만 저장하시고 매일 들어오셔서 1초만에 운세를 확인하세요!</p>
+            <p>한번만 저장하면 로그인 이후 운세 확인 버튼만 누르시면 됩니다.</p>
+            <p>네이버 운세 크롤링 해왔습니다.</p>
+        </form>
+        <br>
+        <form action="/getLucky" method="get" onsubmit="return checkLoginAndSubmit()">
+            <button type="submit" class="btn btn-success">운세 확인하기</button>
+        </form>
+        <div id="LuckyTitle" th:text="${luckyResult != null ? luckyResult.luckyTitle : ''}" style="font-size: 28px; margin-bottom: 10px;"></div>
+        <div id="LuckTime" th:text="${luckytime}" style="margin-bottom: 10px;"></div>
+        <div id="LuckyDetail" th:text="${luckyResult != null ? luckyResult.luckyDetail : ''}"></div>
+    </div>
+    <div class="spinner" id="loadingSpinner"></div>
+<script th:inline="javascript">
+    function checkLoginAndSubmit() {
+        var sessionNickname = [[${session.nickname}]];
+        if (sessionNickname !== null && sessionNickname !== undefined) {
+            document.getElementById('loadingSpinner').classList.add('loading');
+            return true;
+        } else {
+            alert("카카오톡 로그인을 후 이용해주세요.");
+            return false;
+        }
+    }
+</script>
+</body>
+</html>

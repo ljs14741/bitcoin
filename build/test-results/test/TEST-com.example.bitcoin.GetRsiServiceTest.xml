@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.example.bitcoin.GetRsiServiceTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-06-11T05:29:17" hostname="DESKTOP-O4JRRER" time="1.312">
+  <properties/>
+  <testcase name="testGetRsi()" classname="com.example.bitcoin.GetRsiServiceTest" time="1.312"/>
+  <system-out><![CDATA[2024-06-11T14:29:17.263+09:00  INFO 17068 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.bitcoin.GetRsiServiceTest]: GetRsiServiceTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2024-06-11T14:29:17.265+09:00  INFO 17068 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.bitcoin.BitcoinApplication for test class com.example.bitcoin.GetRsiServiceTest
+2024-06-11T14:29:18.570+09:00  INFO 17068 --- [    Test worker] com.example.bitcoin.GetRsiServiceTest    : rsi: 26.26700386536517
+2024-06-11T14:29:18.571+09:00  INFO 17068 --- [    Test worker] com.example.bitcoin.GetRsiServiceTest    : rsi: 77.36461267491731
+2024-06-11T14:29:18.572+09:00  INFO 17068 --- [    Test worker] com.example.bitcoin.GetRsiServiceTest    : rsi: 0.0
+2024-06-11T14:29:18.573+09:00  INFO 17068 --- [    Test worker] com.example.bitcoin.GetRsiServiceTest    : rsi: NaN
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

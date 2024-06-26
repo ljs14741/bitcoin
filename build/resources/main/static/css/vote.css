@@ -1,0 +1,161 @@
+/* 투표 스타일 */
+.vote-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.vote-list-container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.tab-buttons-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.tab-buttons {
+    display: flex;
+    justify-content: center;
+}
+
+.create-vote-form {
+    position: absolute;
+    right: 0;
+}
+
+.create-vote-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff6b6b;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.create-vote-button:hover {
+    background-color: #ff4757;
+}
+
+.vote-options {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+}
+
+.vote-item {
+    background: #f9f9f9;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    flex: 1 1 calc(33.333% - 40px);
+    box-sizing: border-box;
+}
+
+.vote-item.empty {
+    visibility: hidden;
+}
+
+.vote-info {
+    margin-bottom: 10px;
+}
+
+.vote-info h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #343a40;
+}
+
+.vote-info p {
+    margin: 5px 0;
+    color: #6c757d;
+}
+
+.vote-actions {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.vote-actions form {
+    flex: 1;
+}
+
+.vote-actions button {
+    flex: 1 1 30%; /* 각 버튼이 차지할 비율을 30%로 설정 */
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    min-width: 150px; /* 버튼의 최소 너비를 설정 */
+}
+
+.vote-actions button:hover {
+    background-color: #ff4757;
+}
+
+/* 모바일 스타일 */
+@media screen and (max-width: 768px) {
+    .vote-item {
+        flex: 1 1 100%;
+    }
+
+    .vote-actions {
+        flex-direction: column;
+    }
+
+    .vote-actions button {
+        width: 100%;
+        min-width: auto; /* 모바일에서 최소 너비를 해제 */
+    }
+
+    .tab-buttons-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .tab-buttons {
+        justify-content: flex-start;
+        width: 100%;
+    }
+
+    .tab-button {
+        flex: 1;
+    }
+
+    .create-vote-form {
+        position: static;
+        margin-top: 10px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .create-vote-button {
+        width: 100%;
+    }
+}

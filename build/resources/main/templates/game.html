@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>게임</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="title" content="웹 게임">
+    <meta name="description" content="총알 피하기 웹 게임. 요청해주시면 다른 게임도 만들어보겠습니다.">
+    <meta property="og:title" content="웹 게임">
+    <meta property="og:description" content="총알 피하기 웹 게임. 요청해주시면 다른 게임도 만들어보겠습니다.">
+    <link rel="stylesheet" th:href="@{/css/gameStyle.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="icon" href="/img/favicon/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="57x57" href="/img/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/img/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/img/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/img/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/img/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/img/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/img/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/img/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/img/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/img/favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <script th:src="@{/js/phaser.min.js}"></script>
+    <script th:src="@{/js/game.js}"></script>
+    <script th:src="@{/js/header.js}"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6890085609044109" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header th:replace="fragment/header :: headerFragment"></header>
+
+    <div class="intro">
+        <h2 class="main-title">총알 피하기</h2>
+    </div>
+
+    <div class="container-game">
+        <a href="https://binary96.store/game"><i class="fas fa-gamepad"></i>총알피하기게임</a></li>
+        <a href="https://binary96.store/defenseGame"><i class="fas fa-gamepad"></i>김치랜덤디펜스</a></li>
+        <p>현재 pc에서만 정상적으로 게임 가능하며 방향키로 움직이세요!</p>
+        <p>카카오 로그인 하셔서 순위에 도전해보세요!<br>
+            로그인 하지 않으면 '비로그인 유저'로 기록됩니다.<br>
+            로그인 후 닉네임은 메인 화면에서 변경 가능
+        </p>
+    </div>
+
+    <div>
+        <table class="styled-table">
+            <thead>
+            <tr>
+                <th>Rank</th>
+                <th>게임명</th>
+                <th>닉네임</th>
+                <th>점수</th>
+                <th>게임 일자</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="game, iterStat : ${games}">
+                <td th:text="${iterStat.index + 1}">1</td>
+                <td th:text="${game.gameName}">게임명</td>
+                <td th:text="${game.changeNickname}">닉네임</td>
+                <td th:text="${game.score}">점수</td>
+                <td th:text="${#temporals.format(game.createdDate, 'yyyy년 M월 d일')}">게임 일자</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <button id="bgmToggle">BGM 끄기/켜기</button>
+        <label for="volumeControl">BGM 볼륨:</label>
+        <input type="range" id="volumeControl" min="0" max="100" value="100">
+    </div>
+
+<script th:inline="javascript">
+
+    var csrfToken = [[${_csrf.token}]];
+    console.log('csrfToken: ' +csrfToken);
+
+    $(document).ready(function() {
+        $("#kakao-login-btn").click(function() {
+            window.location.href = "/oauth/kakao";
+        });
+    });
+
+</script>
+</body>
+</html>

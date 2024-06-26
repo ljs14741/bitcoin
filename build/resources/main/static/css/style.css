@@ -1,0 +1,564 @@
+/* 폰트 */
+@font-face {
+    font-family: 'TTHakgyoansimUndongjangL';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_keris@1.0/TTHakgyoansimUndongjangL.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'IBMPlexSansKR-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/IBMPlexSansKR-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Body 스타일 */
+body {
+    font-family: 'IBMPlexSansKR-Regular', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    color: #343a40;
+    text-align: center;
+    vertical-align: center;
+}
+
+/* 헤더 스타일 */
+header {
+    background-color: #000000;
+    color: white;
+    padding: 10px 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    margin-bottom: 20px;
+}
+
+.toparea_state_wrapper {
+    display: flex;
+    justify-content: center; /* 가운데 정렬 */
+    align-items: center;
+    position: absolute;
+    top: 60px; /* 헤더 바로 아래에 위치 */
+    width: 100%; /* 전체 너비 사용 */
+}
+.toparea_state {
+    display: flex;
+    align-items: center;
+}
+
+.toparea_state a {
+    color: #808080; /* 링크 색상: 회색 */
+    text-decoration: none; /* 링크 밑줄 제거 */
+}
+
+.toparea_state p {
+    color: #808080; /* 링크 색상: 회색 */
+}
+
+.toparea_state a:hover {
+    text-decoration: underline; /* 마우스 오버 시 밑줄 추가 */
+}
+
+.divider {
+    margin: 0 10px; /* 좌우 간격 */
+    color: #808080; /* 구분자 색상 */
+}
+
+.header-buttons {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+}
+
+header .logo {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+header .logo h1 {
+    font-family: 'TTHakgyoansimUndongjangL', serif;
+    font-size: 24px;
+    margin: 0;
+}
+
+header .logo h1:hover {
+    color: #afa04d; /* 마우스를 올렸을 때 글자색 변경 */
+}
+
+header .main-nav {
+    display: flex;
+    gap: 15px;
+}
+
+header .main-nav ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+    margin: 0;
+    padding: 0;
+}
+
+header .main-nav ul li {
+    display: flex;
+    align-items: center;
+}
+
+header .main-nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+header .main-nav ul li a:hover {
+    background-color: #311d1d;
+    color: #ffffff;
+}
+
+header .main-nav ul li a i {
+    margin-right: 5px;
+}
+
+header .hamburger {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.btn-container{
+    background-color: #343a40;
+    width: 100%;
+    position: sticky;
+    margin-bottom: 1rem;
+    top: 0;
+    /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);*/
+}
+
+.btn-container button {
+    margin: 20px 5px;
+}
+
+/* 컨테이너 스타일 */
+.container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 1rem 2rem 1rem;
+    position: relative;
+    top: 0px;
+}
+
+.service {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+/* 섹션 스타일 */
+section {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 0 1rem 2rem;
+}
+
+.section-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.section-row > section {
+    flex: 1;
+    min-width: 250px;
+    box-sizing: border-box;
+}
+
+h2 {
+    font-family: 'TTHakgyoansimUndongjangL', serif;
+    color: #343a40;
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* 테이블 스타일 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #5239AA;
+    color: white;
+}
+
+td {
+    border-bottom: 1px solid #ddd;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* 버튼 스타일 */
+button, .vote-button, .result-button {
+    background-color: #5239AA;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-family: 'IBMPlexSansKR-Regular', Arial, sans-serif;
+}
+
+button:hover, .vote-button:hover, .result-button:hover {
+    background-color: #3F3955;
+}
+
+/* 링크 스타일 */
+a {
+    color: #5239AA;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #3F3955;
+    text-decoration: underline;
+}
+
+/* 푸터 스타일 */
+footer {
+    background-color: #343a40;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+/* 투표 스타일 */
+.vote-container {
+    max-width: 1140px;
+    margin: 0 1rem 2rem;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.vote-title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.vote-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.vote-form label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.vote-form input[type="text"],
+.vote-form select {
+    padding: 10px;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.vote-form input[type="submit"] {
+    align-self: flex-start;
+    background-color: #5239AA;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.vote-form input[type="submit"]:hover {
+    background-color: #3F3955;
+}
+
+.vote-results {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.vote-results h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.vote-results .result {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.vote-results .result:last-child {
+    border-bottom: none;
+}
+
+.vote-results .result .label {
+    color: #666;
+}
+
+.vote-results .result .value {
+    font-weight: bold;
+    color: #333;
+}
+
+/* 채팅 시스템 스타일 */
+.chat-title {
+    font-family: 'IBMPlexSansKR-Regular', Arial, sans-serif;
+    font-size: 24px;
+    color: #343a40;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+
+#chat {
+    background-color: #f9f9f9;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 100px 1rem 2rem;
+    display: flex;
+    align-items: center;
+    flex-flow: column;
+}
+
+#chat-box {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    width: calc(100% - 2rem);
+    height: 300px;
+    overflow-y: scroll;
+    margin-bottom: 1rem;
+    background-color: white;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+#messages {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* 사용자 이름 스타일 */
+.message-username {
+    font-weight: bold;
+    color: #5239AA;
+    margin-right: 5px;
+}
+
+/* 메시지 내용 스타일 */
+.message-text {
+    color: #333;
+}
+
+#message-input, #username-input {
+    width: calc(100% - 80px);
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    font-family: 'IBMPlexSansKR-Regular', Arial, sans-serif;
+}
+
+#message-input{
+    height: 70px;
+}
+
+.chat-buttons {
+    width: calc(100% - 61px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px; /* 버튼 높이에 맞게 조정 */
+}
+
+button {
+    padding: 0 1rem;
+    font-size: 14px;
+    font-family: 'TTHakgyoansimUndongjangL', Arial, sans-serif;
+    background-color: #5239AA;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 40px; /* 버튼 높이에 맞게 조정 */
+}
+
+button:hover {
+    background-color: #3F3955;
+}
+.kakao-login-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.kakao-link {
+    display: inline-block;
+    height: 40px; /* 버튼 높이에 맞게 조정 */
+    vertical-align: bottom;
+}
+
+.nickname-form {
+    display: inline-block;
+    height: 100%;
+}
+
+#kakao-login-btn {
+    height: 40px;
+}
+
+/* 투표 목록 스타일 */
+.vote-options li {
+    background: #fff;
+    padding: 20px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.vote div{
+    display: flex;
+    flex-flow: row;
+    justify-content: space-evenly;
+}
+
+
+#chat div{
+    text-align: left;
+}
+
+input::placeholder {
+    font-family: 'IBMPlexSansKR-Regular', Arial, sans-serif;
+}
+
+
+.btn-submit{
+    width: 200px;
+}
+
+.btn-changeName{
+    font-family: 'IBMPlexSansKR-Regular', Arial, sans-serif;
+    font-size: 14px;
+    background-color: #606060;
+}
+
+.spinner {
+    display: none;
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 5px solid #3498db;
+    animation: spin 1s linear infinite;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading {
+    display: block;
+}
+
+
+@media screen and (max-width: 768px) {
+    .chat-buttons{
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .header-buttons {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .btn-submit{
+        width: calc(100% - 2px);
+    }
+
+    header .main-nav ul {
+        display: none;
+        flex-direction: column;
+        background-color: #000;
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        width: 200px;
+        border-radius: 10px;
+        z-index: 1000;
+    }
+    header .main-nav ul.active {
+        display: flex;
+    }
+    header .hamburger {
+        display: block;
+    }
+
+    .section-row {
+        flex-direction: column;
+    }
+
+    .section-row > section {
+        min-width: 100%;
+    }
+
+    #chat {
+        margin: 120px 1rem 2rem;
+    }
+}

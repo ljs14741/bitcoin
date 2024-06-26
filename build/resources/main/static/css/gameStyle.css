@@ -1,0 +1,45 @@
+#game-container {
+    width: 50px; /* 원하는 가로 크기 */
+    height: 50px; /* 원하는 세로 크기 */
+    margin: 0 auto; /* 중앙 정렬 */
+}
+
+.container-game {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+canvas {
+    display: block;
+    margin: 0 auto 200px auto; /* 아래쪽에 50px의 마진 추가 */
+}
+
+@media screen and (max-width: 768px) {
+
+    header {
+        position: static;
+    }
+
+    header .main-nav ul {
+        display: none;
+        flex-direction: column;
+        background-color: #000;
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        width: 200px;
+        border-radius: 10px;
+        z-index: 1000;
+    }
+    header .main-nav ul.active {
+        display: flex;
+    }
+    header .hamburger {
+        display: block;
+    }
+}
