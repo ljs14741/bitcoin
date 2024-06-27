@@ -18,13 +18,18 @@ import java.time.LocalDateTime;
 public class Food {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "food_id")
     private Long id;
 
     @Column(name = "food_name", unique = true)
     private String foodName;
 
     @ManyToOne
+    @JoinColumn(name = "category_id")
     private FoodCategory category;
+
+    @Column(name = "food_img")
+    private String foodImg;
 
     @CreatedDate
     @Column(updatable = false, name = "created_date")

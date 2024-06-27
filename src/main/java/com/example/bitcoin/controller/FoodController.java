@@ -1,5 +1,7 @@
 package com.example.bitcoin.controller;
 
+import com.example.bitcoin.dto.FoodCategoryDTO;
+import com.example.bitcoin.dto.FoodDTO;
 import com.example.bitcoin.entity.Food;
 import com.example.bitcoin.entity.FoodCategory;
 import com.example.bitcoin.service.FoodCategoryService;
@@ -7,10 +9,7 @@ import com.example.bitcoin.service.FoodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,20 +23,20 @@ public class FoodController {
 
     @GetMapping("/food")
     public String foodMain(Model model) {
-        List<FoodCategory> categories = foodCategoryService.getAllCategories();
+        List<FoodCategoryDTO> categories = foodCategoryService.getAllCategories();
         model.addAttribute("categories", categories);
         return "food";
     }
 
     @GetMapping("/food/randomCategory")
-    public String getRandomCategory(Model model) {
-        FoodCategory randomCategory = foodCategoryService.getRandomCategory();
-        model.addAttribute("randomCategory", randomCategory);
-        return "food";
+    @ResponseBody
+    public FoodCategoryDTO getRandomCategory() {
+        return foodCategoryService.getRandomCategoryDTO();
     }
 
     @GetMapping("/food/randomFood")
-    public String getRandomFood(Model model, @RequestParam(required = false) Long categoryId) {
+    @ResponseBody
+    public FoodDTO getRandomFood(@RequestParam(required = false) Long categoryId) {
         Food randomFood;
         if (categoryId != null) {
             FoodCategory category = foodCategoryService.getCategoryById(categoryId);
@@ -45,8 +44,7 @@ public class FoodController {
         } else {
             randomFood = foodService.getRandomFood();
         }
-        model.addAttribute("randomFood", randomFood);
-        return "food";
+        return foodService.convertToDTO(randomFood);
     }
 
     @GetMapping("/food/{categoryId}")

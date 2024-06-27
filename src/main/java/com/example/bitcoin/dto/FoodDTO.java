@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 public class FoodDTO {
     private Long id;
     private String foodCategoryName;
+    private String foodName;
+    private String foodImg;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
 }

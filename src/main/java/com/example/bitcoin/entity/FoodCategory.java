@@ -18,14 +18,17 @@ import java.time.LocalDateTime;
 public class FoodCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "food_category_id")
     private Long id;
 
     @Column(name = "food_category_name", unique = true)
     private String foodCategoryName;
 
+    @Column(name = "food_category_img")
+    private String foodCategoryImg;
+
     @CreatedDate
     @Column(updatable = false, name = "created_date")
-
     private LocalDateTime createdDate;
 
     @LastModifiedDate

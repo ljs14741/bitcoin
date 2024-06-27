@@ -1,71 +1,191 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">>
 <head>
     <meta charset="UTF-8">
-    <title>밥좀묵자 - 메뉴 선택</title>
-    <style>
-        .category-container {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-        }
-        .category {
-            text-align: center;
-        }
-    </style>
+    <title>밥 좀 묵자 - 메뉴 선택</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="title" content="밥 좀 묵자">
+    <meta name="description" content="점심, 저녁, 술안주 뭐 먹을지 고민하시는 분, 선택 장애를 갖고 계신 분들에게 메뉴 추천을 해드립니다~">
+    <meta name="keywords" content="밥 먹자, 메뉴 추천, 오늘 뭐 먹지">
+    <meta property="og:title" content="밥 좀 묵자">
+    <meta property="og:description" content="점심, 저녁, 술안주 뭐 먹을지 고민하시는 분, 선택 장애를 갖고 계신 분들에게 메뉴 추천을 해드립니다~">
+    <meta name="naver-site-verification" content="7bf5ed460d4c7ce510734301ed66231be04df7ba" />
+    <meta name="msvalidate.01" content="CDD92023DE164E539D882BD93CF03BCC" />
+    <meta name="google-site-verification" content="6n2SJb2lATZ_KUu0EfXjXrOn2yTT-VcNv7aRmHJGoTU" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="icon" href="/img/favicon/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="57x57" href="/img/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/img/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/img/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/img/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/img/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/img/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/img/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/img/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/img/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/img/favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <script th:src="@{/js/header.js}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6890085609044109" crossorigin="anonymous"></script>
 </head>
 <body>
-<h1>밥좀묵자</h1>
-<div class="category-container">
-    <div class="category">
-        <img src="path/to/image.png" alt="족발·보쌈">
-        <p>족발·보쌈</p>
-    </div>
-    <div class="category">
-        <img src="path/to/image.png" alt="돈가스·회·일식">
-        <p>돈가스·회·일식</p>
-    </div>
-    <!-- Add other categories similarly -->
-</div>
+<header th:replace="fragment/header :: headerFragment"></header>
 
-<button onclick="getRandomCategory()">카테고리 랜덤 뽑기</button>
-<button onclick="getRandomFood()">음식 랜덤 뽑기</button>
-<div>
-    <form action="/food/randomFood" method="get">
-        <label for="categoryId">카테고리 선택:</label>
-        <select id="categoryId" name="categoryId">
-            <option value="">전체</option>
-            <!-- Populate categories here -->
-        </select>
-        <button type="submit">랜덤 음식 뽑기</button>
-    </form>
-</div>
+<div class="container-food">
+    <div class="intro">
+        <h2 class="main-title">밥 좀 묵자</h2>
+    </div>
+    <div class="category-container">
+        <div th:each="category : ${categories}" class="category">
+            <img th:src="@{${category.foodCategoryImg}}" th:alt="${category.foodCategoryName}">
+            <p th:text="${category.foodCategoryName}"></p>
+        </div>
+    </div>
 
-<div>
-    <form action="/food" method="post">
-        <label for="food1">음식 1:</label>
-        <input type="text" id="food1" name="foodName1" required>
-        <label for="food2">음식 2:</label>
-        <input type="text" id="food2" name="foodName2" required>
-        <div id="additionalFoods"></div>
-        <button type="button" onclick="addFoodInput()">추가</button>
-        <button type="submit">등록</button>
-    </form>
+    <div class="button-container">
+        <div>
+            <button id="randomCategoryBtn">카테고리 랜덤 뽑기</button>
+            <div class="category random-category-result" id="randomCategoryResult" style="display:none;">
+                <img id="randomCategoryImg" src="" alt="카테고리 이미지">
+                <p id="randomCategoryName"></p>
+            </div>
+        </div>
+        <div>
+            <button id="randomFoodBtn">음식 랜덤 뽑기</button>
+            <div class="category random-food-result" id="randomFoodResult1" style="display:none;">
+                <img id="randomFoodImg1" src="" alt="음식 이미지">
+                <p id="randomFoodName1"></p>
+            </div>
+        </div>
+    </div>
+    <div>
+        <form id="randomFoodForm">
+            <label for="categoryId">카테고리 선택:</label>
+            <select id="categoryId" name="categoryId">
+                <option value="">전체</option>
+                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.foodCategoryName}"></option>
+            </select>
+            <button type="submit">랜덤 뽑기</button>
+        </form>
+    </div>
+    <div class="category random-food-result" id="randomFoodResult2" style="display:none;">
+        <img id="randomFoodImg2" src="" alt="음식 이미지">
+        <p id="randomFoodName2"></p>
+    </div>
+
+    <div>
+        <form class="food-form" id="userInputForm">
+            <label for="food1">음식 1:</label>
+            <input type="text" id="food1" name="foodName" required>
+            <label for="food2">음식 2:</label>
+            <input type="text" id="food2" name="foodName" required>
+            <div id="additionalFoods"></div>
+            <div class="food random-user-food-result" id="randomUserFoodResult" style="display:none;">
+                <p id="randomUserFoodName"></p>
+            </div>
+            <div class="button-container">
+                <button type="button" onclick="addFoodInput()">추가</button>
+                <button type="button" id="removeFoodBtn" style="display:none;" onclick="removeLastFoodInput()">삭제</button>
+                <button type="button" onclick="getRandomUserFood()">랜덤 뽑기</button>
+            </div>
+        </form>
+    </div>
 </div>
 
 <script>
-    function getRandomCategory() {
-        window.location.href = '/food/randomCategory';
-    }
+    $(document).ready(function() {
+        $('#randomCategoryBtn').click(function() {
+            $.ajax({
+                url: '/food/randomCategory',
+                method: 'GET',
+                success: function(data) {
+                    $('#randomCategoryImg').attr('src', data.foodCategoryImg);
+                    $('#randomCategoryName').text(data.foodCategoryName);
+                    $('#randomCategoryResult').show();
+                },
+                error: function(error) {
+                    console.log("Error:", error);
+                }
+            });
+        });
 
-    function getRandomFood() {
-        window.location.href = '/food/randomFood';
-    }
+    $('#randomFoodBtn').click(function() {
+        $.ajax({
+            url: '/food/randomFood',
+            method: 'GET',
+            success: function(data) {
+                $('#randomFoodImg1').attr('src', data.foodImg);
+                $('#randomFoodName1').text(data.foodName);
+                $('#randomFoodResult1').show();
+            },
+            error: function(error) {
+                console.log("Error:", error);
+            }
+        });
+    });
+
+    $('#randomFoodForm').submit(function(event) {
+        event.preventDefault();
+        var categoryId = $('#categoryId').val();
+        $.ajax({
+            url: '/food/randomFood',
+            method: 'GET',
+            data: { categoryId: categoryId },
+            success: function(data) {
+                $('#randomFoodImg2').attr('src', data.foodImg);
+                $('#randomFoodName2').text(data.foodName);
+                $('#randomFoodResult2').show();
+            },
+            error: function(error) {
+                console.log("Error:", error);
+            }
+        });
+    });
+});
 
     function addFoodInput() {
         var div = document.createElement('div');
-        div.innerHTML = '<label for="additionalFood">추가 음식:</label><input type="text" name="additionalFood">';
+        div.innerHTML = '<label for="additionalFood">추가 음식:</label><input type="text" name="foodName" required>';
         document.getElementById('additionalFoods').appendChild(div);
+        document.getElementById('removeFoodBtn').style.display = 'inline';
+    }
+
+    function removeLastFoodInput() {
+        var additionalFoods = document.getElementById('additionalFoods');
+        additionalFoods.removeChild(additionalFoods.lastElementChild);
+        if (additionalFoods.children.length === 0) {
+            document.getElementById('removeFoodBtn').style.display = 'none';
+        }
+    }
+
+    function getRandomUserFood() {
+        var foodNames = [];
+        var emptyFields = false;
+        $('#userInputForm input[name="foodName"]').each(function() {
+            if (!$(this).val()) {
+                emptyFields = true;
+            } else {
+                foodNames.push($(this).val());
+            }
+        });
+
+        if (emptyFields) {
+            alert('모든 음식 옵션을 입력해 주세요.');
+            return;
+        }
+
+        var randomFood = foodNames[Math.floor(Math.random() * foodNames.length)];
+        $('#randomUserFoodName').text(randomFood);
+        $('#randomUserFoodResult').show();
     }
 </script>
 </body>

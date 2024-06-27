@@ -3,6 +3,7 @@ package com.example.bitcoin.service;
 import java.util.List;
 import java.util.Random;
 
+import com.example.bitcoin.dto.FoodDTO;
 import com.example.bitcoin.entity.Food;
 import com.example.bitcoin.entity.FoodCategory;
 import com.example.bitcoin.repository.FoodRepository;
@@ -36,5 +37,13 @@ public class FoodService {
 
     public void saveFood(Food food) {
         foodRepository.save(food);
+    }
+
+    public FoodDTO convertToDTO(Food food) {
+        return FoodDTO.builder()
+                .id(food.getId())
+                .foodName(food.getFoodName())
+                .foodImg(food.getFoodImg())
+                .build();
     }
 }
