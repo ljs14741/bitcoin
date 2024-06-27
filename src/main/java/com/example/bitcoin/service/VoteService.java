@@ -93,11 +93,10 @@ public class VoteService {
     // 투표 삭제
     @Transactional
     public void deleteVote(Long id) {
+        voteResultRepository.deleteByVoteId(id);
 
         List<Options> options = optionRepository.findByVoteId(id);
         for (Options option : options) {
-            // 각 옵션과 관련된 모든 투표 결과 삭제
-            voteResultRepository.deleteByOptionNumber(option.getOptionNumber());
             // 옵션 삭제
             optionRepository.delete(option);
         }

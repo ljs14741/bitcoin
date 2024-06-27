@@ -93,21 +93,20 @@ public class MeetService {
         List<Vote> votes = voteRepository.findByMeetId(id);
 
         for (Vote vote : votes) {
-            // 2. 각 투표와 관련된 모든 옵션 가져오기
-            List<Options> options = optionRepository.findByVoteId(vote.getId());
+            // 2. 각 투표의 투표 결과 삭제
+            voteResultRepository.deleteByVoteId(vote.getId());
 
+            // 3. 각 투표와 관련된 모든 옵션 삭제
+            List<Options> options = optionRepository.findByVoteId(vote.getId());
             for (Options option : options) {
-                // 3. 각 옵션과 관련된 모든 투표 결과 삭제
-                voteResultRepository.deleteByOptionNumber(option.getOptionNumber());
-                // 4. 옵션 삭제
                 optionRepository.delete(option);
             }
 
-            // 5. 투표 삭제
+            // 4. 투표 삭제
             voteRepository.delete(vote);
         }
 
-        // 6. 마지막으로 모임 삭제
+        // 5. 마지막으로 모임 삭제
         meetRepository.deleteById(id);
     }
 
