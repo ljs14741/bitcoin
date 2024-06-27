@@ -47,6 +47,20 @@ public class FoodController {
         return foodService.convertToDTO(randomFood);
     }
 
+    @GetMapping("/food/randomLunch")
+    @ResponseBody
+    public FoodDTO getRandomLunch() {
+        Food randomFood = foodService.getRandomFoodByType(Food.FoodType.점심);
+        return foodService.convertToDTO(randomFood);
+    }
+
+    @GetMapping("/food/randomSnacks")
+    @ResponseBody
+    public FoodDTO getRandomSnacks() {
+        Food randomFood = foodService.getRandomFoodByType(Food.FoodType.술안주);
+        return foodService.convertToDTO(randomFood);
+    }
+
     @GetMapping("/food/{categoryId}")
     public String getFoodByCategory(@PathVariable Long categoryId, Model model) {
         FoodCategory category = foodCategoryService.getCategoryById(categoryId);

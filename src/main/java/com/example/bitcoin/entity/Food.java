@@ -31,6 +31,10 @@ public class Food {
     @Column(name = "food_img")
     private String foodImg;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "food_type")
+    private FoodType foodType; // 추가된 부분
+
     @CreatedDate
     @Column(updatable = false, name = "created_date")
     private LocalDateTime createdDate;
@@ -38,4 +42,10 @@ public class Food {
     @LastModifiedDate
     @Column(name = "updated_date")
     private LocalDateTime updatedDate;
+
+    public enum FoodType {
+        점심,
+        술안주,
+        점심과술안주
+    }
 }

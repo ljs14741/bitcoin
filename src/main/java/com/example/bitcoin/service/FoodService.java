@@ -8,6 +8,7 @@ import com.example.bitcoin.entity.Food;
 import com.example.bitcoin.entity.FoodCategory;
 import com.example.bitcoin.repository.FoodRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,6 +34,11 @@ public class FoodService {
         List<Food> foods = foodRepository.findByCategory(category);
         Random random = new Random();
         return foods.get(random.nextInt(foods.size()));
+    }
+
+    public Food getRandomFoodByType(Food.FoodType foodType) {
+        List<Food> foods = foodRepository.findRandomFoodByType(foodType, Food.FoodType.점심과술안주, PageRequest.of(0, 1));
+        return foods.isEmpty() ? null : foods.get(0);
     }
 
     public void saveFood(Food food) {
