@@ -23,6 +23,7 @@ public class VoteDTO {
 //    private Meet meet;
     private Vote.VoteType voteType;
     private Boolean allowMultipleVotes;
+    private Integer maxOptions;
     private LocalDateTime endTime;
     private String title;
     private String formattedCreatedDate;

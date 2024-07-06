@@ -49,6 +49,7 @@ public class VoteService {
                 .meet(meet)
                 .voteType(voteDTO.getVoteType())
                 .allowMultipleVotes(voteDTO.getAllowMultipleVotes())
+                .maxOptions(voteDTO.getMaxOptions())
                 .endTime(voteDTO.getEndTime())
                 .title(voteDTO.getTitle())
                 .formattedCreatedDate(voteDTO.getFormattedCreatedDate())

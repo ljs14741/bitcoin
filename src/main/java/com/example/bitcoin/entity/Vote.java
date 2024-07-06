@@ -40,6 +40,9 @@ public class Vote {
     @Column(name = "allow_multiple_votes")
     private Boolean allowMultipleVotes = false;
 
+    @Column(name = "max_options")
+    private Integer maxOptions;
+
     @Column(name = "upd_yn")
     private String updYn = "N";
 

@@ -42,12 +42,13 @@
 
     <div class="vote-container">
         <p th:if="${vote.allowMultipleVotes}" style="color: green;">중복투표: O</p>
+            <span th:if="${vote.maxOptions != null}"> (최대 선택 옵션 개수: [[${vote.maxOptions}]])</span>
         <p th:unless="${vote.allowMultipleVotes}" style="color: red;">중복투표: X</p>
 
         <form th:action="@{/vote/{id}(id=${vote.id})}" method="post" class="vote-form" onsubmit="return validateVoteForm()">
             <ul class="vote-options">
                 <li th:each="option : ${options}" class="form-group">
-                    <input type="checkbox" th:id="${option.id}" th:name="optionNumbers" th:value="${option.optionNumber}" th:if="${vote.allowMultipleVotes}">
+                    <input type="checkbox" th:id="${option.id}" th:name="optionNumbers" th:value="${option.optionNumber}" th:if="${vote.allowMultipleVotes}" onchange="checkMaxOptions()">
                     <input type="radio" th:id="${option.id}" th:name="optionNumbers" th:value="${option.optionNumber}" th:unless="${vote.allowMultipleVotes}">
                     <label th:for="${option.id}" th:text="${option.optionText}">Option</label>
                 </li>
@@ -79,6 +80,17 @@
             return false;
         }
         return true;
+    }
+
+    function checkMaxOptions() {
+        const maxOptions = [[${vote.maxOptions}]];
+        if (maxOptions > 0) {
+            const checkedOptions = document.querySelectorAll('input[name="optionNumbers"]:checked');
+            if (checkedOptions.length > maxOptions) {
+                alert('최대선택옵션 개수는 ' + maxOptions + '개입니다!');
+                checkedOptions[checkedOptions.length - 1].checked = false;
+            }
+        }
     }
 </script>
 </body>

@@ -55,7 +55,11 @@
             <div class="form-group">
                 <label for="allowMultipleVotes" class="form-label">중복 투표 허용:</label>
                 <input type="hidden" id="hiddenAllowMultipleVotes" name="allowMultipleVotes" value="false">
-                <input type="checkbox" id="allowMultipleVotes" name="allowMultipleVotes" class="vote-input" value="true">
+                <input type="checkbox" id="allowMultipleVotes" name="allowMultipleVotes" class="vote-input" value="true" onchange="toggleMaxOptions()">
+            </div>
+            <div class="form-group" id="maxOptionsGroup" style="display: none;">
+                <label for="maxOptions" class="form-label">중복 투표 시 선택 옵션 최대 개수:</label>
+                <input type="number" id="maxOptions" name="maxOptions" class="vote-input form-control">
             </div>
             <ul id="optionList" class="vote-options">
                 <li class="form-group">항목 1: <input type="text" name="options" class="vote-input form-control" required></li>
@@ -110,6 +114,18 @@
 
         return true;
     }
+
+    function toggleMaxOptions() {
+        var allowMultipleVotesCheckbox = document.getElementById("allowMultipleVotes");
+        var maxOptionsGroup = document.getElementById("maxOptionsGroup");
+        if (allowMultipleVotesCheckbox.checked) {
+            maxOptionsGroup.style.display = "block";
+        } else {
+            maxOptionsGroup.style.display = "none";
+        }
+    }
+
+
 
     window.onload = function() {
         updateOptionNumbers();
