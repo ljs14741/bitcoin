@@ -74,6 +74,7 @@ public class VoteController {
     @GetMapping("/vote/edit/{id}")
     public String editVoteForm(@PathVariable Long id, Model model) {
         VoteDTO voteDTO = voteService.getVoteDTOById(id);
+        log.info("테스트: " + voteDTO.getMaxOptions());
         log.info("가가가: " + voteDTO.getMeetId());
 
         List<Options> options = voteService.getOptionsByVoteId(id);

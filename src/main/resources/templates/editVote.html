@@ -59,7 +59,11 @@
             <div class="form-group">
                 <label for="allowMultipleVotes" class="form-label">중복 투표 허용:</label>
                 <input type="hidden" id="hiddenAllowMultipleVotes" name="allowMultipleVotes" value="false">
-                <input type="checkbox" id="allowMultipleVotes" name="allowMultipleVotes" class="vote-input" th:checked="${vote.allowMultipleVotes}" value="true">
+                <input type="checkbox" id="allowMultipleVotes" name="allowMultipleVotes" class="vote-input" th:checked="${vote.allowMultipleVotes}" value="true" onchange="toggleMaxOptions()">
+            </div>
+            <div class="form-group" id="maxOptionsGroup" style="display: none;">
+                <label for="maxOptions" class="form-label">중복 투표 시 선택 옵션 최대 개수:</label>
+                <input type="number" id="maxOptions" name="maxOptions" class="vote-input form-control" th:value="${vote.maxOptions}">
             </div>
             <ul id="optionList" class="vote-options">
                 <li th:each="option, iter : ${options}" class="form-group">
@@ -109,6 +113,16 @@
         }
     }
 
+    function toggleMaxOptions() {
+        var allowMultipleVotesCheckbox = document.getElementById("allowMultipleVotes");
+        var maxOptionsGroup = document.getElementById("maxOptionsGroup");
+        if (allowMultipleVotesCheckbox.checked) {
+            maxOptionsGroup.style.display = "block";
+        } else {
+            maxOptionsGroup.style.display = "none";
+        }
+    }
+
     function validateForm() {
         var inputs = document.querySelectorAll(".vote-input");
         for (var i = 0; i < inputs.length; i++) {
@@ -128,6 +142,10 @@
 
         // 초기 상태 설정
         hiddenAllowMultipleVotes.value = allowMultipleVotesCheckbox.checked ? "true" : "false";
+
+        if (allowMultipleVotesCheckbox.checked) {
+            document.getElementById("maxOptionsGroup").style.display = "block";
+        }
 
         allowMultipleVotesCheckbox.addEventListener('change', function() {
             hiddenAllowMultipleVotes.value = this.checked ? "true" : "false";
