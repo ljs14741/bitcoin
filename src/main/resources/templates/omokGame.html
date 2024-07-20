@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>AI 오목</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="title" content="AI 오목">
+    <meta name="description" content="AI와 한판 오목">
+    <meta property="og:title" content="AI 오목">
+    <meta property="og:description" content="AI와 한판 오목">
+    <link rel="stylesheet" th:href="@{/css/omokGame.css}">
+    <script th:src="@{/js/phaser.min.js}"></script>
+    <script th:src="@{/js/omokGame.js}"></script>
+</head>
+<body>
+
+    <div class="intro">
+        <h2 class="main-title">AI 오목</h2>
+    </div>
+
+    <div id="game-container">
+        <div id="game-board">
+            <div class="star-point star-point-1"></div>
+            <div class="star-point star-point-2"></div>
+            <div class="star-point star-point-3"></div>
+            <div class="star-point star-point-4"></div>
+            <div class="star-point star-point-5"></div>
+        </div>
+
+        <div id="controls">
+            <div id="buttons">
+                <button id="start-game-btn">GameStart</button>
+                <button id="place-stone-btn" disabled>돌생성</button>
+            </div>
+            <div id="chat">
+                <!-- 채팅 내용이 여기에 표시됩니다 -->
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -67,6 +67,12 @@ public class GameController {
         return "defenseGame";
     }
 
+    @GetMapping("/omokGame")
+    public String omokGame(Model model, HttpSession session) {
+
+        return "omokGame";
+    }
+
     @PostMapping("/save")
     @ResponseBody
     public List<Game> saveGame(@RequestBody GameDTO gameDTO, HttpSession session) {
