@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const placeStoneButton = document.createElement('button');
     const chat = document.createElement('div');
     const preGameSettings = document.createElement('div');
-    const size = 14;
+    const size = 15;  // size를 15로 수정
     const cells = [];
     let selectedCell = null;
     let playerFirst = true;
@@ -75,18 +75,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Add star points
     const starPoints = [
-        { top: 2, left: 2 },
-        { top: 2, left: 12 },
-        { top: 12, left: 2 },
-        { top: 12, left: 12 },
+        { top: 3, left: 3 },
+        { top: 3, left: 11 },
+        { top: 11, left: 3 },
+        { top: 11, left: 11 },
         { top: 7, left: 7 }
     ];
 
     starPoints.forEach(point => {
         const star = document.createElement('div');
         star.classList.add('star-point');
-        star.style.top = `calc(${point.top * 60}px - 30px)`;
-        star.style.left = `calc(${point.left * 60}px - 30px)`;
+        star.style.top = `calc(${point.top * 40}px - 20px)`;
+        star.style.left = `calc(${point.left * 40}px - 20px)`;
         gameBoard.appendChild(star);
     });
 
@@ -105,13 +105,13 @@ document.addEventListener('DOMContentLoaded', function () {
         let closestRow = row;
         let closestCol = col;
 
-        if (x < 30) {
+        if (x < 20) {
             closestCol = col;
         } else {
             closestCol = col + 1;
         }
 
-        if (y < 30) {
+        if (y < 20) {
             closestRow = row;
         } else {
             closestRow = row + 1;
