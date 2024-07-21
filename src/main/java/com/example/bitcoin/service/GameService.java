@@ -84,8 +84,8 @@ public class GameService {
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("contents", List.of(
                 Map.of("parts", List.of(
-                        Map.of("text", prompt),
-                        Map.of("text", boardState.toString())
+                        Map.of("text", prompt)
+//                        Map.of("text", boardState.toString())
                 ))
         ));
 
@@ -114,14 +114,48 @@ public class GameService {
     }
 
     private String createPrompt(boolean firstMove, boolean playerFirst, List<List<String>> boardState, Map<String, Integer> playerMove) {
+        String playerColor = playerFirst ? "black" : "white";
+        String aiColor = playerFirst ? "white" : "black";
+
+        String boardStateString = boardState.toString();
+
         if (firstMove) {
             if (playerFirst) {
-                return String.format("안녕? 난 너와 오목을 할거야. 나의 상대가 되어줘. 오목판은 가로, 세로 15*15로 진행할거야. 좌표는 (0,0)부터 (14,14)까지 있어. 내가 먼저 선공을 할게. 나는 black, 너는 white를 해줘. 내가 놓을 자리는 row: %d, col: %d 너는 white 돌을 두고 싶은 자리에 JSON 형식으로 반환해줘. 예시: {\"row\": 8, \"col\": 7}", playerMove.get("row"), playerMove.get("col"));
+                return String.format("안녕? 난 너와 오목을 할거야. 나의 상대가 되어줘. 이해를 돕기 위해 간단한 룰을 알려줄게."
+                                + "\n1) 오목판은 가로, 세로 15x15로 진행할 거야. 좌표는 (0,0)부터 (14,14)까지 있어. (row,col)이라고 생각해. 그리고 제일 왼쪽 상단이 (0,0)이지. 여기서 오른쪽으로 한칸 이동하면 (0,1), 아래로 한칸이동하면 (1,0)이야."
+                                + "\n2) 자신의 돌을 가로, 세로, 대각선 중 한 방향으로 다섯 개 연속으로 놓으면 승리합니다. 상대방의 돌이 5개 되는 것을 막으면서 너의 돌이 5개가 연속으로 되게 만들어서 나를 이기고 승리해 봐."
+                                + "\n3) 나와 상대방 중 돌을 이미 놓은 자리에 중복해서 놓을 수 없다."
+                                + "\n4) 금수(쌍삼, 쌍사) 규칙을 적용하여 금수자리에는 돌을 놓을 수 없다."
+                                + "\n5) 상대가 3줄을 완성했을 때는 반드시 4줄이 되지 않도록 막아야 합니다. 예를 들어, 상대가 ○ ○ ○ 이렇게 3줄을 만들었다면, 다음 수에서는 반드시 ○ ○ ○ ● 또는 ● ○ ○ ○ 이렇게 한쪽을 막아 4줄이 되지 않도록 해 주세요."
+                                + "\n이 전략을 이해하고 게임을 진행해 주세요."
+                                + "\n내가 먼저 선공을 할게. 나는 black, 너는 white를 해줘. 내가 놓을 자리는 row: %d, col: %d. 너는 white 돌을 두고 싶은 자리에 JSON 형식으로 반환해줘. 예시: {\"row\": 8, \"col\": 7}. 대답은 내가 보여준 예시로만 대답해. 다른 말은 필요없어."
+                                + "\n현재의 보드판 상태야: %s. black과 white의 위치를 먼저 파악해. 그 후 없는 위치 중 가장 좋은 위치를 골라.",
+                        playerMove.get("row"), playerMove.get("col"), boardStateString);
             } else {
-                return "안녕? 난 너와 오목을 할거야. 나의 상대가 되어줘. 오목판은 가로, 세로 15*15로 진행할거야. 좌표는 (0,0)부터 (14,14)까지 있어. 나는 white, 너는 black을 해줘. 너는 black 돌을 두고 싶은 자리에 JSON 형식으로 반환해줘. 예시: {\"row\": 8, \"col\": 7}";
+                return String.format("안녕? 난 너와 오목을 할거야. 나의 상대가 되어줘. 이해를 돕기 위해 간단한 룰을 알려줄게."
+                                + "\n1) 오목판은 가로, 세로 15x15로 진행할 거야. 좌표는 (0,0)부터 (14,14)까지 있어. (row,col)이라고 생각해. 그리고 제일 왼쪽 상단이 (0,0)이지. 여기서 오른쪽으로 한칸 이동하면 (0,1), 아래로 한칸이동하면 (1,0)이야."
+                                + "\n2) 자신의 돌을 가로, 세로, 대각선 중 한 방향으로 다섯 개 연속으로 놓으면 승리합니다. 상대방의 돌이 5개 되는 것을 막으면서 너의 돌이 5개가 연속으로 되게 만들어서 나를 이기고 승리해 봐."
+                                + "\n3) 나와 상대방 중 돌을 이미 놓은 자리에 중복해서 놓을 수 없다."
+                                + "\n4) 금수(쌍삼, 쌍사) 규칙을 적용하여 금수자리에는 돌을 놓을 수 없다."
+                                + "\n5) 상대가 3줄을 완성했을 때는 반드시 4줄이 되지 않도록 막아야 합니다. 예를 들어, 상대가 ○ ○ ○ 이렇게 3줄을 만들었다면, 다음 수에서는 반드시 ○ ○ ○ ● 또는 ● ○ ○ ○ 이렇게 한쪽을 막아 4줄이 되지 않도록 해 주세요."
+                                + "\n이 전략을 이해하고 게임을 진행해 주세요."
+                                + "\n너가 먼저 선공을 해. 나는 white, 너는 black을 해줘. 너는 black 돌을 두고 싶은 자리에 JSON 형식으로 반환해줘. 예시: {\"row\": 8, \"col\": 7}. 대답은 내가 보여준 예시로만 대답해. 다른 말은 필요없어."
+                                + "\n현재의 보드판 상태야: %s.",
+                        boardStateString);
             }
         } else {
-            return String.format("내가 놓을 자리는 row: %d, col: %d 너는 white 돌을 두고 싶은 자리에 'white'를 표시해서 알려줘.", playerMove.get("row"), playerMove.get("col"));
+            return String.format("안녕? 난 너와 오목을 할거야. 나의 상대가 되어줘. 이해를 돕기 위해 간단한 룰을 알려줄게."
+                            + "\n1) 오목판은 가로, 세로 15x15로 진행할 거야. 좌표는 (0,0)부터 (14,14)까지 있어. (row,col)이라고 생각해. 그리고 제일 왼쪽 상단이 (0,0)이지. 여기서 오른쪽으로 한칸 이동하면 (0,1), 아래로 한칸이동하면 (1,0)이야."
+                            + "\n2) 자신의 돌을 가로, 세로, 대각선 중 한 방향으로 다섯 개 연속으로 놓으면 승리합니다. 상대방의 돌이 5개 되는 것을 막으면서 너의 돌이 5개가 연속으로 되게 만들어서 나를 이기고 승리해 봐."
+                            + "\n3) 나와 상대방 중 돌을 이미 놓은 자리에 중복해서 놓을 수 없다."
+                            + "\n4) 금수(쌍삼, 쌍사) 규칙을 적용하여 금수자리에는 돌을 놓을 수 없다."
+                            + "\n5) 상대가 3줄을 완성했을 때는 반드시 4줄이 되지 않도록 막아야 합니다. 예를 들어, 상대가 ○ ○ ○ 이렇게 3줄을 만들었다면, 다음 수에서는 반드시 ○ ○ ○ ● 또는 ● ○ ○ ○ 이렇게 한쪽을 막아 4줄이 되지 않도록 해 주세요."
+                            + "\n이 전략을 이해하고 게임을 진행해 주세요."
+                            + "\n나는 " + playerColor + " 돌이야. 너는 " + aiColor + " 돌이야."
+                            + "\n이번 차례에 내가 놓을 자리는 row: %d, col: %d."
+                            + "\n현재의 보드판 상태야: %s. black과 white의 위치를 먼저 파악해. 그 후 없는 위치 중 가장 좋은 위치를 골라."
+                            + "\n이번엔 너 차례야. 잘 생각하고 너가 돌을 두고 싶은 자리에 JSON 형식으로 반환해줘. 예시: {\"row\": 8, \"col\": 7}. 대답은 내가 보여준 예시로만 대답해. 다른 말은 필요없어.",
+                    playerMove.get("row"), playerMove.get("col"), boardStateString);
         }
     }
 
