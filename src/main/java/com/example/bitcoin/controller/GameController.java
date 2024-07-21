@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @Slf4j
@@ -80,4 +81,24 @@ public class GameController {
         return gameService.getTopScoresByGameName(gameDTO.getGameName()); // 저장한 게임의 최신 순위를 반환
     }
 
+    // 오목 Gemini API 호출
+    @PostMapping("/api/gemini/move")
+    @ResponseBody
+    public Map<String, Object> getGeminiMove(@RequestBody Map<String, Object> requestBody) {
+        log.info("Received request body from client: {}", requestBody);
+
+        List<List<String>> boardState = (List<List<String>>) requestBody.get("boardState");
+        Boolean firstMoveObj = (Boolean) requestBody.get("firstMove");
+        boolean firstMove = firstMoveObj != null && firstMoveObj;
+        Boolean playerFirstObj = (Boolean) requestBody.get("playerFirst");
+        boolean playerFirst = playerFirstObj != null && playerFirstObj;
+        Map<String, Integer> playerMove = (Map<String, Integer>) requestBody.get("playerMove");
+
+        log.info("Parsed board state: {}", boardState);
+        log.info("First move: {}", firstMove);
+        log.info("Player first: {}", playerFirst);
+        log.info("Player move: {}", playerMove);
+
+        return gameService.getGeminiMove(boardState, firstMove, playerFirst, playerMove);
+    }
 }

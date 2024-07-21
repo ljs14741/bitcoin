@@ -1,25 +1,37 @@
 document.addEventListener('DOMContentLoaded', function () {
     console.log('omokGame.js has been loaded successfully');
+
     const gameContainer = document.getElementById('game-container');
+    gameContainer.innerHTML = '';
+    const gameBoard = document.createElement('div');
+    const controls = document.createElement('div');
+    const buttons = document.createElement('div');
+    const startButton = document.createElement('button');
+    const placeStoneButton = document.createElement('button');
+    const chat = document.createElement('div');
+    const preGameSettings = document.createElement('div');
+    const size = 14;
+    const cells = [];
+    let selectedCell = null;
+    let playerFirst = true;
+    let firstMove = true; // 첫 번째 수를 위한 변수 추가
+    const modal = document.getElementById('options-modal');
+    const startBtn = document.getElementById('start-btn');
+    const selectedOptionText = document.getElementById('selected-option');
 
     // Clear any existing content to prevent duplication
     gameContainer.innerHTML = '';
 
     // Create main game elements
-    const gameBoard = document.createElement('div');
     gameBoard.id = 'game-board';
 
-    const controls = document.createElement('div');
     controls.id = 'controls';
 
-    const buttons = document.createElement('div');
     buttons.id = 'buttons';
 
-    const startButton = document.createElement('button');
     startButton.id = 'start-game-btn';
     startButton.innerText = 'GameStart';
 
-    const placeStoneButton = document.createElement('button');
     placeStoneButton.id = 'place-stone-btn';
     placeStoneButton.innerText = '돌생성';
     placeStoneButton.disabled = true;
@@ -27,7 +39,6 @@ document.addEventListener('DOMContentLoaded', function () {
     buttons.appendChild(startButton);
     buttons.appendChild(placeStoneButton);
 
-    const chat = document.createElement('div');
     chat.id = 'chat';
 
     controls.appendChild(buttons);
@@ -36,11 +47,17 @@ document.addEventListener('DOMContentLoaded', function () {
     gameContainer.appendChild(gameBoard);
     gameContainer.appendChild(controls);
 
-    // Initialize game board
-    const size = 14; // 14줄 유지
-    let cells = [];
-    let selectedCell = null;
+    // Add pre-game settings
+    preGameSettings.id = 'pre-game-settings';
+    preGameSettings.style.display = 'none';
+    preGameSettings.innerHTML = `
+        <p>Who goes first?</p>
+        <button id="player-first-btn">Player First</button>
+        <button id="ai-first-btn">AI First</button>
+    `;
+    gameContainer.appendChild(preGameSettings);
 
+    // Initialize game board
     for (let i = 0; i < size; i++) {
         cells[i] = [];
         for (let j = 0; j < size; j++) {
@@ -110,43 +127,122 @@ document.addEventListener('DOMContentLoaded', function () {
         placeStoneButton.disabled = false;
     }
 
-    placeStoneButton.addEventListener('click', function () {
+    async function getGeminiMove(board, firstMove, playerFirst, playerMove = null) {
+        const data = {
+            boardState: board,
+            firstMove: firstMove,
+            playerFirst: playerFirst,
+            playerMove: playerMove
+        };
+
+        try {
+            console.log('Sending board state to server:', JSON.stringify(data));
+            const response = await fetch('/api/gemini/move', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                throw new Error(`API request failed with status ${response.status}`);
+            }
+            const responseData = await response.json();
+            console.log('Received data from server:', responseData);
+            return responseData;
+        } catch (error) {
+            console.error('Error fetching move from Gemini API:', error);
+            return null;
+        }
+    }
+
+    function getBoardState() {
+        return cells.map(row => row.map(cell => {
+            if (cell.classList.contains('black')) return 'black';
+            if (cell.classList.contains('white')) return 'white';
+            return 'empty';
+        }));
+    }
+
+    placeStoneButton.addEventListener('click', async function () {
         if (selectedCell) {
             const row = selectedCell.dataset.row;
             const col = selectedCell.dataset.col;
             if (!selectedCell.classList.contains('black') && !selectedCell.classList.contains('white')) {
-                placeStone(row, col, 'black');
+                placeStone(row, col, playerFirst ? 'black' : 'white');
                 selectedCell.classList.remove('red-point');
                 selectedCell = null;
                 placeStoneButton.disabled = true;
 
-                setTimeout(() => {
-                    const aiMove = getAIMove();
-                    placeStone(aiMove.row, aiMove.col, 'white');
-                }, 500);
+                const boardState = getBoardState();
+                const playerMove = { row: parseInt(row, 10), col: parseInt(col, 10) };
+                const response = await getGeminiMove(boardState, firstMove, playerFirst, playerMove);
+                const aiMove = response;
+                if (aiMove) {
+                    placeStone(aiMove.row, aiMove.col, playerFirst ? 'white' : 'black');
+                } else {
+                    console.error('Failed to get AI move');
+                }
+                firstMove = false; // 첫 번째 수 이후에는 false로 설정
             }
         }
     });
 
     function placeStone(row, col, color) {
+        console.log(`Placing stone at row: ${row}, col: ${col}, color: ${color}`);
         const cell = cells[row][col];
         if (!cell.classList.contains('black') && !cell.classList.contains('white')) {
             cell.classList.add(color);
+        } else {
+            console.log(`Cell at row: ${row}, col: ${col} is already occupied.`);
         }
     }
 
-    function getAIMove() {
-        let row, col;
-        do {
-            row = Math.floor(Math.random() * size);
-            col = Math.floor(Math.random() * size);
-        } while (cells[row][col].classList.contains('black') || cells[row][col].classList.contains('white'));
-        return { row, col };
-    }
-
     startButton.addEventListener('click', function () {
-        console.log('Game started!');
-        placeStoneButton.disabled = false; // 게임 시작 시 돌 생성 버튼 활성화
-        // 추가로 초기화 작업을 여기서 수행할 수 있습니다.
+        modal.style.display = 'block';
     });
+
+    document.getElementById('first-btn').addEventListener('click', function () {
+        playerFirst = true;
+        startBtn.disabled = false; // 옵션 선택 시 게임 시작 버튼 활성화
+        selectedOptionText.innerText = '선공을 선택하셨습니다.';
+        document.getElementById('first-btn').classList.add('selected');
+        document.getElementById('second-btn').classList.remove('selected');
+    });
+
+    document.getElementById('second-btn').addEventListener('click', function () {
+        playerFirst = false;
+        startBtn.disabled = false; // 옵션 선택 시 게임 시작 버튼 활성화
+        selectedOptionText.innerText = '후공을 선택하셨습니다.';
+        document.getElementById('second-btn').classList.add('selected');
+        document.getElementById('first-btn').classList.remove('selected');
+    });
+
+    startBtn.addEventListener('click', function () {
+        modal.style.display = 'none';
+        initializeGame();
+    });
+
+    function initializeGame() {
+        console.log('Game started! Player first:', playerFirst);
+
+        firstMove = true; // 게임 시작 시 첫 번째 수를 true로 설정
+
+        if (!playerFirst) {
+            // AI가 선공인 경우 AI의 첫 번째 수를 요청
+            const boardState = getBoardState();
+            getGeminiMove(boardState, true, playerFirst).then(response => {
+                const aiMove = response;
+                if (aiMove) {
+                    placeStone(aiMove.row, aiMove.col, 'black');
+                } else {
+                    console.error('Failed to get AI move');
+                }
+                firstMove = false; // AI가 첫 번째 수를 둔 후에는 false로 설정
+            });
+        }
+        placeStoneButton.disabled = !playerFirst;
+    }
 });

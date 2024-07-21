@@ -15,6 +15,7 @@ body {
     border: 10px solid #B8860B;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     padding: 20px;
+    position: relative; /* 자식 요소로 모달을 포함 */
 }
 
 #game-board {
@@ -118,4 +119,41 @@ button {
     padding: 10px;
     background-color: #fff;
     height: 600px; /* 높이를 고정 */
+}
+
+/* 팝업 창 스타일 */
+.modal {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+}
+
+.modal-content .option {
+    margin: 20px 0;
+}
+
+.option-btn {
+    margin: 5px;
+}
+
+.selected {
+    background-color: #4CAF50; /* 선택된 버튼의 배경색 */
+    color: white; /* 선택된 버튼의 글자색 */
 }
